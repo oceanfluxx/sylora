@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Local env / secrets
+.env
+.env.*
+*.local
+**/private*.json
+**/*.key
+mnemonic*.txt
+
+# OS
+.DS_Store
+Thumbs.db
