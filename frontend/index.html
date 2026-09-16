@@ -1,547 +1,260 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SYLORA — verified eco actions, on-chain</title>
-<meta name="description" content="Log real eco actions, get them verified on-chain, earn hard-capped $SYL. Built for BOT Chain.">
+<title>SYLORA — Aksi nyata untuk bumi, tercatat selamanya</title>
+<meta name="description" content="Catat aksi lingkunganmu, diperiksa tetangga, ditukar voucher. Sistem poin yang tidak bisa dicurangi siapa pun.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --canvas:#f2f4ef; --surface:#ffffff; --ink:#0d1f17; --ink-soft:#4b5a51; --line:#dde3d9;
-  --evergreen:#0d4a33; --evergreen-deep:#082c1f; --lime:#9fe83a; --lime-press:#8bd427;
-  --amber:#a8620a; --amber-bg:#fdf3e0; --brick:#a52a2a; --brick-bg:#fbeaea; --moss:#2f7d5a; --moss-bg:#e4f2e9;
-  --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Space Grotesk',system-ui,sans-serif;
-  --r:6px;
+  --cream:#FFF7EE; --paper:#FFFFFF; --cocoa:#4A342A; --latte:#8C7466; --milkline:#F0E4D6;
+  --matcha:#7CBF8E; --matcha-deep:#3E7A52; --matcha-foam:#E7F4E9;
+  --sakura:#F5B8C4; --sakura-soft:#FDEBF0; --caramel:#E8A54B; --caramel-soft:#FBF0DC;
+  --azuki:#C96A6A; --r:20px; --r-pill:999px;
+  --shadow:0 8px 24px rgba(74,52,42,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--canvas);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;touch-action:manipulation}
-::selection{background:var(--lime);color:var(--evergreen-deep)}
+body{background:var(--cream);color:var(--cocoa);font-family:'Nunito',system-ui,sans-serif;font-size:16px;line-height:1.65;touch-action:manipulation;-webkit-font-smoothing:antialiased}
+::selection{background:var(--sakura);color:var(--cocoa)}
+h1,h2,h3,.brand{font-family:'Baloo 2',cursive;font-weight:700;line-height:1.15}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+a{color:var(--matcha-deep)}
 
-header{position:sticky;top:0;z-index:40;background:var(--evergreen-deep);color:#eef4ef;border-bottom:3px solid var(--lime)}
-.bar{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
-.logo{font-weight:700;font-size:19px;letter-spacing:.14em;text-transform:uppercase;color:#fff}
-.logo em{font-style:normal;color:var(--lime)}
-.net-badge{font-family:var(--mono);font-size:11px;padding:3px 8px;border:1px solid #3c5a4a;border-radius:99px;color:#b9d8c5;white-space:nowrap}
-.spacer{flex:1}
-.btn{font-family:var(--sans);font-weight:600;font-size:14px;border:0;border-radius:var(--r);padding:10px 16px;cursor:pointer;transition:background .15s,transform .05s}
-.btn:active{transform:translateY(1px)}
-.btn:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
-.btn-lime{background:var(--lime);color:var(--evergreen-deep)}
-.btn-lime:hover{background:var(--lime-press)}
-.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.btn-ghost:hover{background:#fff}
-.btn-dark{background:var(--evergreen);color:#fff}
-.btn-dark:hover{background:var(--evergreen-deep)}
-.btn-danger{background:var(--brick);color:#fff}
-.btn-danger:hover{background:#8a1f1f}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn-sm{padding:6px 12px;font-size:13px}
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,247,238,.92);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--milkline)}
+.nbar{display:flex;align-items:center;gap:12px;padding:12px 0}
+.brand{font-size:21px;letter-spacing:.02em;color:var(--cocoa);text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand b{color:var(--matcha-deep)}
+.nlinks{margin-left:auto;display:flex;gap:22px;font-size:14.5px;font-weight:700}
+.nlinks a{color:var(--latte);text-decoration:none}
+.nlinks a:hover{color:var(--matcha-deep)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:16px;border:0;border-radius:var(--r-pill);padding:13px 26px;cursor:pointer;text-decoration:none;transition:.15s;min-height:48px}
+.btn-p{background:var(--matcha-deep);color:#fff}
+.btn-p:hover{background:#336844}
+.btn-s{background:var(--matcha-foam);color:var(--matcha-deep)}
+.btn-s:hover{background:#d9eede}
+.btn:focus-visible{outline:3px solid var(--sakura);outline-offset:2px}
 
-main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
-section{margin-bottom:40px}
-h1{font-size:34px;line-height:1.12;letter-spacing:-.01em;font-weight:700;max-width:560px}
-h1 .hl{color:var(--evergreen);text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:6px;text-underline-offset:2px}
-.lede{margin-top:12px;color:var(--ink-soft);max-width:560px;font-size:16px}
-.hero{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap;padding:34px 0 8px}
-h2{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
-h2 .n{font-family:var(--mono);color:var(--moss);margin-right:8px}
+/* hero */
+.hero{text-align:center;padding:56px 0 8px;position:relative}
+.spark{position:absolute;font-size:22px;color:var(--sakura);animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.35;transform:scale(.85) rotate(0)}50%{opacity:1;transform:scale(1.1) rotate(15deg)}}
+.hero .syl{width:220px;height:auto;margin:0 auto;display:block;filter:drop-shadow(0 14px 22px rgba(62,122,82,.18))}
+.hero .hi{display:inline-block;background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r-pill);padding:7px 18px;font-size:14px;font-weight:800;color:var(--matcha-deep);box-shadow:var(--shadow);margin-bottom:18px}
+h1{font-size:clamp(30px,5vw,44px);max-width:640px;margin:0 auto}
+h1 em{font-style:normal;color:var(--matcha-deep);background:linear-gradient(transparent 68%,var(--sakura) 68%)}
+.sub{max-width:560px;margin:16px auto 0;color:var(--latte);font-size:17px}
+.cta{margin-top:26px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.micro{font-size:13px;color:var(--latte);margin-top:10px}
 
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden;margin-top:24px}
-.strip .cell{padding:16px 18px;border-right:1px solid var(--line)}
-.strip .cell:last-child{border-right:0}
-.strip .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-.strip .v{font-family:var(--mono);font-size:21px;font-weight:600;margin-top:4px;color:var(--evergreen)}
-.strip .v small{font-size:12px;color:var(--ink-soft);font-weight:500}
+/* chalk strip */
+.strip{margin:44px auto 0;background:var(--matcha-deep);border-radius:var(--r);color:#fff;display:flex;flex-wrap:wrap;box-shadow:var(--shadow)}
+.strip div{flex:1;min-width:140px;text-align:center;padding:16px 10px}
+.strip b{display:block;font-family:'Baloo 2';font-size:24px;color:var(--sakura)}
+.strip span{font-size:12.5px;opacity:.85}
 
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
-.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:24px}
-@media(max-width:860px){.grid2{grid-template-columns:1fr}}
-.pad{padding:20px}
-label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:16px 0 6px}
-label:first-child{margin-top:0}
-select,input[type=text],textarea{width:100%;font-family:var(--sans);font-size:15px;color:var(--ink);background:#fbfcfa;border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
-select:focus-visible,input:focus-visible,textarea:focus-visible{outline:none;border-color:var(--moss);box-shadow:0 0 0 3px rgba(47,125,90,.18)}
-textarea{resize:vertical;min-height:74px}
-.file-zone{border:1.5px dashed var(--line);border-radius:var(--r);padding:18px;text-align:center;color:var(--ink-soft);cursor:pointer;transition:border-color .15s,background .15s}
-.file-zone:hover,.file-zone.drag{border-color:var(--moss);background:#f6faf5}
-.file-zone:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
-.file-zone .hash{font-family:var(--mono);font-size:12px;color:var(--moss);word-break:break-all;margin-top:6px}
-.hint{font-size:12.5px;color:var(--ink-soft);margin-top:8px}
-.err{font-size:13px;color:var(--brick);background:var(--brick-bg);border-radius:var(--r);padding:9px 12px;margin-top:12px}
+/* sections */
+section{padding:64px 0 8px}
+.kicker{text-align:center;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--caramel)}
+h2{text-align:center;font-size:clamp(24px,3.6vw,32px);margin-top:6px}
+.lead{color:var(--latte);text-align:center;max-width:560px;margin:10px auto 0}
 
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
-td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
-tr:last-child td{border-bottom:0}
-td .type{font-weight:600}
-td .desc{color:var(--ink-soft);font-size:13px;max-width:340px}
-td .id{font-family:var(--mono);font-size:11px;color:#93a29a}
-.mono{font-family:var(--mono)}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:99px;white-space:nowrap}
-.badge::before{content:"";width:7px;height:7px;border-radius:99px;background:currentColor}
-.b-pending{color:var(--amber);background:var(--amber-bg)}
-.b-verified{color:var(--moss);background:var(--moss-bg)}
-.b-rejected{color:var(--brick);background:var(--brick-bg)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.step{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);padding:26px 22px;position:relative;box-shadow:var(--shadow)}
+.step .n{position:absolute;top:-16px;left:22px;width:34px;height:34px;border-radius:50%;background:var(--sakura);color:var(--cocoa);font-family:'Baloo 2';font-weight:800;display:flex;align-items:center;justify-content:center;font-size:17px;border:3px solid var(--cream)}
+.step .ic{font-size:34px;line-height:1;margin:6px 0 10px}
+.step h3{font-size:19px}
+.step p{color:var(--latte);font-size:14.5px;margin-top:6px}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
 
-.redeem-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.redeem-amt{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--evergreen)}
-.note{font-size:13px;color:var(--ink-soft);background:#f6f8f4;border-left:3px solid var(--moss);padding:10px 12px;border-radius:0 var(--r) var(--r) 0;margin-top:14px}
-.note b{color:var(--ink)}
+/* menu */
+.menu{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);box-shadow:var(--shadow);max-width:640px;margin:36px auto 0;overflow:hidden}
+.menu-h{padding:18px 26px;background:var(--matcha-deep);color:#fff;font-family:'Baloo 2';font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px}
+.mi{display:flex;align-items:center;gap:14px;padding:15px 26px;border-bottom:1.5px dashed var(--milkline)}
+.mi:last-child{border-bottom:0}
+.mi .em{font-size:26px;width:40px;text-align:center}
+.mi .nm{font-weight:800}
+.mi .ds{font-size:13px;color:var(--latte)}
+.mi .pr{margin-left:auto;font-family:'Baloo 2';font-weight:800;color:var(--matcha-deep);font-size:17px;white-space:nowrap;background:var(--matcha-foam);border-radius:var(--r-pill);padding:6px 14px}
+.dots{flex:1;border-bottom:2px dotted var(--milkline);margin:0 4px;min-width:20px;align-self:center}
 
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:640px){.cfg-grid{grid-template-columns:1fr}}
-.cfg-grid input{font-family:var(--mono);font-size:13px}
+/* trust */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.tr{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);padding:20px;text-align:center;box-shadow:var(--shadow)}
+.tr .big{font-size:30px}
+.tr h3{font-size:16px;margin-top:8px}
+.tr p{font-size:13px;color:var(--latte);margin-top:4px}
+@media(max-width:820px){.trust{grid-template-columns:repeat(2,1fr)}}
 
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--evergreen-deep);color:#eef4ef;font-size:14px;padding:12px 18px;border-radius:var(--r);border:1px solid #3c5a4a;opacity:0;transition:.25s;z-index:99;max-width:90vw}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast.bad{background:#3d0f0f;border-color:#7a2b2b}
+/* faq */
+.faq{max-width:660px;margin:36px auto 0}
+details{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);padding:0;margin-bottom:12px;overflow:hidden}
+summary{cursor:pointer;font-weight:800;font-size:16px;padding:17px 22px;list-style:none;display:flex;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:'Baloo 2';color:var(--matcha-deep);font-size:22px;width:26px;flex:none;text-align:center}
+details[open] summary::before{content:"–"}
+details p{padding:0 22px 18px 58px;color:var(--latte);font-size:14.5px}
 
-footer{border-top:1px solid var(--line);padding:22px 20px;color:var(--ink-soft);font-size:13px}
-footer .in{max-width:1080px;margin:0 auto;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
-footer a{color:var(--moss)}
-.demo-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;background:var(--amber-bg);color:var(--amber);border:1px solid #eeddc0;padding:2px 7px;border-radius:99px;text-transform:uppercase}
+/* cta end */
+.end{background:var(--matcha-deep);border-radius:var(--r);color:#fff;text-align:center;padding:46px 24px;margin:56px 0 0;position:relative;overflow:hidden}
+.end h2{color:#fff}
+.end p{opacity:.85;max-width:460px;margin:10px auto 0}
+.end .btn-p{background:var(--sakura);color:var(--cocoa)}
+.end .btn-p:hover{background:#f0a5b6}
+
+footer{padding:34px 0 40px;font-size:13px;color:var(--latte)}
+footer .in{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+footer a{color:var(--matcha-deep)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="bar">
-    <div class="logo">Syl<em>o</em>ra</div>
-    <span class="net-badge" id="netBadge">not connected</span>
-    <span class="demo-tag" id="demoTag" hidden>demo mode</span>
-    <div class="spacer"></div>
-    <button class="btn btn-lime" id="connectBtn">Connect wallet</button>
+<nav><div class="wrap nbar">
+  <a class="brand" href="#">Syl<b>o</b>ra</a>
+  <div class="nlinks">
+    <a href="#cara">Cara kerja</a>
+    <a href="#menu">Menu aksi</a>
+    <a href="#kenapa">Kenapa jujur</a>
+    <a href="#tanya">Tanya</a>
   </div>
-</header>
+</div></nav>
 
-<main>
-  <div class="hero">
-    <div>
-      <h1>Turn <span class="hl">real eco actions</span> into value nobody can fake.</h1>
-      <p class="lede">Plant a tree. Clean a beach. The photo is hashed on your device, locked on-chain at submit, verified by organizers — then 50 $SYL lands in your wallet. Hard-capped supply. Burned when you redeem. No mint button, ever.</p>
+<!-- ===== HERO: kawaii-coffee ===== -->
+<header class="hero"><div class="wrap">
+  <span class="spark" style="top:18%;left:12%">✦</span>
+  <span class="spark" style="top:26%;right:14%;animation-delay:.7s">✧</span>
+  <span class="spark" style="top:58%;left:20%;animation-delay:1.3s">✦</span>
+  <span class="spark" style="top:52%;right:10%;animation-delay:1.9s">✧</span>
+
+  <!-- Syl, maskot cangkir matcha -->
+  <svg class="syl" viewBox="0 0 220 210" role="img" aria-label="Syl, maskot cangkir matcha latte dengan tunas">
+    <!-- uap hati -->
+    <path d="M110 16c-4-9-18-9-18 1 0 7 9 12 18 18 9-6 18-11 18-18 0-10-14-10-18-1z" fill="#F5B8C4"/>
+    <circle cx="80" cy="26" r="4.5" fill="#F5B8C4" opacity=".7"/>
+    <circle cx="141" cy="30" r="3.5" fill="#F5B8C4" opacity=".6"/>
+    <!-- tunas -->
+    <path d="M110 62c0-14-12-20-24-19 3 13 12 19 24 19z" fill="#7CBF8E"/>
+    <path d="M110 62c0-14 12-20 24-19-3 13-12 19-24 19z" fill="#A8D8B0"/>
+    <rect x="107" y="60" width="6" height="18" rx="3" fill="#3E7A52"/>
+    <!-- badan cangkir -->
+    <path d="M58 78h104c0 8-2 12-6 14 5 3 6 8 6 14v38c0 30-22 50-52 50s-52-20-52-50v-38c0-6 1-11 6-14-4-2-6-6-6-14z" fill="#fff" stroke="#F0E4D6" stroke-width="3"/>
+    <!-- sedotan -->
+    <rect x="140" y="42" width="9" height="48" rx="4.5" fill="#F5B8C4"/>
+    <rect x="140" y="42" width="9" height="14" rx="4.5" fill="#E58A9D"/>
+    <!-- muka -->
+    <circle cx="92" cy="136" r="5.5" fill="#4A342A"/>
+    <circle cx="128" cy="136" r="5.5" fill="#4A342A"/>
+    <circle cx="94" cy="134" r="1.8" fill="#fff"/>
+    <circle cx="130" cy="134" r="1.8" fill="#fff"/>
+    <circle cx="78" cy="145" r="6" fill="#F5B8C4" opacity=".8"/>
+    <circle cx="142" cy="145" r="6" fill="#F5B8C4" opacity=".8"/>
+    <path d="M104 147c3 4 9 4 12 0" stroke="#4A342A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- celemek -->
+    <path d="M70 162c8 6 24 9 40 9s32-3 40-9c-2 22-18 36-40 36s-38-14-40-36z" fill="#E7F4E9" stroke="#7CBF8E" stroke-width="2"/>
+    <text x="110" y="196" text-anchor="middle" font-family="Baloo 2,cursive" font-size="15" font-weight="700" fill="#3E7A52">SYL</text>
+  </svg>
+
+  <div class="hi"> halo, aku Syl! ☕</div>
+  <h1>Aksi nyatamu untuk bumi, <em>tercatat selamanya</em> — dan nggak bisa dicurangi.</h1>
+  <p class="sub">Foto tanam pohon, pungut sampah, atau kompos dapurmu diperiksa tetangga sendiri. Tiap aksi yang sah dicetak jadi poin — yang bisa ditukar voucher di toko sekitar.</p>
+  <div class="cta">
+    <a class="btn btn-p" href="app.html">Mulai catat aksi</a>
+    <a class="btn btn-s" href="app.html?demo=1">Lihat-lihat demo dulu</a>
+  </div>
+  <p class="micro">Gratis · butuh dompet digital (MetaMask) hanya untuk mulai · jalan di BOT Chain</p>
+
+  <div class="strip wrap" style="padding:0">
+    <div><b>50</b><span>poin per aksi yang disahkan</span></div>
+    <div><b>1.000.000</b><span>poin selamanya — tidak akan pernah lebih</span></div>
+    <div><b>±15 detik</b><span>waktu pencatatan, biaya ±Rp200</span></div>
+    <div><b>24 jam</b><span>sekali sehari per jenis aksi — biar adil</span></div>
+  </div>
+</div></header>
+
+<!-- ===== CARA KERJA ===== -->
+<section id="cara"><div class="wrap">
+  <div class="kicker">Sesimpel mesen kopi</div>
+  <h2>Tiga langkah, selesai.</h2>
+  <p class="lead">Nggak perlu paham teknologi blockchain. Yang kamu perlu cuma hp, kamera, dan niat baik.</p>
+  <div class="steps">
+    <div class="step"><span class="n">1</span>
+      <div class="ic">📸</div>
+      <h3>Foto &amp; ceritakan</h3>
+      <p>foto buktinya dikunci dengan sidik-jari digital di hp-mu — nggak bisa ditukar foto lain belakangan.</p>
+    </div>
+    <div class="step"><span class="n">2</span>
+      <div class="ic">🤝</div>
+      <h3>Tetangga mengesahkan</h3>
+      <p>Pengurus bank sampah / organizer memeriksa. Sah? Poin-mu langsung dicetak. Nggak sah? Dikabari alasannya, sopan.</p>
+    </div>
+    <div class="step"><span class="n">3</span>
+      <div class="ic">🧾</div>
+      <h3>Tukar voucher</h3>
+      <p>Poin ditukar voucher belanja di mitra, dan poin itu hilang selamanya — makanya nilainya nggak inflasi.</p>
     </div>
   </div>
+</div></section>
 
-  <div class="strip">
-    <div class="cell"><div class="k">Reward pool</div><div class="v" id="stPool">—</div></div>
-    <div class="cell"><div class="k">Verified actions</div><div class="v" id="stVerified">—</div></div>
-    <div class="cell"><div class="k">Supply left</div><div class="v" id="stSupply">—</div></div>
-    <div class="cell"><div class="k">Total burned</div><div class="v" id="stBurned">—</div></div>
-    <div class="cell"><div class="k">Your streak</div><div class="v" id="stStreak">—</div></div>
+<!-- ===== MENU AKSI ===== -->
+<section id="menu"><div class="wrap">
+  <div class="kicker">Menu hari ini</div>
+  <h2>Pilih "pesanan"mu.</h2>
+  <div class="menu">
+    <div class="menu-h">☕ SYL — Serupa Daily</div>
+    <div class="mi"><span class="em">🌱</span><span class="nm">Tanam pohon</span><span class="dots"></span><span class="pr">50 poin</span></div>
+    <div class="mi"><span class="em">🏖️</span><span class="nm">Bersih pantai / sungai</span><span class="dots"></span><span class="pr">50 poin</span></div>
+    <div class="mi"><span class="em">♻️</span><span class="nm">Setor daur ulang</span><span class="dots"></span><span class="pr">50 poin</span></div>
+    <div class="mi"><span class="em">🍂</span><span class="nm">Kompos dapur</span><span class="dots"></span><span class="pr">50 poin</span></div>
+    <div class="mi"><span class="em">🌍</span><span class="nm">Aksi hijau lain</span><span class="dots"></span><span class="pr">50 poin</span></div>
   </div>
+  <p class="lead" style="margin-top:16px;font-size:13.5px">Satu jenis aksi maksimal sehari sekali — biar yang rajin ya yang dapat banyak, bukan yang spam foto.</p>
+</div></section>
 
-  <section class="grid2" style="margin-top:40px">
-    <div>
-      <h2><span class="n">01</span>Log an action</h2>
-      <div class="panel pad">
-        <label for="aType">Action type</label>
-        <select id="aType">
-          <option value="tree_planting">Tree planting</option>
-          <option value="beach_cleanup">Beach cleanup</option>
-          <option value="recycle">Recycling</option>
-          <option value="compost">Composting</option>
-          <option value="other">Other</option>
-        </select>
-        <label for="aDesc">Description</label>
-        <textarea id="aDesc" maxlength="280" placeholder="What did you do, where?…"></textarea>
-        <div class="hint"><span id="charCount">0</span>/280 · one action per type every 24h · max 3 pending</div>
-        <label for="aFile">Proof photo</label>
-        <div class="file-zone" id="fileZone" tabindex="0">
-          <div id="fileLabel">Drop a photo or click to pick<br><span style="font-size:12px">the file never leaves your device — only its keccak256 hash goes on-chain</span></div>
-          <div class="hash" id="hashOut"></div>
-        </div>
-        <input type="file" id="aFile" accept="image/*" hidden>
-        <div id="submitErr"></div>
-        <div style="margin-top:18px"><button class="btn btn-dark" id="submitBtn" disabled style="width:100%">Sign &amp; submit proof</button></div>
-      </div>
-    </div>
-    <div>
-      <h2><span class="n">02</span>Your record</h2>
-      <div class="panel" style="overflow:hidden">
-        <table>
-          <thead><tr><th>Action</th><th>Status</th><th style="text-align:right">Reward</th></tr></thead>
-          <tbody id="myActions"><tr><td colspan="3" style="color:var(--ink-soft)">Connect wallet to see your actions.</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+<!-- ===== KENAPA JUJUR ===== -->
+<section id="kenapa"><div class="wrap">
+  <div class="kicker">Janji dapurnya</div>
+  <h2>Kenapa kamu boleh percaya.</h2>
+  <div class="trust">
+    <div class="tr"><div class="big">🔒</div><h3>Jangankan nyontek, nambah pun nggak bisa</h3><p>1 juta poin pernah ada, selamanya begitu. Tidak ada tombol untuk mencetak baru — bahkan untuk pembuatnya.</p></div>
+    <div class="tr"><div class="big">🖼️</div><h3>Foto dikunci di awal</h3><p>Sidik-jari foto direkam saat submit. Tukar foto belakangan? Sistem langsung know.</p></div>
+    <div class="tr"><div class="big">🔥</div><h3>Ditukar = hilang</h3><p>Poin voucher benar-benar dibakar, bukan dipindah. Makin banyak ditukar, makin langka — harganya terjaga.</p></div>
+    <div class="tr"><div class="big">👀</div><h3>Semua terlihat publik</h3><p>Siapa disahkan berapa, dicek siapa pun di internet. Buku besar yang nggak bisa dihapus.</p></div>
+  </div>
+</div></section>
 
-  <section class="grid2">
-    <div id="verifyWrap" hidden>
-      <h2><span class="n">03</span>Verifier desk</h2>
-      <div class="panel" style="overflow:hidden">
-        <table>
-          <thead><tr><th>Pending proof</th><th></th></tr></thead>
-          <tbody id="pendingTable"></tbody>
-        </table>
-        <div class="pad" id="noPending" hidden style="color:var(--ink-soft);font-size:14px">Queue is empty.</div>
-      </div>
-    </div>
-    <div>
-      <h2><span class="n" id="redeemN">03</span>Redeem voucher</h2>
-      <div class="panel pad">
-        <div class="redeem-row">
-          <div><div class="redeem-amt" id="myBalance">0.00</div><div class="hint">your $SYL</div></div>
-          <div class="redeem-amt" style="font-size:18px;color:var(--ink-soft)">→</div>
-          <div style="flex:1;min-width:150px">
-            <label for="rAmt" style="margin-top:0">Amount to burn</label>
-            <input type="text" inputmode="decimal" id="rAmt" value="50" autocomplete="off">
-            <div class="hint" id="rHint">min 50 $SYL · burned on redeem</div>
-          </div>
-        </div>
-        <div id="redeemErr"></div>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-ghost" id="approveBtn" disabled>Approve $SYL</button>
-          <button class="btn btn-dark" id="redeemBtn" disabled>Burn &amp; get voucher</button>
-        </div>
-        <div class="note"><b>Anti-inflation by design.</b> Redeem burns $SYL straight from your wallet — the pool never holds your tokens. Vouchers are claimed off-chain with local partners.</div>
-      </div>
-    </div>
-  </section>
+<!-- ===== FAQ ===== -->
+<section id="tanya"><div class="wrap">
+  <div class="kicker">Sering ditanya</div>
+  <h2>Tenang, nggak ada yang aneh-aneh.</h2>
+  <div class="faq">
+    <details open><summary>Blockchain itu apa sih, singkatnya?</summary><p>Kayak buku kas bersama: semua catatan ditulis rangkap-rangkap di ribuan komputer sekaligus, jadi nggak bisa dihapus atau diubah diam-diam. Kamu nggak perlu ngurusinnya — SYLORA yang urus.</p></details>
+    <details><summary>Harus bayar dulu buat mulai?</summary><p>Nggak. Catat aksi gratis. Ada biaya jaringan kecil (±Rp200) saat poin-mu berpindah, persis kayak ongkos kirim — sistem yang jelasin dan hitungkan.</p></details>
+    <details><summary>MetaMask itu apa? Kenapa perlu?</summary><p>Dompet digital di hp / browser — kayak rekening, tapi punyamu sendiri tanpa bank. Dipakai buat nyimpen poin dan buktiin "iya, ini akun saya". Isinya poin SYL, bukan uang.</p></details>
+    <details><summary>Siapa yang nentuin aksiku sah atau tidak?</summary><p>Pengurus lokal yang kamu percaya — bank sampah, karang taruna, komunitas. Nama mereka tercatat di sistem; kalau ngawut bisa diganti. Nggak ada satu "admin jahat".</p></details>
+    <details><summary>Nanti poinnya bisa ditukar uang beneran?</summary><p>Poin ditukar voucher di mitra (belanja, token listrik, ongkir). Nilainya asli karena jumlah poin dikunci: yang nyetak nggak bisa main tambah — beda dari poin bank sampah yang bisa di-print diam-diam.</p></details>
+  </div>
+</div></section>
 
-  <section>
-    <h2><span class="n" id="netN">04</span>Network &amp; contracts</h2>
-    <div class="panel pad">
-      <div class="cfg-grid">
-        <div><label for="cfgReg">Registry address</label><input type="text" id="cfgReg" spellcheck="false" placeholder="0x…" autocomplete="off"></div>
-        <div><label for="cfgTok">$SYL token address</label><input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off"></div>
-      </div>
-      <div class="hint" id="netInfo">Paste the two addresses from your Remix deploy (BOT Chain testnet, chain id 968). They stay in this browser only.</div>
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-dark btn-sm" id="loadBtn">Load contracts</button>
-        <button class="btn btn-ghost btn-sm" id="demoBtn">Explore demo mode</button>
-      </div>
-    </div>
-  </section>
-</main>
+<!-- ===== END CTA ===== -->
+<div class="wrap"><div class="end">
+  <svg width="56" height="54" viewBox="0 0 220 210" aria-hidden="true" style="margin-bottom:4px"><path d="M58 78h104c0 8-2 12-6 14 5 3 6 8 6 14v38c0 30-22 50-52 50s-52-20-52-50v-38c0-6 1-11 6-14-4-2-6-6-6-14z" fill="#fff"/><circle cx="92" cy="136" r="5.5" fill="#4A342A"/><circle cx="128" cy="136" r="5.5" fill="#4A342A"/><circle cx="78" cy="145" r="6" fill="#F5B8C4"/><circle cx="142" cy="145" r="6" fill="#F5B8C4"/><path d="M104 147c3 4 9 4 12 0" stroke="#4A342A" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M110 62c0-14-12-20-24-19 3 13 12 19 24 19z" fill="#B8E0C0"/><path d="M110 62c0-14 12-20 24-19-3 13-12 19-24 19z" fill="#B8E0C0"/><rect x="107" y="58" width="6" height="20" rx="3" fill="#3E7A52"/></svg>
+  <h2>Yuk, bumi butuh catatan harian.</h2>
+  <p>Mulai dari satu tanam pohon. Sisanya biar sistem yang ingat — selamanya.</p>
+  <div class="cta" style="margin-top:22px">
+    <a class="btn btn-p" href="app.html">Buka aplikasi SYLORA</a>
+    <a class="btn btn-s" style="background:rgba(255,255,255,.14);color:#fff" href="app.html?demo=1">Mode demo (tanpa dompet)</a>
+  </div>
+</div></div>
 
-<footer><div class="in">
-  <div>SYLORA — GMT Build Week Vol.2 · BOT Chain (testnet 968 / mainnet 677)</div>
-  <div><a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener">github.com/oceanfluxx/sylora</a></div>
+<footer><div class="wrap in">
+  <div>SYLORA — GMT Build Week Vol.2 · jalan di BOT Chain (testnet 968 / mainnet 677)</div>
+  <div><a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener">github.com/oceanfluxx/sylora</a> · <a href="app.html">aplikasi</a></div>
 </div></footer>
 
-<div id="toast" role="status" aria-live="polite"></div>
-
-<script src="vendor/ethers.umd.min.js"></script>
-<script>if(typeof ethers==="undefined")document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"><\/script>');</script>
-<script>
-/* ================= SYLORA — ethers v6 + MetaMask ================= */
-const REG_ABI = [
-  "function owner() view returns (address)",
-  "function syl() view returns (address)",
-  "function verifiers(address) view returns (bool)",
-  "function REWARD() view returns (uint256)",
-  "function MIN_REDEEM() view returns (uint256)",
-  "function actionCount() view returns (uint256)",
-  "function getAction(bytes32) view returns (address,string,string,bytes32,uint64,uint8,address,uint256,uint16)",
-  "function getActionsByUser(address) view returns (bytes32[])",
-  "function getPendingActions() view returns (bytes32[])",
-  "function pendingCount(address) view returns (uint256)",
-  "function userStreak(address) view returns (uint256)",
-  "function poolBalance() view returns (uint256)",
-  "function submitAction(string,string,bytes32) returns (bytes32)",
-  "function verifyAction(bytes32)",
-  "function rejectAction(bytes32,string)",
-  "function redeemVoucher(uint256)"
-];
-const TOK_ABI = [
-  "function symbol() view returns (string)",
-  "function MAX_SUPPLY() view returns (uint256)",
-  "function totalBurned() view returns (uint256)",
-  "function totalSupply() view returns (uint256)",
-  "function balanceOf(address) view returns (uint256)",
-  "function allowance(address,address) view returns (uint256)",
-  "function approve(address,uint256) returns (bool)"
-];
-const TYPES = {tree_planting:"Tree planting",beach_cleanup:"Beach cleanup",recycle:"Recycling",compost:"Composting",other:"Other"};
-const STATUS = ["pending","verified","rejected"];
-
-const $ = id => document.getElementById(id);
-const fmt = (wei,dp=0) => Number(ethers.formatUnits(wei,18)).toLocaleString("en-US",{maximumFractionDigits:dp,minimumFractionDigits:dp});
-const short = a => a ? a.slice(0,6)+"…"+a.slice(-4) : "";
-const esc = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const timeAgo = ts => {
-  const d = Math.max(0, Math.floor(Date.now()/1000) - ts);
-  if (d < 3600) return Math.max(1,Math.floor(d/60)) + "m ago";
-  if (d < 86400) return Math.floor(d/3600) + "h ago";
-  return Math.floor(d/86400) + "d ago";
-};
-const toast=(msg,bad)=>{ const t=$("toast"); t.textContent=msg; t.className="show"+(bad?" bad":""); clearTimeout(t._x); t._x=setTimeout(()=>t.className="",4200); };
-function parseAmt(){ try{ const v=$("rAmt").value.trim(); if(!/^\d+(\.\d{0,18})?$/.test(v)) return null; return ethers.parseUnits(v,"ether"); }catch{ return null; } }
-function cleanErr(m){
-  if(/CooldownActive/.test(m)) return "Cooldown: this action type was submitted less than 24h ago.";
-  if(/TooManyPending/.test(m)) return "You already have 3 actions awaiting verification.";
-  if(/InvalidActionType/.test(m)) return "Unknown action type.";
-  if(/DescriptionTooLong/.test(m)) return "Description exceeds 280 characters.";
-  if(/PoolEmpty/.test(m)) return "Reward pool is empty — organizer must top it up.";
-  if(/NotPending/.test(m)) return "This action was already decided.";
-  if(/NotVerified/.test(m)||/NotVerifier/.test(m)) return "Only organizers can verify or reject.";
-  if(/BelowMinRedeem/.test(m)) return "Minimum redeem is 50 $SYL.";
-  if(/InsufficientBalance|ERC20: transfer/.test(m)) return "Not enough allowance or balance — Approve $SYL first.";
-  return m;
-}
-
-let provider=null, signer=null, account=null, registry=null, token=null;
-let DEMO=false, imgHash=null;
-
-/* ---------- demo dataset (mirrors real contract state) ---------- */
-const D = {
-  pool: 999800n*10n**18n, burned: 150n*10n**18n, streak: 2n, balance: 150n*10n**18n,
-  mine: [
-    {id:"0x8a3fc2e1",type:"tree_planting",desc:"Planted 12 mangrove seedlings at Wonokromo riverbank with neighbours",status:1,reward:50n*10n**18n,streak:2,ts:Math.floor(Date.now()/1000)-2*86400},
-    {id:"0x71c09f44",type:"beach_cleanup",desc:"3 bags of plastic collected, Glass Beach crew",status:1,reward:50n*10n**18n,streak:1,ts:Math.floor(Date.now()/1000)-4*86400},
-    {id:"0xf00d5a1b",type:"compost",desc:"First month of kitchen compost — 8kg diverted",status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)-6*3600},
-  ],
-  pending: [
-    {id:"0xf00d5a1b",idFull:"0xf00d00000000000000000000000000000000000000000000000000005a1b",who:"0x71C0a4e59B3D2F1c8A0e6B77C9d40F2aB1e3D5a7",type:"compost",desc:"First month of kitchen compost — 8kg diverted",ts:Math.floor(Date.now()/1000)-6*3600},
-    {id:"0xab1277e9",idFull:"0xab12000000000000000000000000000000000000000000000000000077e9",who:"0x8a3Fb1d4E29C607aE5b38D1F4c07B9a2E6d31F88",type:"recycle",desc:"4.2kg e-waste dropped at kecamatan depot",ts:Math.floor(Date.now()/1000)-11*3600},
-  ]
-};
-
-/* ---------- connect ---------- */
-$("connectBtn").addEventListener("click", async ()=>{
-  if (DEMO){ toast("You're in demo mode — exit it to use real contracts",true); return; }
-  if (!window.ethereum){ toast("MetaMask not found — install it to connect",true); return; }
-  try{
-    provider = new ethers.BrowserProvider(window.ethereum);
-    const accts = await provider.send("eth_requestAccounts",[]);
-    account = accts[0];
-    const net = await provider.getNetwork();
-    const cid = Number(net.chainId);
-    $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
-    $("connectBtn").textContent = short(account);
-    signer = await provider.getSigner();
-    if (registry) refresh(); else if ($("cfgReg").value && $("cfgTok").value) loadContracts();
-    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)||"Connect wallet"; if(registry) refresh(); });
-    window.ethereum.on?.("chainChanged", ()=>location.reload());
-  }catch(e){ toast("Wallet rejected: "+(e.shortMessage||e.message),true); }
-});
-
-function loadContracts(silent){
-  const r=$("cfgReg").value.trim(), t=$("cfgTok").value.trim();
-  if(!ethers.isAddress(r)||!ethers.isAddress(t)){ toast("Both addresses must be valid 0x…",true); return; }
-  if(!provider||!account){ toast("Connect wallet first",true); return; }
-  localStorage.setItem("syl_reg",r); localStorage.setItem("syl_tok",t);
-  registry = new ethers.Contract(r,REG_ABI,provider);
-  token = new ethers.Contract(t,TOK_ABI,provider);
-  $("netInfo").textContent = "Registry "+r.slice(0,10)+"… · Token "+t.slice(0,10)+"…";
-  if(!silent) toast("Contracts loaded ✓");
-  refresh();
-}
-$("loadBtn").addEventListener("click",()=>loadContracts());
-$("cfgReg").value = localStorage.getItem("syl_reg")||"";
-$("cfgTok").value = localStorage.getItem("syl_tok")||"";
-
-/* ---------- render helpers ---------- */
-function renderStrip(pool,verified,streak,burned,supplyLeft){
-  $("stPool").innerHTML = fmt(pool)+" <small>$SYL</small>";
-  $("stVerified").textContent = verified.toLocaleString();
-  $("stSupply").innerHTML = fmt(supplyLeft)+" <small>/ 1M</small>";
-  $("stBurned").innerHTML = fmt(burned)+" <small>$SYL</small>";
-  $("stStreak").textContent = streak+"d";
-}
-function badge(s){ return `<span class="badge b-${STATUS[s]}">${STATUS[s]}</span>`; }
-function row(a){
-  return `<tr>
-    <td><div class="type">${TYPES[a.type]||esc(a.type)}</div><div class="desc">${esc(a.desc)}</div>
-        <div class="id">${a.id} · ${timeAgo(a.ts)}</div></td>
-    <td>${badge(a.status)}</td>
-    <td style="text-align:right" class="mono">${a.status===1?fmt(a.reward)+" $SYL":"—"}${a.status===1&&a.streak>1?`<div style="font-size:11px;color:var(--ink-soft)">streak ×${a.streak}</div>`:""}</td></tr>`;
-}
-function renderMine(list){
-  $("myActions").innerHTML = list.length
-    ? list.map(row).join("")
-    : `<tr><td colspan="3" style="color:var(--ink-soft)">No actions yet — log your first one.</td></tr>`;
-}
-function renderPending(list){
-  if(!list.length){ $("pendingTable").innerHTML=""; $("noPending").hidden=false; return; }
-  $("noPending").hidden=true;
-  $("pendingTable").innerHTML = list.map(p=>`<tr>
-    <td><div class="type">${TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(p.desc)}</div>
-        <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
-    <td style="text-align:right;white-space:nowrap">
-      <button class="btn btn-dark btn-sm" data-act="verify" data-id="${p.idFull}">Verify +50</button>
-      <button class="btn btn-danger btn-sm" data-act="reject" data-id="${p.idFull}">Reject</button></td></tr>`).join("");
-}
-
-/* ---------- refresh (real chain) ---------- */
-async function refresh(){
-  if (DEMO || !registry || !account) return;
-  try{
-    const [pool, streak, maxSupply, burned, ids] = await Promise.all([
-      registry.poolBalance(), registry.userStreak(account),
-      token.MAX_SUPPLY(), token.totalBurned(), registry.getActionsByUser(account)
-    ]);
-    let verified=0; const mine=[];
-    for(const id of ids){
-      const a = await registry.getAction(id);
-      if(a[5]===1) verified++;
-      mine.push({id:id.slice(0,10)+"…",idFull:id,type:a[1],desc:a[2],status:a[5],reward:a[7],streak:a[8],ts:Number(a[4])});
-    }
-    mine.sort((x,y)=>y.ts-x.ts);
-    renderStrip(pool,verified,streak,burned,maxSupply-burned);
-    renderMine(mine);
-    const isVerifier = await registry.verifiers(account);
-    $("verifyWrap").hidden = !isVerifier;
-    $("redeemN").textContent = isVerifier ? "04" : "03";
-    $("netN").textContent = isVerifier ? "05" : "04";
-    if(isVerifier){
-      const pend=[]; const pids = await registry.getPendingActions();
-      for(const id of pids){ const a=await registry.getAction(id);
-        pend.push({id:id.slice(0,10)+"…",idFull:id,who:a[0],type:a[1],desc:a[2],ts:Number(a[4])}); }
-      renderPending(pend);
-    }
-    updateRedeem();
-  }catch(e){ console.error(e); toast("Read failed — check addresses / network: "+(e.shortMessage||e.message),true); }
-}
-
-/* ---------- submit ---------- */
-$("aDesc").addEventListener("input", e=>{ $("charCount").textContent=e.target.value.length; enableSubmit(); });
-function enableSubmit(){
-  $("submitBtn").disabled = !(imgHash && $("aDesc").value.trim().length>0);
-}
-async function hashFile(file){
-  if(!file) return;
-  const buf = new Uint8Array(await file.arrayBuffer());
-  imgHash = ethers.keccak256(buf);
-  $("fileLabel").innerHTML = `Photo hashed ✓ <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB — never uploaded)</span>`;
-  $("hashOut").textContent = imgHash;
-  enableSubmit();
-}
-$("fileZone").addEventListener("click",()=>$("aFile").click());
-$("fileZone").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); $("aFile").click(); }});
-$("aFile").addEventListener("change",e=>hashFile(e.target.files[0]));
-["dragover","dragleave","drop"].forEach(ev=>$("fileZone").addEventListener(ev,e=>{
-  e.preventDefault();
-  $("fileZone").classList.toggle("drag",ev==="dragover");
-  if(ev==="drop"&&e.dataTransfer.files[0]) hashFile(e.dataTransfer.files[0]);
-}));
-
-$("submitBtn").addEventListener("click", async ()=>{
-  const type=$("aType").value, desc=$("aDesc").value.trim();
-  if(DEMO){
-    D.mine.unshift({id:"0x"+Math.random().toString(16).slice(2,10),type,desc,status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)});
-    renderMine(D.mine); toast("Demo: action submitted for verification");
-    resetForm(); return;
-  }
-  if(!signer||!registry){ toast("Connect wallet + load contracts first",true); return; }
-  $("submitBtn").disabled=true; $("submitErr").innerHTML="";
-  try{
-    const tx = await registry.connect(signer).submitAction(type,desc,imgHash);
-    toast("Submitted — waiting for confirmation…");
-    await tx.wait();
-    toast("Action logged on-chain ✓");
-    resetForm(); refresh();
-  }catch(e){
-    $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"failed"))}</div>`;
-    enableSubmit();
-  }
-});
-function resetForm(){
-  imgHash=null; $("hashOut").textContent=""; $("aDesc").value=""; $("charCount").textContent="0";
-  $("fileLabel").innerHTML="Drop a photo or click to pick<br><span style='font-size:12px'>the file never leaves your device — only its keccak256 hash goes on-chain</span>";
-  enableSubmit();
-}
-
-/* ---------- verifier desk (event delegation) ---------- */
-$("pendingTable").addEventListener("click", async e=>{
-  const b=e.target.closest("button"); if(!b) return;
-  const id=b.dataset.id, act=b.dataset.act;
-  if(DEMO){
-    if(act==="verify"){
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending);
-      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(approved from queue)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
-      D.balance+=50n*10n**18n; renderMine(D.mine); $("myBalance").textContent=fmt(D.balance,2);
-      toast("Demo: verified, +50 $SYL");
-    }else{
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: rejected");
-    }
-    return;
-  }
-  try{
-    if(act==="verify"){
-      const tx=await registry.connect(signer).verifyAction(id); toast("Tx sent…"); await tx.wait();
-      toast("Verified ✓ reward paid from pool");
-    }else{
-      const reason=prompt("Rejection reason (shown to submitter):")||"Not verifiable";
-      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Tx sent…"); await tx.wait();
-      toast("Action rejected");
-    }
-    refresh();
-  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"failed"),true); }
-});
-
-/* ---------- redeem ---------- */
-$("rAmt").addEventListener("input", updateRedeem);
-async function updateRedeem(){
-  const amt = parseAmt();
-  let bal = DEMO ? D.balance : 0n;
-  if(!DEMO && token && account){ try{ bal = await token.balanceOf(account); }catch{} }
-  $("myBalance").textContent = fmt(bal,2);
-  const min = 50n*10n**18n;
-  const ok = amt!==null && amt>=min && amt<=bal;
-  $("redeemErr").innerHTML = amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
-    : amt>bal && amt>0n ? `<div class="err">Amount exceeds your $SYL balance.</div>`
-    : amt>0n&&amt<min ? `<div class="err">Minimum redeem is 50 $SYL.</div>` : "";
-  $("redeemBtn").disabled = !ok;
-  $("approveBtn").disabled = !ok;
-}
-$("approveBtn").addEventListener("click", async ()=>{
-  const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){ toast("Demo: approval simulated — now burn"); $("redeemBtn").disabled=false; return; }
-  try{
-    const tx=await token.connect(signer).approve(await registry.syl(),amt);
-    toast("Approving…"); await tx.wait(); toast("Allowance set ✓ now burn");
-    $("redeemBtn").disabled=false;
-  }catch(e){ toast(cleanErr(e.shortMessage||e.message),true); }
-});
-$("redeemBtn").addEventListener("click", async ()=>{
-  const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){
-    D.balance-=amt; D.burned+=amt;
-    renderStrip(D.pool, D.mine.filter(m=>m.status===1).length, D.streak, D.burned, 1000000n*10n**18n-D.burned);
-    $("myBalance").textContent=fmt(D.balance,2);
-    toast("Demo: "+fmt(amt)+" $SYL burned → voucher ready"); return;
-  }
-  try{
-    const tx=await registry.connect(signer).redeemVoucher(amt);
-    toast("Burning…"); await tx.wait(); toast(fmt(amt)+" $SYL burned — voucher minted ✓");
-    refresh();
-  }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"failed"),true); }
-});
-
-/* ---------- demo mode ---------- */
-$("demoBtn").addEventListener("click", ()=>toggleDemo(!DEMO));
-function toggleDemo(on){
-  DEMO=on;
-  $("demoTag").hidden=!on;
-  $("demoBtn").textContent=on?"Exit demo mode":"Explore demo mode";
-  if(on){
-    $("netBadge").textContent="demo · chain 968";
-    renderStrip(D.pool,D.mine.filter(m=>m.status===1).length,D.streak,D.burned,1000000n*10n**18n-D.burned);
-    renderMine(D.mine); renderPending(D.pending);
-    $("verifyWrap").hidden=false; $("redeemN").textContent="04"; $("netN").textContent="05";
-    $("connectBtn").textContent="Connect wallet";
-    updateRedeem();
-    toast("Demo mode — data is simulated, no wallet needed. Good for the judges.");
-  }else{
-    $("netBadge").textContent = provider&&account ? "connected" : "not connected";
-    $("verifyWrap").hidden=true;
-    renderStrip(0n,0,0n,0n,1000000n*10n**18n);
-    ["stPool","stVerified","stSupply","stBurned","stStreak"].forEach(i=>$(i).textContent="—");
-    renderMine([]);
-    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--ink-soft)">Connect wallet to see your actions.</td></tr>`;
-    $("myBalance").textContent="0.00";
-    if(provider&&account&&registry) refresh();
-  }
-}
-
-if(!window.ethereum) $("netBadge").textContent="no wallet · demo available";
-if(location.search.includes("demo=1")) toggleDemo(true);
-</script>
 </body>
 </html>

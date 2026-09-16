@@ -43,7 +43,7 @@ Detail lengkap: [`build-week/DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md)
 
 - [x] Smart contracts (Solidity ^0.8.20) — compile & 36/36 E2E green
 - [ ] Deploy ke BOT Chain testnet (butuh faucet)
-- [x] Frontend DApp (single-page, MetaMask + ethers v6, demo mode)
+- [x] Landing kawaii-coffee (DESIGN.md token system, ID copy) + DApp app.html (MetaMask, ethers v6, demo mode)
 
 ## 📄 PRD
 
