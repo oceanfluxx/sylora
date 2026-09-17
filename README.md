@@ -1,17 +1,19 @@
 # SYLORA 🌱
 
-**On-chain eco-action reward system** — proof-of-action untuk aksi lingkungan nyata, dengan token reward $SYL yang *hard-capped* dan deflationary.
+**Eco-action reward DApp with a fixed public ledger** — aksi lingkungan tercatat, reward punya batas, dan lifecycle poin dapat diaudit siapa pun.
 
 > Built for **GMT Build Week Vol.2** — target: BOT Chain (testnet chain ID 968 / mainnet Bohr 677).
 
 ## ✨ Kenapa SYLORA beda
 
-| Masalah "poin bank sampah" biasa | Solusi SYLORA |
+Platform seperti ESG-in, Sirkula, dan aplikasi bank sampah sudah membuktikan bahwa orang mau melakukan aksi hijau kalau ada reward. SYLORA mengambil pertanyaan berikutnya: bagaimana memastikan reward itu tidak bisa dicetak seenaknya dan riwayatnya tidak bisa diubah diam-diam?
+
+| Poin lemah reward lingkungan umum | Solusi SYLORA |
 |---|---|
-| Poin bisa di-print diam-diam oleh admin | **Supply hard-cap 1.000.000 $SYL** — tidak ada fungsi `mint()` sama sekali di contract |
-| Bukti foto bisa dipalsukan / di-swap | `imageHash` (keccak256) di-commit on-chain **sebelum** upload — bukti terkunci saat submit |
-| Poin gak ada gunanya kalau udah dikumpulin | $SYL **dibakar** saat tukar voucher → supply menyusut, ada real utility |
-| Admin bisa bayar reward sembarangan | Reward hanya keluar dari pool — **solvent by design**, pool balance = reward unclaimed |
+| Poin bisa diubah tanpa catatan publik | **Supply hard-cap 1.000.000 $SYL** — tidak ada fungsi `mint()` sama sekali di contract |
+| Bukti foto bisa diganti setelah dikirim | `imageHash` (keccak256) di-commit on-chain **sebelum** upload — bukti terkunci saat submit |
+| Poin cuma angka tanpa lifecycle | $SYL **dibakar** saat tukar voucher → supply menyusut, ada real utility |
+| Reward keluar tanpa batas yang jelas | Reward hanya keluar dari pool — **solvent by design**, pool balance = reward unclaimed |
 
 ## 🧱 Contracts
 
@@ -50,4 +52,4 @@ Detail lengkap: [`build-week/DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md)
 Lihat [`SYLORA_PRD.md`](SYLORA_PRD.md) — gap analysis, tokenomics, MVP scope.
 
 ---
-*Lesson learned dari proyek eco-token sebelumnya (Toucan/KlimaDAO zombie credits): token yang bisa di-mint bebas = trust-killer. SYLORA justru sebaliknya — supply terkunci selamanya, verifikasi ganda (AI + human), burn-on-redeem.*
+*Lesson learned dari proyek eco-token sebelumnya (Toucan/KlimaDAO zombie credits): token yang bisa di-mint bebas = trust-killer. SYLORA justru sebaliknya — supply terkunci selamanya, human verification untuk MVP, dan burn-on-redeem. AI verification tetap roadmap.*

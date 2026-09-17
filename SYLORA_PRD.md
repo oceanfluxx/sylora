@@ -6,8 +6,8 @@
 ---
 
 **Author:** Erina (ocean)
-**Date:** 9 September 2026 (v0.2 — post competitor gap analysis)
-**Status:** Draft v0.2
+**Date:** 16 September 2026 (v0.3 — ESGIN/ESG-in competitor gap analysis)
+**Status:** Draft v0.3 — positioning updated after direct review of ESGIN website, platform page, and whitepaper search excerpts.
 **Hackathon submission deadline:** 23 September 2026, 11:59 PM (GMT+7)
 **Build window:** 18–22 September 2026 (5 days)
 
@@ -23,28 +23,37 @@ SYLORA terinspirasi dari project Lumora (Indra Mahesa, 2026) yang mengeksplorasi
 
 ## 1a. Competitor & Gap Analysis (riset 9 Sept 2026)
 
-**Kompetitor yang dianalisis:**
+**Kompetitor dan pembanding yang dianalisis:**
 
-| Project | Model | Pelajaran |
-|---|---|---|
-| DeCleanup Network (Base+Celo) | Clean-to-earn | Staked verifier (100 token) + slashing; GPS+timestamp; Hypercerts tiap 10 cleanup |
-| Green Credit (Devpost/Moonbeam) | Submit+verify+reward (paling mirip SYLORA) | Sink ekonomi: stake USDC earn GCT; roadmap oracle & Web-of-Trust |
-| EcoQuest (Devpost) | Gamified eco-action | Verifikasi AI vision (confidence score, deteksi foto stock/duplikat), streak multiplier |
-| Treegens | Proof-of-Tree mangrove | Token $MGRO hanya lahir dari planting terverifikasi (AI + DAO), bukti lapangan ber-GPS |
-| VeChain x 4ocean (Cleanify) | Clean-to-Earn korporat | Reward ganda: token + fisik (gelang plastik daur ulang) |
-| Green Goods | Impact-to-funding | Work verified → Hypercerts yang dibeli funder CSR |
-| Tanbii (startup $3M pre-seed) | Climate game | Proof-of-Green: AI verifikasi behavior, 25k early users |
-| Plastic Bank | SaaS fintech sosial | AI fraud detection via pattern recognition |
-| Toucan/KlimaDAO (studi kegagalan) | Tokenisasi carbon credit | Tokenisasi tanpa quality control → pasar jadi tempat buang kredit jelek ("zombie credits"). Lesson: quality gate WAJIB di desain awal |
+| Project | Model | Yang sudah mereka lakukan | Gap yang masih terbuka |
+|---|---|---|---|
+| **ESG-in / ESGIN (Indonesia)** | Climate-action platform + AI verification + ESG data | User submit foto/video dan metadata lokasi; aksi diverifikasi AI; poin off-chain; ecosystem menghubungkan komunitas, bank sampah, perusahaan, carbon/ESG market | User reward masih berupa poin off-chain yang kebijakan nilainya dapat berubah; token ESGIN berada di economic layer terpisah. Belum fokus pada buku kas reward komunitas yang fixed-supply dan transparan |
+| DeCleanup Network (Base+Celo) | Clean-to-earn | Staked verifier + slashing; GPS/timestamp; Hypercerts | Lebih kompleks dan berorientasi protokol; belum menjadi UX sederhana untuk kebiasaan harian pengguna umum |
+| Green Credit (Devpost/Moonbeam) | Submit + verify + reward | Stake USDC, earn GCT; roadmap oracle dan Web-of-Trust | Belum menyelesaikan trust chain dari bukti aksi sampai reward yang punya sink jelas |
+| EcoQuest (Devpost) | Gamified eco-action | AI vision, confidence score, deteksi foto duplikat/stock, streak multiplier | Kuat di gamifikasi dan validasi, tetapi bukan fokus pada batas supply dan lifecycle reward |
+| Treegens | Proof-of-Tree mangrove | AI + DAO, bukti planting ber-GPS; token hanya lahir dari planting terverifikasi | Spesifik pada penanaman/mangrove, bukan platform multi-aksi komunitas |
+| VeChain x 4ocean (Cleanify) | Corporate clean-to-earn | Reward token + produk fisik | Bergantung pada partner korporat dan campaign tertentu |
+| Plastic Bank | Social fintech / waste collection | Infrastruktur pengumpulan sampah dan fraud detection | Reward dan ledger tetap dikelola secara terpusat |
+| Toucan/KlimaDAO | Tokenisasi carbon credit | Membuka akses tokenisasi carbon market | Pelajaran kegagalan: tokenisasi tanpa quality gate dapat menghasilkan “zombie credits” |
 
-**Gap SYLORA vs pasar → 4 improvement yang masuk MVP (lihat §5 untuk spec):**
+### Gap yang dipilih SYLORA
 
-1. **Proof bisa diganti setelah submit** (semua kompetitor menyimpan GPS/timestamp/hash) → fix: simpan `keccak256(imageBytes)` on-chain, bukan URL.
-2. **Verifikasi 1 organizer = bottleneck** (pesaing sudah pakai AI/staking) → MVP tetap human-verified, tapi hash proof membuat verifikasi auditable. AI vision = roadmap.
-3. **Tokenomics tanpa sink** (kesalahan yang sama dengan Toucan: mint bebas → inflasi) → fix: reward pool dari sponsor + burn-on-redeem. $SYL hanya keluar dari pool sponsor, dan dibakar saat redeem voucher.
-4. **Zero anti-sybil** → fix: cooldown per jenis aksi + max pending per user (on-chain mapping).
+Riset baru mempersempit gap SYLORA. Kita **tidak** mengklaim sebagai aplikasi pertama yang memberi poin untuk aksi lingkungan. ESG-in sudah menunjukkan pola *aksi → bukti → verifikasi → poin* dapat dipakai sebagai platform nyata di Indonesia.
 
-**Angle lokal yang belum dipakai pesaing Indonesia:** aplikasi bank sampah ada banyak, tapi nilainya sering turun & tidak transparan (paper jurnal: "Depresiasi Nilai Poin DTBM"). Pitch: *SYLORA = reward lingkungan dengan buku kas publik — tiap $SYL keluar dari smart contract tercatat publik, tidak bisa "dicetak diam-diam" seperti poin bank sampah.*
+Gap yang ingin diisi SYLORA adalah **trust dan lifecycle reward untuk aksi komunitas**:
+
+1. **Poin platform dapat berubah tanpa ledger publik yang mudah diaudit** → SYLORA memakai supply `$SYL` yang fixed-cap dan seluruh distribusi reward tercatat on-chain.
+2. **Poin aktivitas dan token ekonomi berada di lapisan terpisah** → SYLORA mengeksplorasi satu reward unit yang punya batas supply, sumber reward jelas, dan utility redeem.
+3. **Bukti hanya membuktikan aksi dikirim, bukan selalu integritas bukti setelah submit** → SYLORA menyimpan `keccak256(imageBytes)` on-chain. Klaimnya dibatasi: hash menjaga bukti tidak diganti setelah dikirim; verifier tetap menilai apakah aksi benar-benar terjadi.
+4. **Reward belum memiliki lifecycle yang jelas** → SYLORA menerapkan `reward pool → verified reward → redeem → burn`, sehingga reward yang digunakan tidak berputar tanpa batas.
+5. **Anti-spam/anti-sybil pada aksi komunitas sederhana masih minim** → MVP memakai cooldown per jenis aksi dan batas pending action per user.
+6. **UX Web3 sering terlalu teknis** → SYLORA menerjemahkan wallet, gas, token, dan burn menjadi bahasa pengguna biasa: dompet digital, biaya jaringan, poin, serta “poin ditukar lalu hilang”.
+
+**Positioning final:**
+
+> *ESG-in mengubah aksi lingkungan menjadi data ESG yang dapat diverifikasi. SYLORA mengeksplorasi bagaimana reward aksi komunitas dapat dibuat terbatas, transparan, dan memiliki lifecycle yang dapat diaudit.*
+
+**Angle lokal:** aplikasi bank sampah dan platform eco-action sudah membuktikan kebutuhan terhadap reward, tetapi nilai poin dan aturan distribusinya umumnya masih bergantung pada operator. SYLORA memosisikan diri sebagai **buku kas publik untuk reward lingkungan komunitas**, bukan sebagai aplikasi eco-reward pertama.
 
 ---
 
@@ -56,7 +65,7 @@ SYLORA terinspirasi dari project Lumora (Indra Mahesa, 2026) yang mengeksplorasi
 - Frontend 1 halaman HTML yang connect MetaMask + panggil contract
 - Deploy ke BOT Chain **testnet** (development) dan **mainnet** (submission)
 - Live di custom domain ($1 reimbursement dari hackathon)
-- Demo flow: submit → verify → mint reward, end-to-end working
+- Demo flow: submit → human verifier approves → pool-funded reward, end-to-end working
 
 ### Non-Goals (out of scope untuk MVP)
 - NFT badge (rencana next steps)
@@ -309,7 +318,11 @@ sylora/
 
 ## References
 
-- [GMT Build Week Hackathon Vol.2 Guidebook](https://www.girlmeetstech.org/guidebook-build-week-hackathon-vol2)
+- [ESGIN website](https://www.esgintoken.com/) — ecosystem, Proof of Action, AI verification, token layer
+- [ESG-in Indonesia platform](https://id.esg-in.com/) — live Indonesia climate-action platform
+- [ESGIN Whitepaper](https://www.esgintoken.com/ESGIN_Whitepaper.pdf) — two-layer point/token architecture
+- [ESGIN Businesspaper](https://www.esgintoken.com/esgin_businesspaper.pdf) — ESG action network, EAC, AI verification, bank network
+- [GMT Build Week Hackathon Vol.2 Guidebook](https://www.girlmeetstech.org/guidebook-build-week-hackathon)
 - [BOT Chain Developer Docs](https://dev-docs.botchain.ai/docs/intro/)
 - [BOT Chain Testnet Faucet](https://faucet.botchain.ai/basic)
 - [BOT Chain Testnet Explorer (Bohr)](https://scan.bohr.life/)
