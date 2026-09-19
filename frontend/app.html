@@ -1,236 +1,317 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SYLORA — Catat aksi hijau, dapatkan manfaat nyata</title>
 <meta name="description" content="Catat aksi lingkungan, diperiksa komunitas, dan dapatkan poin SYL yang terbatas serta transparan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --canvas:#f2f4ef; --surface:#ffffff; --ink:#0d1f17; --ink-soft:#4b5a51; --line:#dde3d9;
-  --evergreen:#0d4a33; --evergreen-deep:#082c1f; --lime:#9fe83a; --lime-press:#8bd427;
-  --amber:#a8620a; --amber-bg:#fdf3e0; --brick:#a52a2a; --brick-bg:#fbeaea; --moss:#2f7d5a; --moss-bg:#e4f2e9;
-  --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Space Grotesk',system-ui,sans-serif;
-  --r:6px;
+  --cream:#FFF7EE; --paper:#FFFFFF; --cocoa:#4A342A; --latte:#8C7466; --milkline:#F0E4D6;
+  --matcha:#7CBF8E; --matcha-deep:#3E7A52; --matcha-foam:#E7F4E9;
+  --sakura:#F5B8C4; --sakura-soft:#FDEBF0; --caramel:#E8A54B; --caramel-soft:#FBF0DC;
+  --azuki:#C96A6A; --azuki-soft:#FBEAEA;
+  --r:16px; --r-pill:999px;
+  --shadow:0 6px 18px rgba(74,52,42,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--canvas);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;touch-action:manipulation}
-::selection{background:var(--lime);color:var(--evergreen-deep)}
+body{background:var(--cream);color:var(--cocoa);font-family:'Nunito',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;touch-action:manipulation}
+::selection{background:var(--sakura);color:var(--cocoa)}
+h1,h2,h3,.brand{font-family:'Baloo 2',cursive;font-weight:700;line-height:1.2}
+button{font-family:inherit}
 
-header{position:sticky;top:0;z-index:40;background:var(--evergreen-deep);color:#eef4ef;border-bottom:3px solid var(--lime)}
-.bar{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
-.logo{font-weight:700;font-size:19px;letter-spacing:.14em;text-transform:uppercase;color:#fff}
-.logo em{font-style:normal;color:var(--lime)}
-.net-badge{font-family:var(--mono);font-size:11px;padding:3px 8px;border:1px solid #3c5a4a;border-radius:99px;color:#b9d8c5;white-space:nowrap}
+/* ---------- top bar ---------- */
+header{position:sticky;top:0;z-index:40;background:rgba(255,247,238,.94);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--milkline)}
+.bar{max-width:480px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:10px}
+.brand{font-size:20px;color:var(--cocoa);text-decoration:none}
+.brand b{color:var(--matcha-deep)}
 .spacer{flex:1}
-.btn{font-family:var(--sans);font-weight:600;font-size:14px;border:0;border-radius:var(--r);padding:10px 16px;cursor:pointer;transition:background .15s,transform .05s}
-.btn:active{transform:translateY(1px)}
-.btn:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
-.btn-lime{background:var(--lime);color:var(--evergreen-deep)}
-.btn-lime:hover{background:var(--lime-press)}
-.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.btn-ghost:hover{background:#fff}
-.btn-dark{background:var(--evergreen);color:#fff}
-.btn-dark:hover{background:var(--evergreen-deep)}
-.btn-danger{background:var(--brick);color:#fff}
-.btn-danger:hover{background:#8a1f1f}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn-sm{padding:6px 12px;font-size:13px}
+.net-badge{font-size:11px;font-weight:800;padding:4px 10px;border:1.5px solid var(--milkline);border-radius:var(--r-pill);color:var(--latte);background:var(--paper);white-space:nowrap}
+.demo-tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;background:var(--caramel-soft);color:#9a6a1e;border:1.5px solid #f2dcb4;padding:3px 9px;border-radius:var(--r-pill);text-transform:uppercase}
 
-main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
-section{margin-bottom:40px}
-h1{font-size:34px;line-height:1.12;letter-spacing:-.01em;font-weight:700;max-width:560px}
-h1 .hl{color:var(--evergreen);text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:6px;text-underline-offset:2px}
-.lede{margin-top:12px;color:var(--ink-soft);max-width:560px;font-size:16px}
-.hero{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap;padding:34px 0 8px}
-h2{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
-h2 .n{font-family:var(--mono);color:var(--moss);margin-right:8px}
+/* ---------- layout ---------- */
+main{max-width:480px;margin:0 auto;padding:18px 18px 96px}
+.tab{display:none;animation:fadein .18s ease}
+.tab.on{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page-title{font-size:24px;margin-bottom:14px}
 
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden;margin-top:24px}
-.strip .cell{padding:16px 18px;border-right:1px solid var(--line)}
-.strip .cell:last-child{border-right:0}
-.strip .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-.strip .v{font-family:var(--mono);font-size:21px;font-weight:600;margin-top:4px;color:var(--evergreen)}
-.strip .v small{font-size:12px;color:var(--ink-soft);font-weight:500}
+/* ---------- cards ---------- */
+.card{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.card h3{font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 .em{font-size:20px}
 
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
-.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:24px}
-@media(max-width:860px){.grid2{grid-template-columns:1fr}}
-.pad{padding:20px}
-label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:16px 0 6px}
+/* point card */
+.point-card{background:linear-gradient(135deg,var(--matcha-deep),#2f5e40);color:#fff;border:0}
+.point-card .lbl{font-size:12.5px;font-weight:700;opacity:.85}
+.point-card .big{font-family:'Baloo 2';font-size:40px;font-weight:800;line-height:1.1;color:#fff}
+.point-card .big small{font-size:15px;font-weight:700;opacity:.8}
+.point-card .row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chip{font-size:11.5px;font-weight:800;padding:5px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.3);color:#fff}
+
+/* stat grid */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
+.stat .k{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--latte)}
+.stat .v{font-family:'Baloo 2';font-size:20px;font-weight:800;color:var(--matcha-deep);margin-top:2px}
+.stat .v small{font-size:11.5px;color:var(--latte);font-weight:700}
+
+/* ticker */
+.ticker{display:flex;align-items:center;gap:8px;background:var(--cocoa);color:#fff;border-radius:var(--r-pill);padding:9px 14px;font-size:12.5px;font-weight:700;margin-bottom:16px;overflow:hidden}
+.ticker .live{background:#3ddc74;color:#0b3d1f;font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--r-pill);letter-spacing:.06em;flex-shrink:0}
+.ticker .msg{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticker .pts{color:#3ddc74;flex-shrink:0}
+
+/* ---------- forms ---------- */
+label{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--latte);margin:14px 0 6px}
 label:first-child{margin-top:0}
-select,input[type=text],textarea{width:100%;font-family:var(--sans);font-size:15px;color:var(--ink);background:#fbfcfa;border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
-select:focus-visible,input:focus-visible,textarea:focus-visible{outline:none;border-color:var(--moss);box-shadow:0 0 0 3px rgba(47,125,90,.18)}
-textarea{resize:vertical;min-height:74px}
-.file-zone{border:1.5px dashed var(--line);border-radius:var(--r);padding:18px;text-align:center;color:var(--ink-soft);cursor:pointer;transition:border-color .15s,background .15s}
-.file-zone:hover,.file-zone.drag{border-color:var(--moss);background:#f6faf5}
-.file-zone:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
-.file-zone .hash{font-family:var(--mono);font-size:12px;color:var(--moss);word-break:break-all;margin-top:6px}
-.hint{font-size:12.5px;color:var(--ink-soft);margin-top:8px}
-.err{font-size:13px;color:var(--brick);background:var(--brick-bg);border-radius:var(--r);padding:9px 12px;margin-top:12px}
+select,input[type=text],textarea{width:100%;font-family:'Nunito';font-size:15px;color:var(--cocoa);background:#fdfaf5;border:1.5px solid var(--milkline);border-radius:12px;padding:11px 13px}
+select:focus-visible,input:focus-visible,textarea:focus-visible{outline:none;border-color:var(--matcha);box-shadow:0 0 0 3px rgba(124,191,142,.25)}
+textarea{resize:vertical;min-height:76px}
+.file-zone{border:2px dashed var(--milkline);border-radius:var(--r);padding:22px 14px;text-align:center;color:var(--latte);cursor:pointer;transition:.15s;background:#fdfaf5}
+.file-zone:hover,.file-zone.drag{border-color:var(--matcha);background:var(--matcha-foam)}
+.file-zone:focus-visible{outline:3px solid var(--sakura);outline-offset:2px}
+.file-zone .hash{font-size:11px;color:var(--matcha-deep);word-break:break-all;margin-top:8px;font-weight:700}
+.hint{font-size:12.5px;color:var(--latte);margin-top:8px}
+.err{font-size:13px;color:var(--azuki);background:var(--azuki-soft);border-radius:12px;padding:10px 13px;margin-top:12px;font-weight:700}
 
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
-td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:16px;border:0;border-radius:var(--r-pill);padding:13px 22px;cursor:pointer;transition:.15s;min-height:48px;text-decoration:none}
+.btn:focus-visible{outline:3px solid var(--sakura);outline-offset:2px}
+.btn:active{transform:translateY(1px)}
+.btn-p{background:var(--matcha-deep);color:#fff}
+.btn-p:hover{background:#336844}
+.btn-s{background:var(--matcha-foam);color:var(--matcha-deep)}
+.btn-s:hover{background:#d9eede}
+.btn-o{background:var(--paper);color:var(--cocoa);border:1.5px solid var(--milkline)}
+.btn-o:hover{background:#fdfaf5}
+.btn-d{background:var(--azuki);color:#fff}
+.btn-d:hover{background:#b05252}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-sm{padding:8px 14px;font-size:14px;min-height:38px}
+.btn-w{width:100%}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--latte);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--milkline);font-weight:800}
+td{padding:12px 10px;border-bottom:1.5px solid var(--milkline);vertical-align:top}
 tr:last-child td{border-bottom:0}
-td .type{font-weight:600}
-td .desc{color:var(--ink-soft);font-size:13px;max-width:340px}
-td .id{font-family:var(--mono);font-size:11px;color:#93a29a}
-.mono{font-family:var(--mono)}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:99px;white-space:nowrap}
-.badge::before{content:"";width:7px;height:7px;border-radius:99px;background:currentColor}
-.b-pending{color:var(--amber);background:var(--amber-bg)}
-.b-verified{color:var(--moss);background:var(--moss-bg)}
-.b-rejected{color:var(--brick);background:var(--brick-bg)}
+td .type{font-weight:800}
+td .desc{color:var(--latte);font-size:12.5px;max-width:200px}
+td .id{font-size:10.5px;color:#b3a496}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:99px;background:currentColor}
+.b-pending{color:#9a6a1e;background:var(--caramel-soft)}
+.b-verified{color:var(--matcha-deep);background:var(--matcha-foam)}
+.b-rejected{color:var(--azuki);background:var(--azuki-soft)}
 
-.redeem-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.redeem-amt{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--evergreen)}
-.note{font-size:13px;color:var(--ink-soft);background:#f6f8f4;border-left:3px solid var(--moss);padding:10px 12px;border-radius:0 var(--r) var(--r) 0;margin-top:14px}
-.note b{color:var(--ink)}
+/* ---------- saya ---------- */
+.profile{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.avatar{width:58px;height:58px;border-radius:50%;background:var(--matcha-foam);display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid var(--milkline);flex-shrink:0}
+.profile .nm{font-family:'Baloo 2';font-weight:800;font-size:18px}
+.profile .st{font-size:12.5px;color:var(--latte);font-weight:700}
+.list-item{display:flex;align-items:center;gap:12px;padding:14px 2px;border-bottom:1.5px dashed var(--milkline);font-weight:700;font-size:14.5px}
+.list-item:last-child{border-bottom:0}
+.list-item .em{font-size:20px;width:30px;text-align:center}
+.list-item .grow{flex:1}
+.mini{font-size:11px;color:var(--latte);font-weight:700}
+.cfg-grid input{font-size:12.5px}
 
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:640px){.cfg-grid{grid-template-columns:1fr}}
-.cfg-grid input{font-family:var(--mono);font-size:13px}
-
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--evergreen-deep);color:#eef4ef;font-size:14px;padding:12px 18px;border-radius:var(--r);border:1px solid #3c5a4a;opacity:0;transition:.25s;z-index:99;max-width:90vw}
+/* ---------- toast ---------- */
+#toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--cocoa);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:var(--r-pill);opacity:0;transition:.25s;z-index:99;max-width:88vw;text-align:center;box-shadow:0 10px 30px rgba(74,52,42,.3)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast.bad{background:#3d0f0f;border-color:#7a2b2b}
+#toast.bad{background:#7a2b2b}
 
-footer{border-top:1px solid var(--line);padding:22px 20px;color:var(--ink-soft);font-size:13px}
-footer .in{max-width:1080px;margin:0 auto;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
-footer a{color:var(--moss)}
-.demo-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;background:var(--amber-bg);color:var(--amber);border:1px solid #eeddc0;padding:2px 7px;border-radius:99px;text-transform:uppercase}
+/* ---------- bottom nav ---------- */
+nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);border-top:1.5px solid var(--milkline);padding-bottom:env(safe-area-inset-bottom)}
+.navbar{max-width:480px;margin:0 auto;display:flex}
+.navbar button{flex:1;background:none;border:0;padding:9px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#c5b8aa;font-size:10.5px;font-weight:800}
+.navbar button .ic{font-size:22px;line-height:1;filter:grayscale(1);opacity:.65;transition:.15s}
+.navbar button.on{color:var(--matcha-deep)}
+.navbar button.on .ic{filter:none;opacity:1;transform:translateY(-2px)}
 </style>
 </head>
 <body>
 
 <header>
   <div class="bar">
-    <div class="logo">Syl<em>o</em>ra</div>
-    <a href="index.html" style="color:#b9d8c5;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.04em">← beranda</a>
-    <span class="net-badge" id="netBadge">belum terhubung</span>
-    <span class="demo-tag" id="demoTag" hidden>mode demo</span>
+    <a class="brand" href="index.html">Syl<b>o</b>ra ☕</a>
     <div class="spacer"></div>
-    <button class="btn btn-lime" id="connectBtn">Hubungkan dompet digital</button>
+    <span class="demo-tag" id="demoTag" hidden>mode demo</span>
+    <span class="net-badge" id="netBadge">belum terhubung</span>
   </div>
 </header>
 
 <main>
-  <div class="hero">
-    <div>
-      <h1>Catat aksi hijau, <span class="hl">dapatkan manfaat nyata.</span></h1>
-      <p class="lede">Foto aksimu dikunci saat dikirim, lalu diperiksa komunitas. Kalau disahkan, kamu mendapat 50 poin SYL dari celengan hadiah. Jumlah poin terbatas, tercatat terbuka, dan poin yang ditukar akan hilang agar tetap adil.</p>
+
+  <!-- ============ TAB: BERANDA ============ -->
+  <section class="tab on" id="tab-home">
+    <h1 class="page-title">Halo, orang baik 🌱</h1>
+
+    <div class="ticker" id="ticker">
+      <span class="live">LIVE</span>
+      <span class="msg" id="tickerMsg">Rina menyelesaikan Setor daur ulang dan mendapat</span>
+      <span class="pts" id="tickerPts">+50 poin</span>
     </div>
-  </div>
 
-  <div class="strip">
-    <div class="cell"><div class="k">Celengan hadiah</div><div class="v" id="stPool">—</div></div>
-    <div class="cell"><div class="k">Aksi disahkan</div><div class="v" id="stVerified">—</div></div>
-    <div class="cell"><div class="k">Poin tersisa</div><div class="v" id="stSupply">—</div></div>
-    <div class="cell"><div class="k">Poin ditukar &amp; hilang</div><div class="v" id="stBurned">—</div></div>
-    <div class="cell"><div class="k">Rentetan aksimu</div><div class="v" id="stStreak">—</div></div>
-  </div>
-
-  <section class="grid2" style="margin-top:40px">
-    <div>
-      <h2><span class="n">01</span>Catat aksi</h2>
-      <div class="panel pad">
-        <label for="aType">Jenis aksi</label>
-        <select id="aType">
-          <option value="tree_planting">Tanam pohon</option>
-          <option value="beach_cleanup">Bersihkan pantai/sungai</option>
-          <option value="recycle">Setor daur ulang</option>
-          <option value="compost">Buat kompos</option>
-          <option value="other">Aksi hijau lain</option>
-        </select>
-        <label for="aDesc">Ceritakan aksimu</label>
-        <textarea id="aDesc" maxlength="280" placeholder="Contoh: setor 2 kg botol plastik ke bank sampah dekat rumah…"></textarea>
-        <div class="hint"><span id="charCount">0</span>/280 · satu jenis aksi per 24 jam · maksimal 3 menunggu</div>
-        <label for="aFile">Foto bukti</label>
-        <div class="file-zone" id="fileZone" tabindex="0">
-          <div id="fileLabel">Taruh foto di sini atau klik untuk memilih<br><span style="font-size:12px">foto tetap di perangkatmu — hanya sidik-jari digitalnya yang dicatat</span></div>
-          <div class="hash" id="hashOut"></div>
-        </div>
-        <input type="file" id="aFile" accept="image/*" hidden>
-        <div id="submitErr"></div>
-        <div style="margin-top:18px"><button class="btn btn-dark" id="submitBtn" disabled style="width:100%">Kirim foto bukti</button></div>
+    <div class="card point-card">
+      <div class="lbl">Poin SYL kamu</div>
+      <div class="row">
+        <div class="big" id="balHome">0 <small>poin</small></div>
+        <span class="chip" id="streakChip">🔥 rentetan 0 hari</span>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-s btn-w" id="connectBtn">🔗 Hubungkan dompet digital</button>
       </div>
     </div>
-    <div>
-      <h2><span class="n">02</span>Catatanmu</h2>
-      <div class="panel" style="overflow:hidden">
-        <table>
-          <thead><tr><th>Aksi</th><th>Status</th><th style="text-align:right">Poin</th></tr></thead>
-          <tbody id="myActions"><tr><td colspan="3" style="color:var(--ink-soft)">Hubungkan dompet digital untuk melihat aksimu.</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
 
-  <section class="grid2">
+    <div class="stats">
+      <div class="stat"><div class="k">Celengan hadiah</div><div class="v" id="stPool">—</div></div>
+      <div class="stat"><div class="k">Aksi disahkan</div><div class="v" id="stVerified">—</div></div>
+      <div class="stat"><div class="k">Poin tersisa</div><div class="v" id="stSupply">—</div></div>
+      <div class="stat"><div class="k">Poin ditukar & hilang</div><div class="v" id="stBurned">—</div></div>
+    </div>
+
     <div id="verifyWrap" hidden>
-      <h2><span class="n">03</span>Meja pemeriksa</h2>
-      <div class="panel" style="overflow:hidden">
+      <div class="card">
+        <h3><span class="em">🔍</span> Meja pemeriksa</h3>
         <table>
           <thead><tr><th>Bukti yang menunggu</th><th></th></tr></thead>
           <tbody id="pendingTable"></tbody>
         </table>
-        <div class="pad" id="noPending" hidden style="color:var(--ink-soft);font-size:14px">Belum ada aksi yang perlu diperiksa.</div>
+        <div id="noPending" hidden style="color:var(--latte);font-size:13.5px;font-weight:700;padding:10px 2px">Belum ada aksi yang perlu diperiksa.</div>
       </div>
     </div>
-    <div>
-      <h2><span class="n" id="redeemN">03</span>Tukar poin</h2>
-      <div class="panel pad">
-        <div class="redeem-row">
-          <div><div class="redeem-amt" id="myBalance">0.00</div><div class="hint">poin SYL-mu</div></div>
-          <div class="redeem-amt" style="font-size:18px;color:var(--ink-soft)">→</div>
-          <div style="flex:1;min-width:150px">
-            <label for="rAmt" style="margin-top:0">Jumlah poin yang ditukar</label>
-            <input type="text" inputmode="decimal" id="rAmt" value="50" autocomplete="off">
-            <div class="hint" id="rHint">minimal 50 SYL · poin akan ditukar &amp; hilang</div>
-          </div>
-        </div>
-        <div id="redeemErr"></div>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-ghost" id="approveBtn" disabled>Izinkan penukaran</button>
-          <button class="btn btn-dark" id="redeemBtn" disabled>Tukar jadi voucher</button>
-        </div>
-        <div class="note"><b>Supaya tetap adil.</b> Poinmu ditukar langsung dari dompet digital dan hilang setelah dipakai. Voucher diklaim lewat mitra lokal.</div>
+
+    <div class="card" style="background:var(--matcha-foam);border-color:#d5ead9">
+      <h3><span class="em">☕</span> Cara kerjanya</h3>
+      <div style="font-size:13.5px;color:var(--matcha-deep);font-weight:700">
+        1. Foto aksi hijaumu di tab <b>Aksi</b> 📸<br>
+        2. Pemeriksa komunitas mengesahkan ✅<br>
+        3. Terima 50 poin SYL, tukar voucher di tab <b>Tukar</b> 🎁
       </div>
     </div>
   </section>
 
-  <section>
-    <h2><span class="n" id="netN">04</span>Pengaturan sistem</h2>
-    <div class="panel pad">
-      <div class="cfg-grid">
-        <div><label for="cfgReg">Alamat buku aksi</label><input type="text" id="cfgReg" spellcheck="false" placeholder="0x…" autocomplete="off"></div>
-        <div><label for="cfgTok">Alamat poin SYL</label><input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off"></div>
+  <!-- ============ TAB: AKSI ============ -->
+  <section class="tab" id="tab-aksi">
+    <h1 class="page-title">Catat aksi 📸</h1>
+    <div class="card">
+      <label for="aType">Jenis aksi</label>
+      <select id="aType">
+        <option value="tree_planting">🌳 Tanam pohon</option>
+        <option value="beach_cleanup">🏖️ Bersihkan pantai/sungai</option>
+        <option value="recycle">♻️ Setor daur ulang</option>
+        <option value="compost">🪱 Buat kompos</option>
+        <option value="other">🌿 Aksi hijau lain</option>
+      </select>
+      <label for="aDesc">Ceritakan aksimu</label>
+      <textarea id="aDesc" maxlength="280" placeholder="Contoh: setor 2 kg botol plastik ke bank sampah dekat rumah…"></textarea>
+      <div class="hint"><span id="charCount">0</span>/280 · satu jenis aksi per 24 jam · maksimal 3 menunggu</div>
+      <label for="aFile">Foto bukti</label>
+      <div class="file-zone" id="fileZone" tabindex="0">
+        <div id="fileLabel">Taruh foto di sini atau klik untuk memilih<br><span style="font-size:12px">foto tetap di perangkatmu — hanya sidik-jari digitalnya yang dicatat</span></div>
+        <div class="hash" id="hashOut"></div>
       </div>
-      <div class="hint" id="netInfo">Pengaturan teknis untuk pengelola: masukkan alamat kontrak pencatatan aksi dan poin SYL. Alamat hanya disimpan di browser ini.</div>
+      <input type="file" id="aFile" accept="image/*" hidden>
+      <div id="submitErr"></div>
+      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled>📤 Kirim foto bukti</button></div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: RIWAYAT ============ -->
+  <section class="tab" id="tab-riwayat">
+    <h1 class="page-title">Catatanmu 📒</h1>
+    <div class="card" style="padding:6px 10px">
+      <table>
+        <thead><tr><th>Aksi</th><th>Status</th><th style="text-align:right">Poin</th></tr></thead>
+        <tbody id="myActions"><tr><td colspan="3" style="color:var(--latte);font-weight:700">Hubungkan dompet digital untuk melihat aksimu.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ TAB: TUKAR ============ -->
+  <section class="tab" id="tab-tukar">
+    <h1 class="page-title">Tukar poin 🎁</h1>
+    <div class="card point-card">
+      <div class="lbl">Poin SYL kamu</div>
+      <div class="big" id="myBalance">0.00 <small>poin</small></div>
+    </div>
+    <div class="card">
+      <label for="rAmt">Jumlah poin yang ditukar</label>
+      <input type="text" inputmode="decimal" id="rAmt" value="50" autocomplete="off">
+      <div class="hint" id="rHint">minimal 50 SYL · poin akan ditukar & hilang</div>
+      <div id="redeemErr"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-o" id="approveBtn" disabled style="flex:1">✋ Izinkan penukaran</button>
+        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1">🎁 Tukar jadi voucher</button>
+      </div>
+      <div class="hint" style="margin-top:14px"><b>Supaya tetap adil:</b> poinmu ditukar langsung dari dompet digital dan hilang setelah dipakai. Voucher diklaim lewat mitra lokal.</div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: SAYA ============ -->
+  <section class="tab" id="tab-saya">
+    <h1 class="page-title">Saya 👤</h1>
+    <div class="card">
+      <div class="profile">
+        <div class="avatar">🌱</div>
+        <div>
+          <div class="nm" id="meName">Pengguna SYLORA</div>
+          <div class="st" id="meStatus">dompet belum terhubung</div>
+        </div>
+      </div>
+      <div class="list-item"><span class="em">🔍</span><span class="grow">Peran pemeriksa</span><span class="mini" id="meRole">tidak</span></div>
+      <div class="list-item"><span class="em">🔥</span><span class="grow">Rentetan aksi</span><span class="mini" id="meStreak">—</span></div>
+      <div class="list-item"><span class="em">🎁</span><span class="grow">Voucher ditukar</span><span class="mini" id="meVoucher">—</span></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="em">⚙️</span> Pengaturan sistem</h3>
+      <div class="hint" style="margin-top:0" id="netInfo">Pengaturan teknis untuk pengelola: masukkan alamat kontrak pencatatan aksi dan poin SYL. Alamat hanya disimpan di browser ini.</div>
+      <div class="cfg-grid">
+        <label for="cfgReg">Alamat buku aksi</label>
+        <input type="text" id="cfgReg" spellcheck="false" placeholder="0x…" autocomplete="off">
+        <label for="cfgTok">Alamat poin SYL</label>
+        <input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off">
+      </div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-dark btn-sm" id="loadBtn">Muat sistem</button>
-        <button class="btn btn-ghost btn-sm" id="demoBtn">Coba mode demo</button>
+        <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Muat sistem</button>
+        <button class="btn btn-s btn-sm" id="demoBtn" style="flex:1">Coba mode demo</button>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center">
+      <div style="font-size:13px;color:var(--latte);font-weight:700">
+        SYLORA · GMT Build Week Vol.2 · BOT Chain<br>
+        <a href="index.html" style="color:var(--matcha-deep)">← beranda situs</a> ·
+        <a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener" style="color:var(--matcha-deep)">github</a>
       </div>
     </div>
   </section>
+
 </main>
 
-<footer><div class="in">
-  <div>SYLORA — GMT Build Week Vol.2 · BOT Chain (testnet 968 / mainnet 677)</div>
-  <div><a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener">github.com/oceanfluxx/sylora</a></div>
-</div></footer>
+<nav>
+  <div class="navbar" id="navbar">
+    <button class="on" data-tab="home"><span class="ic">🏠</span>Beranda</button>
+    <button data-tab="aksi"><span class="ic">📸</span>Aksi</button>
+    <button data-tab="riwayat"><span class="ic">📒</span>Riwayat</button>
+    <button data-tab="tukar"><span class="ic">🎁</span>Tukar</button>
+    <button data-tab="saya"><span class="ic">👤</span>Saya</button>
+  </div>
+</nav>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="vendor/ethers.umd.min.js"></script>
 <script>if(typeof ethers==="undefined")document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"><\/script>');</script>
 <script>
-/* ================= SYLORA — ethers v6 + MetaMask ================= */
+/* ================= SYLORA — mobile app shell + ethers v6 ================= */
 const REG_ABI = [
   "function owner() view returns (address)",
   "function syl() view returns (address)",
@@ -243,6 +324,7 @@ const REG_ABI = [
   "function getPendingActions() view returns (bytes32[])",
   "function pendingCount(address) view returns (uint256)",
   "function userStreak(address) view returns (uint256)",
+  "function voucherCount(address) view returns (uint256)",
   "function poolBalance() view returns (uint256)",
   "function submitAction(string,string,bytes32) returns (bytes32)",
   "function verifyAction(bytes32)",
@@ -258,7 +340,7 @@ const TOK_ABI = [
   "function allowance(address,address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)"
 ];
-const TYPES = {tree_planting:"Tanam pohon",beach_cleanup:"Bersihkan pantai/sungai",recycle:"Setor daur ulang",compost:"Buat kompos",other:"Aksi hijau lain"};
+const TYPES = {tree_planting:"🌳 Tanam pohon",beach_cleanup:"🏖️ Bersihkan pantai/sungai",recycle:"♻️ Setor daur ulang",compost:"🪱 Buat kompos",other:"🌿 Aksi hijau lain"};
 const STATUS = ["menunggu pemeriksaan","disahkan","belum bisa diterima"];
 
 const $ = id => document.getElementById(id);
@@ -267,9 +349,9 @@ const short = a => a ? a.slice(0,6)+"…"+a.slice(-4) : "";
 const esc = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const timeAgo = ts => {
   const d = Math.max(0, Math.floor(Date.now()/1000) - ts);
-  if (d < 3600) return Math.max(1,Math.floor(d/60)) + "m ago";
-  if (d < 86400) return Math.floor(d/3600) + "h ago";
-  return Math.floor(d/86400) + "d ago";
+  if (d < 3600) return Math.max(1,Math.floor(d/60)) + " mnt lalu";
+  if (d < 86400) return Math.floor(d/3600) + " jam lalu";
+  return Math.floor(d/86400) + " hari lalu";
 };
 const toast=(msg,bad)=>{ const t=$("toast"); t.textContent=msg; t.className="show"+(bad?" bad":""); clearTimeout(t._x); t._x=setTimeout(()=>t.className="",4200); };
 function parseAmt(){ try{ const v=$("rAmt").value.trim(); if(!/^\d+(\.\d{0,18})?$/.test(v)) return null; return ethers.parseUnits(v,"ether"); }catch{ return null; } }
@@ -285,6 +367,24 @@ function cleanErr(m){
   if(/InsufficientBalance|ERC20: transfer/.test(m)) return "Poin atau izin penukaran belum cukup. Klik Izinkan penukaran dulu.";
   return m;
 }
+
+/* ---------- tabs ---------- */
+$("navbar").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  document.querySelectorAll(".navbar button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+});
+
+/* ---------- ticker (demo flavour) ---------- */
+const TICKS = [
+  ["Rina menyelesaikan Setor daur ulang dan mendapat","+50 poin"],
+  ["Budi mengesahkan aksi Tanam pohon di bantaran sungai","+50 poin"],
+  ["Sari menukar 100 poin dengan voucher bibit tanaman","🎁"],
+  ["Aksi Bersihkan pantai diverifikasi pemeriksa komunitas","✅"]
+];
+let tickI=0;
+setInterval(()=>{ tickI=(tickI+1)%TICKS.length; $("tickerMsg").textContent=TICKS[tickI][0]; $("tickerPts").textContent=TICKS[tickI][1]; },4500);
 
 let provider=null, signer=null, account=null, registry=null, token=null;
 let DEMO=false, imgHash=null;
@@ -313,11 +413,13 @@ $("connectBtn").addEventListener("click", async ()=>{
     account = accts[0];
     const net = await provider.getNetwork();
     const cid = Number(net.chainId);
-    $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
-    $("connectBtn").textContent = short(account);
+    $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — ganti ke BOT";
+    $("connectBtn").textContent = "🔗 "+short(account);
+    $("meName").textContent = short(account);
+    $("meStatus").textContent = "dompet terhubung";
     signer = await provider.getSigner();
     if (registry) refresh(); else if ($("cfgReg").value && $("cfgTok").value) loadContracts();
-    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)||"Hubungkan dompet digital"; if(registry) refresh(); });
+    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)?("🔗 "+short(account)):"🔗 Hubungkan dompet digital"; if(registry) refresh(); });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
   }catch(e){ toast("Permintaan dompet ditolak: "+(e.shortMessage||e.message),true); }
 });
@@ -329,7 +431,7 @@ function loadContracts(silent){
   localStorage.setItem("syl_reg",r); localStorage.setItem("syl_tok",t);
   registry = new ethers.Contract(r,REG_ABI,provider);
   token = new ethers.Contract(t,TOK_ABI,provider);
-  $("netInfo").textContent = "Registry "+r.slice(0,10)+"… · Token "+t.slice(0,10)+"…";
+  $("netInfo").textContent = "Buku aksi "+r.slice(0,10)+"… · Poin SYL "+t.slice(0,10)+"…";
   if(!silent) toast("Sistem berhasil dimuat ✓");
   refresh();
 }
@@ -339,11 +441,12 @@ $("cfgTok").value = localStorage.getItem("syl_tok")||"";
 
 /* ---------- render helpers ---------- */
 function renderStrip(pool,verified,streak,burned,supplyLeft){
-  $("stPool").innerHTML = fmt(pool)+" <small>$SYL</small>";
+  $("stPool").innerHTML = fmt(pool)+" <small>SYL</small>";
   $("stVerified").textContent = verified.toLocaleString();
-  $("stSupply").innerHTML = fmt(supplyLeft)+" <small>/ 1M</small>";
-  $("stBurned").innerHTML = fmt(burned)+" <small>$SYL</small>";
-  $("stStreak").textContent = streak+"d";
+  $("stSupply").innerHTML = fmt(supplyLeft)+" <small>/ 1 jt</small>";
+  $("stBurned").innerHTML = fmt(burned)+" <small>SYL</small>";
+  $("streakChip").textContent = "🔥 rentetan "+streak+" aksi";
+  $("meStreak").textContent = streak+" aksi beruntun";
 }
 function badge(s){ return `<span class="badge b-${["pending","verified","rejected"][s]}">${STATUS[s]}</span>`; }
 function row(a){
@@ -351,22 +454,26 @@ function row(a){
     <td><div class="type">${TYPES[a.type]||esc(a.type)}</div><div class="desc">${esc(a.desc)}</div>
         <div class="id">${a.id} · ${timeAgo(a.ts)}</div></td>
     <td>${badge(a.status)}</td>
-    <td style="text-align:right" class="mono">${a.status===1?fmt(a.reward)+" $SYL":"—"}${a.status===1&&a.streak>1?`<div style="font-size:11px;color:var(--ink-soft)">streak ×${a.streak}</div>`:""}</td></tr>`;
+    <td style="text-align:right;font-weight:800;color:var(--matcha-deep)">${a.status===1?fmt(a.reward):"—"}${a.status===1&&a.streak>1?`<div style="font-size:10.5px;color:var(--latte)">🔥 ×${a.streak}</div>`:""}</td></tr>`;
 }
 function renderMine(list){
   $("myActions").innerHTML = list.length
     ? list.map(row).join("")
-    : `<tr><td colspan="3" style="color:var(--ink-soft)">No actions yet — log your first one.</td></tr>`;
+    : `<tr><td colspan="3" style="color:var(--latte);font-weight:700">Belum ada aksi — catat aksimu yang pertama di tab Aksi 📸</td></tr>`;
 }
 function renderPending(list){
   if(!list.length){ $("pendingTable").innerHTML=""; $("noPending").hidden=false; return; }
   $("noPending").hidden=true;
   $("pendingTable").innerHTML = list.map(p=>`<tr>
     <td><div class="type">${TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(p.desc)}</div>
-        <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
+        <div class="id">${p.id} · oleh ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
     <td style="text-align:right;white-space:nowrap">
-      <button class="btn btn-dark btn-sm" data-act="verify" data-id="${p.idFull}">Sahkan +50</button>
-      <button class="btn btn-danger btn-sm" data-act="reject" data-id="${p.idFull}">Belum bisa diterima</button></td></tr>`).join("");
+      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px">✅ Sahkan</button><br>
+      <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}">✖ Tolak</button></td></tr>`).join("");
+}
+function setBalances(bal){
+  $("balHome").innerHTML = fmt(bal)+" <small>poin</small>";
+  $("myBalance").innerHTML = fmt(bal,2)+" <small>poin</small>";
 }
 
 /* ---------- refresh (real chain) ---------- */
@@ -386,10 +493,10 @@ async function refresh(){
     mine.sort((x,y)=>y.ts-x.ts);
     renderStrip(pool,verified,streak,burned,maxSupply-burned);
     renderMine(mine);
+    try{ $("meVoucher").textContent = (await registry.voucherCount(account))+" voucher"; }catch{}
     const isVerifier = await registry.verifiers(account);
     $("verifyWrap").hidden = !isVerifier;
-    $("redeemN").textContent = isVerifier ? "04" : "03";
-    $("netN").textContent = isVerifier ? "05" : "04";
+    $("meRole").textContent = isVerifier ? "ya ✓" : "tidak";
     if(isVerifier){
       const pend=[]; const pids = await registry.getPendingActions();
       for(const id of pids){ const a=await registry.getAction(id);
@@ -397,7 +504,7 @@ async function refresh(){
       renderPending(pend);
     }
     updateRedeem();
-  }catch(e){ console.error(e); toast("Read failed — check addresses / network: "+(e.shortMessage||e.message),true); }
+  }catch(e){ console.error(e); toast("Gagal membaca data — periksa alamat / jaringan: "+(e.shortMessage||e.message),true); }
 }
 
 /* ---------- submit ---------- */
@@ -433,12 +540,12 @@ $("submitBtn").addEventListener("click", async ()=>{
   $("submitBtn").disabled=true; $("submitErr").innerHTML="";
   try{
     const tx = await registry.connect(signer).submitAction(type,desc,imgHash);
-    toast("Submitted — waiting for confirmation…");
+    toast("Terkirim — menunggu konfirmasi…");
     await tx.wait();
-    toast("Action logged on-chain ✓");
+    toast("Aksi tercatat di sistem ✓");
     resetForm(); refresh();
   }catch(e){
-    $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"failed"))}</div>`;
+    $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"gagal"))}</div>`;
     enableSubmit();
   }
 });
@@ -455,25 +562,25 @@ $("pendingTable").addEventListener("click", async e=>{
   if(DEMO){
     if(act==="verify"){
       D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending);
-      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(approved from queue)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
-      D.balance+=50n*10n**18n; renderMine(D.mine); $("myBalance").textContent=fmt(D.balance,2);
-      toast("Demo: verified, +50 $SYL");
+      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(disahkan dari antrean)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
+      D.balance+=50n*10n**18n; renderMine(D.mine); setBalances(D.balance);
+      toast("Demo: disahkan, +50 poin SYL");
     }else{
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: rejected");
+      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: ditolak");
     }
     return;
   }
   try{
     if(act==="verify"){
-      const tx=await registry.connect(signer).verifyAction(id); toast("Tx sent…"); await tx.wait();
-      toast("Verified ✓ reward paid from pool");
+      const tx=await registry.connect(signer).verifyAction(id); toast("Transaksi dikirim…"); await tx.wait();
+      toast("Disahkan ✓ hadiah keluar dari celengan");
     }else{
-      const reason=prompt("Rejection reason (shown to submitter):")||"Not verifiable";
-      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Tx sent…"); await tx.wait();
-      toast("Action rejected");
+      const reason=prompt("Alasan penolakan (diperlihatkan ke pengirim):")||"Tidak bisa diverifikasi";
+      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Transaksi dikirim…"); await tx.wait();
+      toast("Aksi ditolak");
     }
     refresh();
-  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"failed"),true); }
+  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"gagal"),true); }
 });
 
 /* ---------- redeem ---------- */
@@ -482,21 +589,21 @@ async function updateRedeem(){
   const amt = parseAmt();
   let bal = DEMO ? D.balance : 0n;
   if(!DEMO && token && account){ try{ bal = await token.balanceOf(account); }catch{} }
-  $("myBalance").textContent = fmt(bal,2);
+  setBalances(bal);
   const min = 50n*10n**18n;
   const ok = amt!==null && amt>=min && amt<=bal;
-  $("redeemErr").innerHTML = amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
-    : amt>bal && amt>0n ? `<div class="err">Amount exceeds your $SYL balance.</div>`
-    : amt>0n&&amt<min ? `<div class="err">Minimum redeem is 50 $SYL.</div>` : "";
+  $("redeemErr").innerHTML = amt===null ? `<div class="err">Masukkan jumlah desimal yang valid.</div>`
+    : amt>bal && amt>0n ? `<div class="err">Jumlah melebihi poin SYL kamu.</div>`
+    : amt>0n&&amt<min ? `<div class="err">Minimal penukaran adalah 50 SYL.</div>` : "";
   $("redeemBtn").disabled = !ok;
   $("approveBtn").disabled = !ok;
 }
 $("approveBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){ toast("Demo: approval simulated — now burn"); $("redeemBtn").disabled=false; return; }
+  if(DEMO){ toast("Demo: izin disimulasikan — sekarang tukar"); $("redeemBtn").disabled=false; return; }
   try{
     const tx=await token.connect(signer).approve(await registry.syl(),amt);
-    toast("Approving…"); await tx.wait(); toast("Allowance set ✓ now burn");
+    toast("Meminta izin…"); await tx.wait(); toast("Izin penukaran aktif ✓ sekarang tukar");
     $("redeemBtn").disabled=false;
   }catch(e){ toast(cleanErr(e.shortMessage||e.message),true); }
 });
@@ -505,14 +612,14 @@ $("redeemBtn").addEventListener("click", async ()=>{
   if(DEMO){
     D.balance-=amt; D.burned+=amt;
     renderStrip(D.pool, D.mine.filter(m=>m.status===1).length, D.streak, D.burned, 1000000n*10n**18n-D.burned);
-    $("myBalance").textContent=fmt(D.balance,2);
-    toast("Demo: "+fmt(amt)+" $SYL burned → voucher ready"); return;
+    setBalances(D.balance);
+    toast("Demo: "+fmt(amt)+" poin SYL ditukar & hilang → voucher siap"); return;
   }
   try{
     const tx=await registry.connect(signer).redeemVoucher(amt);
-    toast("Burning…"); await tx.wait(); toast(fmt(amt)+" $SYL burned — voucher minted ✓");
+    toast("Menukar…"); await tx.wait(); toast(fmt(amt)+" poin SYL ditukar — voucher siap ✓");
     refresh();
-  }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"failed"),true); }
+  }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"gagal"),true); }
 });
 
 /* ---------- demo mode ---------- */
@@ -525,24 +632,27 @@ function toggleDemo(on){
     $("netBadge").textContent="demo · chain 968";
     renderStrip(D.pool,D.mine.filter(m=>m.status===1).length,D.streak,D.burned,1000000n*10n**18n-D.burned);
     renderMine(D.mine); renderPending(D.pending);
-    $("verifyWrap").hidden=false; $("redeemN").textContent="04"; $("netN").textContent="05";
-    $("connectBtn").textContent="Hubungkan dompet digital";
+    setBalances(D.balance);
+    $("verifyWrap").hidden=false;
+    $("meRole").textContent="ya ✓ (demo)";
+    $("meName").textContent="Sahabat Syl (demo)";
+    $("meStatus").textContent="mode demo aktif";
     updateRedeem();
     toast("Mode demo — datanya simulasi, tidak perlu dompet digital.");
   }else{
     $("netBadge").textContent = provider&&account ? "sudah terhubung" : "belum terhubung";
     $("verifyWrap").hidden=true;
-    renderStrip(0n,0,0n,0n,1000000n*10n**18n);
-    ["stPool","stVerified","stSupply","stBurned","stStreak"].forEach(i=>$(i).textContent="—");
+    ["stPool","stVerified","stSupply","stBurned"].forEach(i=>$(i).textContent="—");
+    $("streakChip").textContent="🔥 rentetan 0 hari";
     renderMine([]);
-    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--ink-soft)">Connect wallet to see your actions.</td></tr>`;
-    $("myBalance").textContent="0.00";
+    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--latte);font-weight:700">Hubungkan dompet digital untuk melihat aksimu.</td></tr>`;
+    setBalances(0n);
+    $("meRole").textContent="tidak";
     if(provider&&account&&registry) refresh();
   }
 }
 
-if(!window.ethereum) $("netBadge").textContent="no wallet · demo available";
-if(location.search.includes("demo=1")) toggleDemo(true);
+if(!window.ethereum) $("netBadge").textContent="dompet tidak ada · demo tersedia";
 </script>
 </body>
 </html>
