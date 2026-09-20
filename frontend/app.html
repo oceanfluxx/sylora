@@ -30,6 +30,7 @@ button{font-family:inherit}
 header{position:sticky;top:0;z-index:40;background:rgba(255,247,238,.94);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--milkline)}
 .bar{max-width:480px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:10px}
 .brand{font-size:20px;color:var(--cocoa);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.brand .wordmark{display:inline-block;letter-spacing:0;font-kerning:normal;white-space:nowrap}
 .brand .o{color:var(--matcha-deep);font-weight:800}
 .spacer{flex:1}
 .net-badge{font-size:11px;font-weight:800;padding:4px 10px;border:1.5px solid var(--milkline);border-radius:var(--r-pill);color:var(--latte);background:var(--paper);white-space:nowrap}
@@ -143,7 +144,7 @@ td .id{font-size:10.5px;color:#b3a496}
 
 /* ---------- profile ---------- */
 .profile{display:flex;align-items:center;gap:14px;margin-bottom:6px}
-.avatar{width:58px;height:58px;border-radius:50%;background:var(--matcha-foam);display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid var(--milkline);flex-shrink:0;background-image:url("assets/syl-mascot.png");background-size:cover;background-position:center}
+.avatar{width:58px;height:58px;border-radius:50%;background:var(--matcha-foam);display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid var(--milkline);flex-shrink:0;background-image:url("assets/syl-profile.png");background-size:cover;background-position:center}
 .profile .nm{font-family:'Baloo 2';font-weight:800;font-size:18px}
 .profile .st{font-size:12.5px;color:var(--latte);font-weight:700}
 .list-item{display:flex;align-items:center;gap:12px;padding:14px 2px;border-bottom:1.5px dashed var(--milkline);font-weight:700;font-size:14.5px}
@@ -174,7 +175,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
 <header>
   <div class="bar">
-    <a class="brand" href="index.html"><img src="assets/syl-logo.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px">Syl<span class="o">o</span>ra</a>
+    <a class="brand" href="index.html"><img src="assets/syl-logo.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px"><span class="wordmark">Sylora</span></a>
     <div class="spacer"></div>
     <span class="demo-tag" id="demoTag" hidden>demo mode</span>
     <span class="net-badge" id="netBadge">not connected</span>
