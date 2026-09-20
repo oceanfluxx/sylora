@@ -97,7 +97,7 @@ main{max-width:480px;margin:0 auto;padding:18px 18px 110px}
 .chal .ss{font-size:12px;color:var(--latte);font-weight:700}
 .chal .meta{font-size:11px;color:var(--matcha-deep);font-weight:800;margin-top:3px}
 .chal .join{margin-left:auto;flex-shrink:0}
-.chal-wrap{margin-bottom:12px}.chal-wrap .chal{margin-bottom:0}.challenge-options{display:none;background:var(--matcha-foam);border:1.5px solid var(--milkline);border-top:0;border-radius:0 0 var(--r) var(--r);padding:12px 14px}.chal-wrap.open .challenge-options{display:block}.challenge-options .option-title{font-size:11px;color:var(--latte);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}.option-grid{display:grid;grid-template-columns:1fr;gap:7px}.challenge-option{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:1.5px solid var(--milkline);border-radius:10px;background:var(--paper);color:var(--cocoa);padding:9px 11px;font:700 13px 'Nunito';text-align:left;cursor:pointer}.challenge-option:hover,.challenge-option:focus-visible{border-color:var(--matcha);background:#fff;outline:none}.challenge-option .reward{color:var(--matcha-deep);font-size:11px;white-space:nowrap}.chal-wrap.open .chal{border-radius:var(--r) var(--r) 0 0}
+.chal-wrap{margin-bottom:12px}.chal-wrap .chal{margin-bottom:0}.challenge-options{display:none;background:var(--matcha-foam);border:1.5px solid var(--milkline);border-top:0;border-radius:0 0 var(--r) var(--r);padding:12px 14px}.chal-wrap.open .challenge-options{display:block}.challenge-options .option-title{font-size:11px;color:var(--latte);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}.option-grid{display:grid;grid-template-columns:1fr;gap:7px}.challenge-option{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:1.5px solid var(--milkline);border-radius:10px;background:var(--paper);color:var(--cocoa);padding:9px 11px;font:700 13px 'Nunito';text-align:left;cursor:pointer}.challenge-option:hover,.challenge-option:focus-visible{border-color:var(--matcha);background:#fff;outline:none}.challenge-option.selected{border-color:var(--matcha-deep);background:#fff;box-shadow:0 0 0 2px rgba(74,135,88,.16)}.challenge-option .reward{color:var(--matcha-deep);font-size:11px;white-space:nowrap}.challenge-option .status{display:block;color:var(--latte);font-size:10px;font-weight:800;margin-top:3px}.chal-wrap.open .chal{border-radius:var(--r) var(--r) 0 0}.challenge-pending{display:none;margin-top:10px;padding:10px 11px;border-radius:10px;background:var(--caramel-soft);color:#805e28;font-size:12px;font-weight:800;line-height:1.45}.chal-wrap.pending .challenge-pending{display:block}.chal-wrap.pending .join{color:var(--matcha-deep);border-color:var(--matcha)}
 
 /* ---------- forms ---------- */
 label{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--latte);margin:14px 0 6px}
@@ -251,6 +251,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <div><div class="tt">First-time try</div><div class="ss">Log your very first action and grab your first points.</div><div class="meta" id="chOne">— participants</div></div>
         <button class="btn btn-s btn-sm join" data-ch="one">Choose</button>
       </div>
+      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
       <div class="challenge-options"><div class="option-title">Choose your first action</div><div class="option-grid"><button class="challenge-option" data-option="Follow X SYLORA">Follow X SYLORA <span class="reward">+500 pts</span></button></div></div>
     </div>
 
@@ -261,6 +262,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <button class="btn btn-s btn-sm join" data-ch="daily">Choose</button>
       </div>
       <div class="challenge-options"><div class="option-title">Choose your daily action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree">Plant a tree <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Drop off recycling">Drop off recycling <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Make compost">Make compost <span class="reward">+500 pts</span></button></div></div>
+      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
     </div>
 
     <div class="chal-wrap" data-challenge="weekly">
@@ -270,6 +272,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <button class="btn btn-s btn-sm join" data-ch="weekly">Choose</button>
       </div>
       <div class="challenge-options"><div class="option-title">Choose your weekly goal</div><div class="option-grid"><button class="challenge-option" data-option="Plant 3 trees">Plant 3 trees <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Complete 3 action types">Complete 3 action types <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Collect 10 kg of recyclables">Collect 10 kg of recyclables <span class="reward">+500 pts</span></button></div></div>
+      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
     </div>
 
     <div class="chal-wrap" data-challenge="community">
@@ -279,6 +282,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <button class="btn btn-s btn-sm join" data-ch="community">Choose</button>
       </div>
       <div class="challenge-options"><div class="option-title">Choose a community action</div><div class="option-grid"><button class="challenge-option" data-option="Join a beach cleanup">Join a beach cleanup <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Join a tree-planting day">Join a tree-planting day <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Join a recycling drive">Join a recycling drive <span class="reward">+500 pts</span></button></div></div>
+      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
     </div>
 
     <div class="hint" style="text-align:center">Streaks are tallied automatically by the contract on each approval — they can't be gamed.</div>
@@ -535,8 +539,11 @@ document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("cl
   const wrap=b.closest(".chal-wrap");
   wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected"));
   b.classList.add("selected");
+  wrap.classList.add("pending");
+  const join=wrap.querySelector(".join");
+  join.textContent="Pending verification";
   const title=wrap.querySelector(".tt").textContent;
-  toast(title+" selected: "+b.dataset.option+" · reward +500 SYL");
+  toast(title+" selected. Submit proof first — 500 points are released only after verifier approval.");
 }));
 
 let provider=null, signer=null, account=null, registry=null, token=null;
