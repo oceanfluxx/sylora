@@ -158,6 +158,7 @@ td .id{font-size:10.5px;color:#b3a496}
 #toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--cocoa);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:var(--r-pill);opacity:0;transition:.25s;z-index:99;max-width:88vw;text-align:center;box-shadow:0 10px 30px rgba(74,52,42,.3)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.bad{background:#7a2b2b}
+.proof-modal{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(74,52,42,.38);padding:18px}.proof-modal.open{display:flex}.proof-dialog{width:min(480px,100%);max-height:90vh;overflow:auto;background:var(--paper);border:1.5px solid var(--milkline);border-radius:22px 22px 16px 16px;box-shadow:0 20px 60px rgba(74,52,42,.28);padding:20px}.proof-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.proof-head h2{font-size:21px;margin:0 0 4px}.proof-close{width:36px;height:36px;border:1.5px solid var(--milkline);border-radius:50%;background:transparent;color:var(--cocoa);font-size:20px;cursor:pointer}.proof-copy{font-size:13px;color:var(--latte);font-weight:700;line-height:1.5}.proof-reward{display:flex;justify-content:space-between;align-items:center;background:var(--matcha-foam);border:1.5px solid var(--milkline);border-radius:12px;padding:10px 12px;margin:14px 0;color:var(--matcha-deep);font-weight:800;font-size:13px}.proof-reward strong{font-size:17px}.proof-preview{display:none;max-width:100%;max-height:180px;margin:10px auto 0;border-radius:12px;border:1.5px solid var(--milkline)}.proof-modal textarea{min-height:74px}.proof-modal .file-zone{padding:18px 12px}.proof-status{font-size:12px;color:#805e28;font-weight:800;margin-top:10px;line-height:1.45}.proof-modal .btn-w{margin-top:14px}.proof-modal .btn-w:disabled{opacity:.5;cursor:not-allowed}
 
 /* ---------- bottom nav (mobile-first, large tap targets) ---------- */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);border-top:1.5px solid var(--milkline);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -4px 18px rgba(74,52,42,.06)}
@@ -405,6 +406,21 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
   </div>
 </nav>
 
+<div class="proof-modal" id="proofModal" role="dialog" aria-modal="true" aria-labelledby="proofTitle">
+  <div class="proof-dialog">
+    <div class="proof-head"><div><h2 id="proofTitle">Submit challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
+    <div class="proof-reward"><span>Potential reward after approval</span><strong>500 pts</strong></div>
+    <label for="challengeDesc">What did you do?</label>
+    <textarea id="challengeDesc" maxlength="280" placeholder="Describe what you completed and when."></textarea>
+    <label>Proof image</label>
+    <div class="file-zone" id="challengeFileZone" tabindex="0"><div id="challengeFileLabel">Upload one JPG, JPEG, or PNG<br><span style="font-size:12px">Maximum size: 5 MB</span></div></div>
+    <input type="file" id="challengeFile" accept="image/png,image/jpeg" hidden>
+    <img id="challengePreview" class="proof-preview" alt="Selected proof preview">
+    <div class="proof-status">Your reward stays pending until a community verifier approves the proof.</div>
+    <div id="challengeSubmitErr"></div>
+    <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Submit for verification</button>
+  </div>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="vendor/ethers.umd.min.js"></script>
@@ -535,15 +551,35 @@ document.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>{
   const open=wrap.classList.toggle("open");
   b.textContent=open?"Hide choices":"Choose";
 }));
+let challengeChoice="", challengeType="other", challengeHash=null;
+const proofModal=$("proofModal"), challengeFile=$("challengeFile"), challengePreview=$("challengePreview");
+function openProofModal(option, title){
+  challengeChoice=option; challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
+  $("proofTitle").textContent="Submit proof: "+option;
+  $("proofSubtitle").textContent=title+" requires community verification before the reward is released.";
+  $("challengeDesc").value=""; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
+  proofModal.classList.add("open"); $("challengeDesc").focus();
+}
+function closeProofModal(){proofModal.classList.remove("open");}
+$("proofClose").addEventListener("click",closeProofModal); proofModal.addEventListener("click",e=>{if(e.target===proofModal)closeProofModal()});
+$("challengeFileZone").addEventListener("click",()=>challengeFile.click());
+$("challengeFileZone").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();challengeFile.click()}});
+challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=await hashFileValue(f); challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
+$("challengeDesc").addEventListener("input",updateChallengeSubmit);
+function updateChallengeSubmit(){$("challengeSubmitBtn").disabled=!(challengeHash&&$("challengeDesc").value.trim())}
+async function hashFileValue(file){return ethers.keccak256(await file.arrayBuffer())}
+$("challengeSubmitBtn").addEventListener("click",async()=>{
+  const desc="[Challenge: "+challengeChoice+"] "+$("challengeDesc").value.trim();
+  if(!challengeHash||!desc)return;
+  if(!signer||!registry){toast("Connect a wallet and load the system first",true);return}
+  const btn=$("challengeSubmitBtn");btn.disabled=true;$("challengeSubmitErr").innerHTML="";
+  try{const tx=await registry.connect(signer).submitAction("other",desc,challengeHash);toast("Challenge proof submitted — awaiting verifier approval");await tx.wait();closeProofModal();toast("Proof recorded. The 500-point reward remains pending until approval");refresh();}
+  catch(e){$("challengeSubmitErr").innerHTML='<div class="err">'+esc(cleanErr(e.shortMessage||e.info||e.message||"Submission failed"))+'</div>';btn.disabled=false}
+});
 document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("click",()=>{
-  const wrap=b.closest(".chal-wrap");
-  wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected"));
-  b.classList.add("selected");
-  wrap.classList.add("pending");
-  const join=wrap.querySelector(".join");
-  join.textContent="Pending verification";
-  const title=wrap.querySelector(".tt").textContent;
-  toast(title+" selected. Submit proof first — 500 points are released only after verifier approval.");
+  const wrap=b.closest(".chal-wrap"); wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected")); b.classList.add("selected");
+  wrap.classList.add("pending"); wrap.querySelector(".join").textContent="Pending verification";
+  openProofModal(b.dataset.option,wrap.querySelector(".tt").textContent);
 }));
 
 let provider=null, signer=null, account=null, registry=null, token=null;
