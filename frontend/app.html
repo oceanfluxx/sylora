@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SYLORA — Catat aksi hijau, dapatkan manfaat nyata</title>
-<meta name="description" content="Catat aksi lingkungan, diperiksa komunitas, dan dapatkan poin SYL yang terbatas serta transparan.">
+<title>SYLORA — Log climate actions, earn real-world value</title>
+<meta name="description" content="Log eco-actions, verified by your community, and earn limited, transparent SYL points redeemable for vouchers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -27,8 +27,8 @@ button{font-family:inherit}
 /* ---------- top bar ---------- */
 header{position:sticky;top:0;z-index:40;background:rgba(255,247,238,.94);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--milkline)}
 .bar{max-width:480px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:10px}
-.brand{font-size:20px;color:var(--cocoa);text-decoration:none}
-.brand b{color:var(--matcha-deep)}
+.brand{font-size:20px;color:var(--cocoa);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.brand .o{color:var(--matcha-deep);font-weight:800}
 .spacer{flex:1}
 .net-badge{font-size:11px;font-weight:800;padding:4px 10px;border:1.5px solid var(--milkline);border-radius:var(--r-pill);color:var(--latte);background:var(--paper);white-space:nowrap}
 .demo-tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;background:var(--caramel-soft);color:#9a6a1e;border:1.5px solid #f2dcb4;padding:3px 9px;border-radius:var(--r-pill);text-transform:uppercase}
@@ -139,7 +139,7 @@ td .id{font-size:10.5px;color:#b3a496}
 .b-verified{color:var(--matcha-deep);background:var(--matcha-foam)}
 .b-rejected{color:var(--azuki);background:var(--azuki-soft)}
 
-/* ---------- saya ---------- */
+/* ---------- profile ---------- */
 .profile{display:flex;align-items:center;gap:14px;margin-bottom:6px}
 .avatar{width:58px;height:58px;border-radius:50%;background:var(--matcha-foam);display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid var(--milkline);flex-shrink:0;background-image:url("assets/syl-mascot.png");background-size:cover;background-position:center}
 .profile .nm{font-family:'Baloo 2';font-weight:800;font-size:18px}
@@ -171,221 +171,221 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
 <header>
   <div class="bar">
-    <a class="brand" href="index.html"><img src="assets/syl-mascot.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px;vertical-align:middle;margin-right:6px">Syl<b>o</b>ra</a>
+    <a class="brand" href="index.html"><img src="assets/syl-mascot.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px">Syl<span class="o">o</span>ra</a>
     <div class="spacer"></div>
-    <span class="demo-tag" id="demoTag" hidden>mode demo</span>
-    <span class="net-badge" id="netBadge">belum terhubung</span>
+    <span class="demo-tag" id="demoTag" hidden>demo mode</span>
+    <span class="net-badge" id="netBadge">not connected</span>
   </div>
 </header>
 
 <main>
 
-  <!-- ============ TAB: BERANDA ============ -->
+  <!-- ============ TAB: HOME ============ -->
   <section class="tab on" id="tab-home">
-    <h1 class="page-title">Halo, orang baik 🌱</h1>
-    <p class="page-sub">Aksi kecilmu tercatat, terbatas, dan tidak bisa dicurangi.</p>
+    <h1 class="page-title">Hello, kind soul 🌱</h1>
+    <p class="page-sub">Your small actions are recorded, capped, and impossible to cheat.</p>
 
     <div class="ticker" id="ticker">
       <span class="live">LIVE</span>
-      <span class="msg" id="tickerMsg">Rina menyelesaikan Setor daur ulang dan mendapat</span>
-      <span class="pts" id="tickerPts">+50 poin</span>
+      <span class="msg" id="tickerMsg">Rina dropped off recycling and earned</span>
+      <span class="pts" id="tickerPts">+50 pts</span>
     </div>
 
     <div class="card point-card">
-      <div class="lbl">Poin SYL kamu</div>
+      <div class="lbl">Your SYL points</div>
       <div class="row">
-        <div class="big" id="balHome">0 <small>poin</small></div>
-        <span class="chip" id="streakChip">🔥 rentetan 0 hari</span>
+        <div class="big" id="balHome">0 <small>pts</small></div>
+        <span class="chip" id="streakChip">🔥 0-day streak</span>
       </div>
       <div style="margin-top:14px">
-        <button class="btn btn-s btn-w" id="connectBtn">🔗 Hubungkan dompet digital</button>
+        <button class="btn btn-s btn-w" id="connectBtn">🔗 Connect digital wallet</button>
       </div>
     </div>
 
     <div class="cstats">
-      <div><div class="v" id="cMembers">—</div><div class="k">Anggota</div></div>
-      <div><div class="v" id="cDistributed">—</div><div class="k">Poin dibagikan</div></div>
-      <div><div class="v" id="stVerified">—</div><div class="k">Aksi selesai</div></div>
-      <div><div class="v" id="stBurned">—</div><div class="k">Poin ditukar</div></div>
+      <div><div class="v" id="cMembers">—</div><div class="k">Members</div></div>
+      <div><div class="v" id="cDistributed">—</div><div class="k">Points distributed</div></div>
+      <div><div class="v" id="stVerified">—</div><div class="k">Actions done</div></div>
+      <div><div class="v" id="stBurned">—</div><div class="k">Points redeemed</div></div>
     </div>
 
     <div class="card">
-      <h3><span class="em">🏅</span> Papan peringkat minggu ini</h3>
-      <div class="rank-pill" id="myRank">🌱 Peringkatmu: — · 0 poin</div>
+      <h3><span class="em">🏅</span> Weekly leaderboard</h3>
+      <div class="rank-pill" id="myRank">🌱 Your rank: — · 0 pts</div>
       <div id="leaderList"></div>
-      <div class="hint">Peringkat dari aksi yang disahkan minggu ini. Poin berasal dari celengan hadiah — jumlahnya terbatas dan tercatat terbuka.</div>
+      <div class="hint">Rank based on actions approved this week. Points come from the reward pool — fixed supply, fully on-chain.</div>
     </div>
 
     <div id="verifyWrap" hidden>
       <div class="card">
-        <h3><span class="em">🔍</span> Meja pemeriksa</h3>
+        <h3><span class="em">🔍</span> Verifier desk</h3>
         <table>
-          <thead><tr><th>Bukti yang menunggu</th><th></th></tr></thead>
+          <thead><tr><th>Proof awaiting review</th><th></th></tr></thead>
           <tbody id="pendingTable"></tbody>
         </table>
-        <div id="noPending" hidden style="color:var(--latte);font-size:13.5px;font-weight:700;padding:10px 2px">Belum ada aksi yang perlu diperiksa.</div>
+        <div id="noPending" hidden style="color:var(--latte);font-size:13.5px;font-weight:700;padding:10px 2px">No actions need your review right now.</div>
       </div>
     </div>
 
     <div class="card" style="background:var(--matcha-foam);border-color:#d5ead9">
-      <h3><span class="em">☕</span> Cara kerjanya</h3>
+      <h3><span class="em">☕</span> How it works</h3>
       <div style="font-size:13.5px;color:var(--matcha-deep);font-weight:700">
-        1. Pilih aksi di tab <b>Aksi</b>, foto buktinya 📸<br>
-        2. Pemeriksa komunitas mengesahkan ✅<br>
-        3. Terima 50 poin SYL, tukar voucher di tab <b>Tukar</b> 🎁
+        1. Pick an action in the <b>Action</b> tab and snap proof 📸<br>
+        2. A community verifier approves it ✅<br>
+        3. Receive 50 SYL points, redeem a voucher in the <b>Redeem</b> tab 🎁
       </div>
     </div>
   </section>
 
-  <!-- ============ TAB: TANTANGAN ============ -->
+  <!-- ============ TAB: CHALLENGES ============ -->
   <section class="tab" id="tab-tantangan">
-    <h1 class="page-title">Tantangan 🏆</h1>
-    <p class="page-sub">Ikuti tantangan komunitas, jaga rentetan aksimu tetap hidup.</p>
+    <h1 class="page-title">Challenges 🏆</h1>
+    <p class="page-sub">Join community challenges, keep your streak alive.</p>
 
     <div class="chal">
       <div class="em">⚡</div>
       <div>
-        <div class="tt">Satu Kali Coba</div>
-        <div class="ss">Catat aksi pertamamu dan dapatkan poin pertama.</div>
-        <div class="meta" id="chOne">— peserta</div>
+        <div class="tt">First-time try</div>
+        <div class="ss">Log your very first action and grab your first points.</div>
+        <div class="meta" id="chOne">— participants</div>
       </div>
-      <button class="btn btn-s btn-sm join" data-ch="one">Ikut</button>
+      <button class="btn btn-s btn-sm join" data-ch="one">Join</button>
     </div>
 
     <div class="chal">
       <div class="em">📅</div>
       <div>
-        <div class="tt">Aksi Harian</div>
-        <div class="ss">Satu aksi hijau setiap hari, rentetanmu dihitung otomatis.</div>
-        <div class="meta" id="chDaily">— peserta</div>
+        <div class="tt">Daily action</div>
+        <div class="ss">One green action per day — your streak is counted automatically.</div>
+        <div class="meta" id="chDaily">— participants</div>
       </div>
-      <button class="btn btn-s btn-sm join" data-ch="daily">Ikut</button>
+      <button class="btn btn-s btn-sm join" data-ch="daily">Join</button>
     </div>
 
     <div class="chal">
       <div class="em">🗓️</div>
       <div>
-        <div class="tt">Tantangan Mingguan</div>
-        <div class="ss">Kumpulkan 3 aksi berbeda dalam seminggu.</div>
-        <div class="meta" id="chWeekly">— peserta</div>
+        <div class="tt">Weekly challenge</div>
+        <div class="ss">Complete 3 different action types in a week.</div>
+        <div class="meta" id="chWeekly">— participants</div>
       </div>
-      <button class="btn btn-s btn-sm join" data-ch="weekly">Ikut</button>
+      <button class="btn btn-s btn-sm join" data-ch="weekly">Join</button>
     </div>
 
     <div class="chal">
       <div class="em">🏘️</div>
       <div>
-        <div class="tt">Aksi Bareng Komunitas</div>
-        <div class="ss">Bersih-bersih pantai atau tanam pohon bersama bank sampah dekatmu.</div>
-        <div class="meta" id="chCommunity">— peserta</div>
+        <div class="tt">Community action</div>
+        <div class="ss">Beach cleanup or tree planting with your local bank-sampah.</div>
+        <div class="meta" id="chCommunity">— participants</div>
       </div>
-      <button class="btn btn-s btn-sm join" data-ch="community">Ikut</button>
+      <button class="btn btn-s btn-sm join" data-ch="community">Join</button>
     </div>
 
-    <div class="hint" style="text-align:center">Rentetan aksi dihitung otomatis oleh sistem setiap kali aksimu disahkan — tidak bisa diakali.</div>
+    <div class="hint" style="text-align:center">Streaks are tallied automatically by the contract on each approval — they can't be gamed.</div>
   </section>
 
-  <!-- ============ TAB: AKSI ============ -->
+  <!-- ============ TAB: ACTION ============ -->
   <section class="tab" id="tab-aksi">
-    <h1 class="page-title">Aksi hari ini 📸</h1>
-    <p class="page-sub">Pilih aksinya, foto buktinya, dan kirim untuk diperiksa.</p>
+    <h1 class="page-title">Today's action 📸</h1>
+    <p class="page-sub">Pick an action, snap your proof, submit for review.</p>
 
     <div class="tasks" id="taskGrid"></div>
 
     <div class="card" id="aksiForm">
-      <h3><span class="em">✍️</span> Catat aksi</h3>
-      <label for="aType">Jenis aksi</label>
+      <h3><span class="em">✍️</span> Log an action</h3>
+      <label for="aType">Action type</label>
       <select id="aType">
-        <option value="tree_planting">🌳 Tanam pohon</option>
-        <option value="beach_cleanup">🏖️ Bersihkan pantai/sungai</option>
-        <option value="recycle">♻️ Setor daur ulang</option>
-        <option value="compost">🪱 Buat kompos</option>
-        <option value="other">🔌 Aksi hijau lain</option>
+        <option value="tree_planting">🌳 Plant a tree</option>
+        <option value="beach_cleanup">🏖️ Clean a beach or river</option>
+        <option value="recycle">♻️ Drop off recycling</option>
+        <option value="compost">🪱 Make compost</option>
+        <option value="other">🔌 Other green action</option>
       </select>
-      <label for="aDesc">Ceritakan aksimu</label>
-      <textarea id="aDesc" maxlength="280" placeholder="Contoh: setor 2 kg botol plastik ke bank sampah dekat rumah…"></textarea>
-      <div class="hint"><span id="charCount">0</span>/280 · satu jenis aksi per 24 jam · maksimal 3 menunggu</div>
-      <label for="aFile">Foto bukti</label>
+      <label for="aDesc">Describe your action</label>
+      <textarea id="aDesc" maxlength="280" placeholder="e.g. dropped off 2 kg of plastic bottles at my local bank-sampah…"></textarea>
+      <div class="hint"><span id="charCount">0</span>/280 · one action type per 24 h · up to 3 awaiting review</div>
+      <label for="aFile">Proof photo</label>
       <div class="file-zone" id="fileZone" tabindex="0">
-        <div id="fileLabel">Taruh foto di sini atau klik untuk memilih<br><span style="font-size:12px">foto tetap di perangkatmu — hanya sidik-jari digitalnya yang dicatat</span></div>
+        <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">the file stays on your device — only its digital fingerprint is recorded</span></div>
         <div class="hash" id="hashOut"></div>
       </div>
       <input type="file" id="aFile" accept="image/*" hidden>
       <div id="submitErr"></div>
-      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled>📤 Kirim foto bukti</button></div>
+      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled>📤 Submit proof photo</button></div>
     </div>
   </section>
 
-  <!-- ============ TAB: TUKAR ============ -->
+  <!-- ============ TAB: REDEEM ============ -->
   <section class="tab" id="tab-tukar">
-    <h1 class="page-title">Tukar poin 🎁</h1>
-    <p class="page-sub">Poin yang ditukar akan hilang selamanya — supaya tetap adil.</p>
+    <h1 class="page-title">Redeem points 🎁</h1>
+    <p class="page-sub">Redeemed points are destroyed forever — that's how fairness is kept.</p>
     <div class="card point-card">
-      <div class="lbl">Poin SYL kamu</div>
-      <div class="big" id="myBalance">0.00 <small>poin</small></div>
+      <div class="lbl">Your SYL points</div>
+      <div class="big" id="myBalance">0.00 <small>pts</small></div>
     </div>
     <div class="card">
-      <h3><span class="em">🎟️</span> Contoh voucher</h3>
-      <div class="list-item"><span class="em">🌱</span><span class="grow">Bibit tanaman</span><span class="mini">50 poin</span></div>
-      <div class="list-item"><span class="em">☕</span><span class="grow">Minuman di kedai mitra</span><span class="mini">100 poin</span></div>
-      <div class="list-item"><span class="em">🛍️</span><span class="grow">Tas belanja kain</span><span class="mini">150 poin</span></div>
+      <h3><span class="em">🎟️</span> Sample vouchers</h3>
+      <div class="list-item"><span class="em">🌱</span><span class="grow">Plant seedlings</span><span class="mini">50 pts</span></div>
+      <div class="list-item"><span class="em">☕</span><span class="grow">Drink at partner café</span><span class="mini">100 pts</span></div>
+      <div class="list-item"><span class="em">🛍️</span><span class="grow">Reusable shopping bag</span><span class="mini">150 pts</span></div>
     </div>
     <div class="card">
-      <label for="rAmt">Jumlah poin yang ditukar</label>
+      <label for="rAmt">Amount of points to redeem</label>
       <input type="text" inputmode="decimal" id="rAmt" value="50" autocomplete="off">
-      <div class="hint" id="rHint">minimal 50 SYL · poin akan ditukar & hilang</div>
+      <div class="hint" id="rHint">minimum 50 SYL · points will be burned &amp; gone</div>
       <div id="redeemErr"></div>
       <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-o" id="approveBtn" disabled style="flex:1">✋ Izinkan penukaran</button>
-        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1">🎁 Tukar jadi voucher</button>
+        <button class="btn btn-o" id="approveBtn" disabled style="flex:1">✋ Approve redemption</button>
+        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1">🎁 Burn &amp; get voucher</button>
       </div>
-      <div class="hint" style="margin-top:14px"><b>Supaya tetap adil:</b> poinmu ditukar langsung dari dompet digital dan hilang setelah dipakai. Voucher diklaim lewat mitra lokal.</div>
+      <div class="hint" style="margin-top:14px"><b>Why burn?</b> your points are pulled from your wallet and destroyed after the voucher is claimed. The supply shrinks, so the value holds.</div>
     </div>
   </section>
 
-  <!-- ============ TAB: SAYA ============ -->
+  <!-- ============ TAB: PROFILE ============ -->
   <section class="tab" id="tab-saya">
-    <h1 class="page-title">Saya 👤</h1>
+    <h1 class="page-title">Profile 👤</h1>
     <div class="card">
       <div class="profile">
-        <div class="avatar">🌱</div>
+        <div class="avatar"></div>
         <div>
-          <div class="nm" id="meName">Pengguna SYLORA</div>
-          <div class="st" id="meStatus">dompet belum terhubung</div>
+          <div class="nm" id="meName">SYLORA user</div>
+          <div class="st" id="meStatus">wallet not connected</div>
         </div>
       </div>
-      <div class="list-item"><span class="em">🔍</span><span class="grow">Peran pemeriksa</span><span class="mini" id="meRole">tidak</span></div>
-      <div class="list-item"><span class="em">🔥</span><span class="grow">Rentetan aksi</span><span class="mini" id="meStreak">—</span></div>
-      <div class="list-item"><span class="em">🎁</span><span class="grow">Voucher ditukar</span><span class="mini" id="meVoucher">—</span></div>
+      <div class="list-item"><span class="em">🔍</span><span class="grow">Verifier role</span><span class="mini" id="meRole">no</span></div>
+      <div class="list-item"><span class="em">🔥</span><span class="grow">Action streak</span><span class="mini" id="meStreak">—</span></div>
+      <div class="list-item"><span class="em">🎁</span><span class="grow">Vouchers redeemed</span><span class="mini" id="meVoucher">—</span></div>
     </div>
 
     <div class="card">
-      <h3><span class="em">📒</span> Catatan aksimu</h3>
+      <h3><span class="em">📒</span> Your action log</h3>
       <table>
-        <thead><tr><th>Aksi</th><th>Status</th><th style="text-align:right">Poin</th></tr></thead>
-        <tbody id="myActions"><tr><td colspan="3" style="color:var(--latte);font-weight:700">Hubungkan dompet digital untuk melihat aksimu.</td></tr></tbody>
+        <thead><tr><th>Action</th><th>Status</th><th style="text-align:right">Points</th></tr></thead>
+        <tbody id="myActions"><tr><td colspan="3" style="color:var(--latte);font-weight:700">Connect a wallet to see your actions.</td></tr></tbody>
       </table>
     </div>
 
     <div class="card">
-      <h3><span class="em">⚙️</span> Pengaturan sistem</h3>
-      <div class="hint" style="margin-top:0" id="netInfo">Pengaturan teknis untuk pengelola: masukkan alamat kontrak pencatatan aksi dan poin SYL. Alamat hanya disimpan di browser ini.</div>
+      <h3><span class="em">⚙️</span> System settings</h3>
+      <div class="hint" style="margin-top:0" id="netInfo">For organisers: enter the deployed contract addresses for the action registry and SYL token. Addresses are stored in this browser only.</div>
       <div class="cfg-grid">
-        <label for="cfgReg">Alamat buku aksi</label>
+        <label for="cfgReg">Action registry address</label>
         <input type="text" id="cfgReg" spellcheck="false" placeholder="0x…" autocomplete="off">
-        <label for="cfgTok">Alamat poin SYL</label>
+        <label for="cfgTok">SYL token address</label>
         <input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off">
       </div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Muat sistem</button>
-        <button class="btn btn-s btn-sm" id="demoBtn" style="flex:1">Coba mode demo</button>
+        <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Load contracts</button>
+        <button class="btn btn-s btn-sm" id="demoBtn" style="flex:1">Try demo mode</button>
       </div>
     </div>
 
     <div class="card" style="text-align:center">
       <div style="font-size:13px;color:var(--latte);font-weight:700">
         SYLORA · GMT Build Week Vol.2 · BOT Chain<br>
-        <a href="index.html" style="color:var(--matcha-deep)">← beranda situs</a> ·
+        <a href="index.html" style="color:var(--matcha-deep)">← back to site</a> ·
         <a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener" style="color:var(--matcha-deep)">github</a>
       </div>
     </div>
@@ -395,11 +395,11 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
 <nav>
   <div class="navbar" id="navbar">
-    <button class="on" data-tab="home"><span class="ic">🏠</span><span class="lb">Beranda</span></button>
-    <button data-tab="tantangan"><span class="ic">🏆</span><span class="lb">Tantangan</span></button>
-    <button data-tab="aksi"><span class="ic">📸</span><span class="lb">Aksi</span></button>
-    <button data-tab="tukar"><span class="ic">🎁</span><span class="lb">Tukar</span></button>
-    <button data-tab="saya"><span class="ic">👤</span><span class="lb">Saya</span></button>
+    <button class="on" data-tab="home"><span class="ic">🏠</span><span class="lb">Home</span></button>
+    <button data-tab="tantangan"><span class="ic">🏆</span><span class="lb">Challenges</span></button>
+    <button data-tab="aksi"><span class="ic">📸</span><span class="lb">Action</span></button>
+    <button data-tab="tukar"><span class="ic">🎁</span><span class="lb">Redeem</span></button>
+    <button data-tab="saya"><span class="ic">👤</span><span class="lb">Profile</span></button>
   </div>
 </nav>
 
@@ -437,8 +437,8 @@ const TOK_ABI = [
   "function allowance(address,address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)"
 ];
-const TYPES = {tree_planting:"🌳 Tanam pohon",beach_cleanup:"🏖️ Bersihkan pantai/sungai",recycle:"♻️ Setor daur ulang",compost:"🪱 Buat kompos",other:"🔌 Aksi hijau lain"};
-const STATUS = ["menunggu pemeriksaan","disahkan","belum bisa diterima"];
+const TYPES = {tree_planting:"🌳 Plant a tree",beach_cleanup:"🏖️ Clean beach/river",recycle:"♻️ Drop off recycling",compost:"🪱 Make compost",other:"🔌 Other green action"};
+const STATUS = ["pending","verified","rejected"];
 
 const $ = id => document.getElementById(id);
 const fmt = (wei,dp=0) => Number(ethers.formatUnits(wei,18)).toLocaleString("en-US",{maximumFractionDigits:dp,minimumFractionDigits:dp});
@@ -446,22 +446,22 @@ const short = a => a ? a.slice(0,6)+"…"+a.slice(-4) : "";
 const esc = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const timeAgo = ts => {
   const d = Math.max(0, Math.floor(Date.now()/1000) - ts);
-  if (d < 3600) return Math.max(1,Math.floor(d/60)) + " mnt lalu";
-  if (d < 86400) return Math.floor(d/3600) + " jam lalu";
-  return Math.floor(d/86400) + " hari lalu";
+  if (d < 3600) return Math.max(1,Math.floor(d/60)) + " min ago";
+  if (d < 86400) return Math.floor(d/3600) + " hr ago";
+  return Math.floor(d/86400) + " d ago";
 };
 const toast=(msg,bad)=>{ const t=$("toast"); t.textContent=msg; t.className="show"+(bad?" bad":""); clearTimeout(t._x); t._x=setTimeout(()=>t.className="",4200); };
 function parseAmt(){ try{ const v=$("rAmt").value.trim(); if(!/^\d+(\.\d{0,18})?$/.test(v)) return null; return ethers.parseUnits(v,"ether"); }catch{ return null; } }
 function cleanErr(m){
-  if(/CooldownActive/.test(m)) return "Aksi jenis ini baru dikirim kurang dari 24 jam lalu.";
-  if(/TooManyPending/.test(m)) return "Sudah ada 3 aksi yang menunggu pemeriksaan.";
-  if(/InvalidActionType/.test(m)) return "Jenis aksi ini belum tersedia.";
-  if(/DescriptionTooLong/.test(m)) return "Ceritamu lebih dari 280 karakter.";
-  if(/PoolEmpty/.test(m)) return "Celengan hadiah kosong — pengelola perlu mengisinya lagi.";
-  if(/NotPending/.test(m)) return "Aksi ini sudah diperiksa sebelumnya.";
-  if(/NotVerified/.test(m)||/NotVerifier/.test(m)) return "Hanya pemeriksa terdaftar yang bisa melakukan ini.";
-  if(/BelowMinRedeem/.test(m)) return "Minimal penukaran adalah 50 SYL.";
-  if(/InsufficientBalance|ERC20: transfer/.test(m)) return "Poin atau izin penukaran belum cukup. Klik Izinkan penukaran dulu.";
+  if(/CooldownActive/.test(m)) return "This action type was submitted less than 24 h ago.";
+  if(/TooManyPending/.test(m)) return "You already have 3 actions awaiting review.";
+  if(/InvalidActionType/.test(m)) return "That action type isn't supported yet.";
+  if(/DescriptionTooLong/.test(m)) return "Your description is over 280 characters.";
+  if(/PoolEmpty/.test(m)) return "Reward pool is empty — the operator needs to refill it.";
+  if(/NotPending/.test(m)) return "This action has already been reviewed.";
+  if(/NotVerified/.test(m)||/NotVerifier/.test(m)) return "Only registered verifiers can do that.";
+  if(/BelowMinRedeem/.test(m)) return "Minimum redemption is 50 SYL.";
+  if(/InsufficientBalance|ERC20: transfer/.test(m)) return "Insufficient balance or allowance. Click 'Approve redemption' first.";
   return m;
 }
 
@@ -479,22 +479,22 @@ document.querySelector("nav").addEventListener("click", e=>{
 
 /* ---------- ticker (demo flavour) ---------- */
 const TICKS = [
-  ["Rina menyelesaikan Setor daur ulang dan mendapat","+50 poin"],
-  ["Budi mengesahkan aksi Tanam pohon di bantaran sungai","+50 poin"],
-  ["Sari menukar 100 poin dengan voucher bibit tanaman","🎁"],
-  ["Aksi Bersihkan pantai diverifikasi pemeriksa komunitas","✅"]
+  ["Rina dropped off recycling and earned","+50 pts"],
+  ["Budi approved a tree-planting at the riverbank","+50 pts"],
+  ["Sari redeemed 100 pts for a plant-seedling voucher","🎁"],
+  ["A beach cleanup was verified by a community verifier","✅"]
 ];
 let tickI=0;
 setInterval(()=>{ tickI=(tickI+1)%TICKS.length; $("tickerMsg").textContent=TICKS[tickI][0]; $("tickerPts").textContent=TICKS[tickI][1]; },4500);
 
 /* ---------- task cards ---------- */
 const TASKS = [
-  {type:"tree_planting", emoji:"🌳", title:"Tanam pohon", sub:"di halaman atau lahan kosong"},
-  {type:"beach_cleanup", emoji:"🏖️", title:"Bersihkan pantai/sungai", sub:"pungut sampah plastik"},
-  {type:"recycle", emoji:"♻️", title:"Setor daur ulang", sub:"botol, kertas, ke bank sampah"},
-  {type:"compost", emoji:"🪱", title:"Buat kompos", sub:"olah sisa dapur jadi pupuk"},
-  {type:"other", emoji:"🔌", title:"Cabut colokan", sub:"alat elektronik yang menganggur"},
-  {type:"other", emoji:"🥤", title:"Bawa tumbler", sub:"beli minum tanpa gelas plastik"}
+  {type:"tree_planting", emoji:"🌳", title:"Plant a tree", sub:"in a yard or public space"},
+  {type:"beach_cleanup", emoji:"🏖️", title:"Beach or river cleanup", sub:"pick up plastic waste"},
+  {type:"recycle", emoji:"♻️", title:"Drop off recycling", sub:"bottles, paper, to a bank-sampah"},
+  {type:"compost", emoji:"🪱", title:"Make compost", sub:"turn kitchen scraps into fertiliser"},
+  {type:"other", emoji:"🔌", title:"Unplug electronics", sub:"appliances on standby waste energy"},
+  {type:"other", emoji:"🥤", title:"Bring a tumbler", sub:"skip disposable cups on purchases"}
 ];
 $("taskGrid").innerHTML = TASKS.map((t,i)=>`<button class="task" data-i="${i}">
   <span class="pts">+50</span><span class="em">${t.emoji}</span>
@@ -505,7 +505,7 @@ $("taskGrid").addEventListener("click", e=>{
   $("aType").value=t.type;
   document.querySelectorAll(".task").forEach(x=>x.classList.toggle("sel",x===b));
   $("aksiForm").scrollIntoView({behavior:"smooth"});
-  toast("Aksi dipilih: "+t.title+" — lengkapi cerita & foto bukti");
+  toast("Selected: "+t.title+" — add a description & proof photo");
 });
 
 /* ---------- leaderboard & challenges (demo data) ---------- */
@@ -517,20 +517,20 @@ function renderLeader(myPts){
   $("leaderList").innerHTML = LEADER.map((r,i)=>`<div class="lb-row">
     <span class="lb-rank${i===0?" gold":""}">${i+1}</span>
     <span class="lb-name">${esc(r[0])}</span>
-    <span class="lb-pts">${r[1].toLocaleString("en-US")} poin</span></div>`).join("")
+    <span class="lb-pts">${r[1].toLocaleString("en-US")} pts</span></div>`).join("")
     + `<div class="lb-row lb-you"><span class="lb-rank" id="lbYouRank">—</span>
-    <span class="lb-name">Kamu</span><span class="lb-pts">${myPts.toLocaleString("en-US")} poin</span></div>`;
+    <span class="lb-name">You</span><span class="lb-pts">${myPts.toLocaleString("en-US")} pts</span></div>`;
 }
 function renderRank(myPts){
   let rank = LEADER.filter(r=>r[1]>myPts).length + 1;
-  $("myRank").textContent = "🌱 Peringkatmu: #"+rank+" · "+myPts.toLocaleString("en-US")+" poin";
+  $("myRank").textContent = "🌱 Your rank: #"+rank+" · "+myPts.toLocaleString("en-US")+" pts";
   const el=$("lbYouRank"); if(el) el.textContent=rank;
 }
-const CHALS = {one:["chOne","3.214 peserta · sampai 31 Des"],daily:["chDaily","12.608 peserta · berjalan terus"],weekly:["chWeekly","1.953 peserta · setiap Senin"],community:["chCommunity","264 peserta · ikut jadwal komunitas"]};
+const CHALS = {one:["chOne","3,214 participants · until Dec 31"],daily:["chDaily","12,608 participants · ongoing"],weekly:["chWeekly","1,953 participants · every Monday"],community:["chCommunity","264 participants · community-led"]};
 Object.values(CHALS).forEach(([id,txt])=>$(id).textContent=txt);
 document.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>{
-  b.textContent="Ikut ✓"; b.disabled=true;
-  toast("Kamu ikut tantangan ini — catat aksimu di tab Aksi 📸");
+  b.textContent="Joined ✓"; b.disabled=true;
+  toast("You're in — log your action in the Action tab 📸");
 }));
 
 let provider=null, signer=null, account=null, registry=null, token=null;
@@ -540,46 +540,46 @@ let DEMO=false, imgHash=null;
 const D = {
   pool: 999800n*10n**18n, burned: 150n*10n**18n, streak: 2n, balance: 150n*10n**18n, members: 128,
   mine: [
-    {id:"0x8a3fc2e1",type:"tree_planting",desc:"Menanam 12 bibit mangrove di bantaran sungai bersama warga",status:1,reward:50n*10n**18n,streak:2,ts:Math.floor(Date.now()/1000)-2*86400},
-    {id:"0x71c09f44",type:"beach_cleanup",desc:"Mengumpulkan 3 karung plastik bersama komunitas pantai",status:1,reward:50n*10n**18n,streak:1,ts:Math.floor(Date.now()/1000)-4*86400},
-    {id:"0xf00d5a1b",type:"compost",desc:"Bulan pertama membuat kompos dapur — 8 kg sampah organik",status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)-6*3600},
+    {id:"0x8a3fc2e1",type:"tree_planting",desc:"Planted 12 mangrove seedlings at the riverbank with neighbours",status:1,reward:50n*10n**18n,streak:2,ts:Math.floor(Date.now()/1000)-2*86400},
+    {id:"0x71c09f44",type:"beach_cleanup",desc:"Collected 3 bags of plastic with the beach community",status:1,reward:50n*10n**18n,streak:1,ts:Math.floor(Date.now()/1000)-4*86400},
+    {id:"0xf00d5a1b",type:"compost",desc:"First month of kitchen composting — 8 kg of organic waste diverted",status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)-6*3600},
   ],
   pending: [
-    {id:"0xf00d5a1b",idFull:"0xf00d00000000000000000000000000000000000000000000000000005a1b",who:"0x71C0a4e59B3D2F1c8A0e6B77C9d40F2aB1e3D5a7",type:"compost",desc:"Bulan pertama membuat kompos dapur — 8 kg sampah organik",ts:Math.floor(Date.now()/1000)-6*3600},
-    {id:"0xab1277e9",idFull:"0xab12000000000000000000000000000000000000000000000000000077e9",who:"0x8a3Fb1d4E29C607aE5b38D1F4c07B9a2E6d31F88",type:"recycle",desc:"Menyetor 4,2 kg kabel dan perangkat elektronik ke depo kecamatan",ts:Math.floor(Date.now()/1000)-11*3600},
+    {id:"0xf00d5a1b",idFull:"0xf00d00000000000000000000000000000000000000000000000000005a1b",who:"0x71C0a4e59B3D2F1c8A0e6B77C9d40F2aB1e3D5a7",type:"compost",desc:"First month of kitchen composting — 8 kg of organic waste diverted",ts:Math.floor(Date.now()/1000)-6*3600},
+    {id:"0xab1277e9",idFull:"0xab12000000000000000000000000000000000000000000000000000077e9",who:"0x8a3Fb1d4E29C607aE5b38D1F4c07B9a2E6d31F88",type:"recycle",desc:"Dropped off 4.2 kg of cables and electronics at the sub-district depot",ts:Math.floor(Date.now()/1000)-11*3600},
   ]
 };
 
 /* ---------- connect ---------- */
 $("connectBtn").addEventListener("click", async ()=>{
-  if (DEMO){ toast("Kamu sedang di mode demo — keluar dulu untuk memakai sistem asli",true); return; }
-  if (!window.ethereum){ toast("Dompet digital belum ditemukan — pasang MetaMask untuk terhubung",true); return; }
+  if (DEMO){ toast("You're in demo mode — exit it first to use the real system",true); return; }
+  if (!window.ethereum){ toast("No digital wallet found — install MetaMask to connect",true); return; }
   try{
     provider = new ethers.BrowserProvider(window.ethereum);
     const accts = await provider.send("eth_requestAccounts",[]);
     account = accts[0];
     const net = await provider.getNetwork();
     const cid = Number(net.chainId);
-    $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — ganti ke BOT";
+    $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
     $("connectBtn").textContent = "🔗 "+short(account);
     $("meName").textContent = short(account);
-    $("meStatus").textContent = "dompet terhubung";
+    $("meStatus").textContent = "wallet connected";
     signer = await provider.getSigner();
     if (registry) refresh(); else if ($("cfgReg").value && $("cfgTok").value) loadContracts();
-    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)?("🔗 "+short(account)):"🔗 Hubungkan dompet digital"; if(registry) refresh(); });
+    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)?("🔗 "+short(account)):"🔗 Connect digital wallet"; if(registry) refresh(); });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
-  }catch(e){ toast("Permintaan dompet ditolak: "+(e.shortMessage||e.message),true); }
+  }catch(e){ toast("Wallet request rejected: "+(e.shortMessage||e.message),true); }
 });
 
 function loadContracts(silent){
   const r=$("cfgReg").value.trim(), t=$("cfgTok").value.trim();
-  if(!ethers.isAddress(r)||!ethers.isAddress(t)){ toast("Kedua alamat harus valid dan diawali 0x…",true); return; }
-  if(!provider||!account){ toast("Hubungkan dompet digital dulu",true); return; }
+  if(!ethers.isAddress(r)||!ethers.isAddress(t)){ toast("Both addresses must be valid 0x…",true); return; }
+  if(!provider||!account){ toast("Connect a wallet first",true); return; }
   localStorage.setItem("syl_reg",r); localStorage.setItem("syl_tok",t);
   registry = new ethers.Contract(r,REG_ABI,provider);
   token = new ethers.Contract(t,TOK_ABI,provider);
-  $("netInfo").textContent = "Buku aksi "+r.slice(0,10)+"… · Poin SYL "+t.slice(0,10)+"…";
-  if(!silent) toast("Sistem berhasil dimuat ✓");
+  $("netInfo").textContent = "Registry "+r.slice(0,10)+"… · SYL token "+t.slice(0,10)+"…";
+  if(!silent) toast("System loaded ✓");
   refresh();
 }
 $("loadBtn").addEventListener("click",()=>loadContracts());
@@ -591,8 +591,8 @@ function renderStrip(pool,verified,streak,burned,supplyLeft,distributed){
   $("stVerified").textContent = verified.toLocaleString();
   $("stBurned").textContent = fmt(burned);
   $("cDistributed").innerHTML = fmt(distributed)+" <small>SYL</small>";
-  $("streakChip").textContent = "🔥 rentetan "+streak+" aksi";
-  $("meStreak").textContent = streak+" aksi beruntun";
+  $("streakChip").textContent = "🔥 "+streak+"-action streak";
+  $("meStreak").textContent = streak+" actions in a row";
 }
 function badge(s){ return `<span class="badge b-${["pending","verified","rejected"][s]}">${STATUS[s]}</span>`; }
 function row(a){
@@ -605,21 +605,21 @@ function row(a){
 function renderMine(list){
   $("myActions").innerHTML = list.length
     ? list.map(row).join("")
-    : `<tr><td colspan="3" style="color:var(--latte);font-weight:700">Belum ada aksi — catat aksimu yang pertama di tab Aksi 📸</td></tr>`;
+    : `<tr><td colspan="3" style="color:var(--latte);font-weight:700">No actions yet — log your first one in the Action tab 📸</td></tr>`;
 }
 function renderPending(list){
   if(!list.length){ $("pendingTable").innerHTML=""; $("noPending").hidden=false; return; }
   $("noPending").hidden=true;
   $("pendingTable").innerHTML = list.map(p=>`<tr>
     <td><div class="type">${TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(p.desc)}</div>
-        <div class="id">${p.id} · oleh ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
+        <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
     <td style="text-align:right;white-space:nowrap">
-      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px">✅ Sahkan</button><br>
-      <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}">✖ Tolak</button></td></tr>`).join("");
+      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px">✅ Approve</button><br>
+      <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}">✖ Reject</button></td></tr>`).join("");
 }
 function setBalances(bal){
-  $("balHome").innerHTML = fmt(bal)+" <small>poin</small>";
-  $("myBalance").innerHTML = fmt(bal,2)+" <small>poin</small>";
+  $("balHome").innerHTML = fmt(bal)+" <small>pts</small>";
+  $("myBalance").innerHTML = fmt(bal,2)+" <small>pts</small>";
   renderRank(Number(fmt(bal)));
 }
 
@@ -642,10 +642,10 @@ async function refresh(){
     const distributed = maxSupply - pool - burned; // pool + distributed + burned = 1M
     renderStrip(pool,Number(totalActions),streak,burned,maxSupply-burned,distributed);
     renderMine(mine);
-    try{ $("meVoucher").textContent = (await registry.voucherCount(account))+" voucher"; }catch{}
+    try{ $("meVoucher").textContent = (await registry.voucherCount(account))+" voucher"+(await registry.voucherCount(account)===1?"":"s"); }catch{}
     const isVerifier = await registry.verifiers(account);
     $("verifyWrap").hidden = !isVerifier;
-    $("meRole").textContent = isVerifier ? "ya ✓" : "tidak";
+    $("meRole").textContent = isVerifier ? "yes ✓" : "no";
     if(isVerifier){
       const pend=[]; const pids = await registry.getPendingActions();
       for(const id of pids){ const a=await registry.getAction(id);
@@ -653,7 +653,7 @@ async function refresh(){
       renderPending(pend);
     }
     updateRedeem();
-  }catch(e){ console.error(e); toast("Gagal membaca data — periksa alamat / jaringan: "+(e.shortMessage||e.message),true); }
+  }catch(e){ console.error(e); toast("Failed to read data — check address / network: "+(e.shortMessage||e.message),true); }
 }
 
 /* ---------- submit ---------- */
@@ -665,7 +665,7 @@ async function hashFile(file){
   if(!file) return;
   const buf = new Uint8Array(await file.arrayBuffer());
   imgHash = ethers.keccak256(buf);
-  $("fileLabel").innerHTML = `Foto dikunci ✓ <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB — tidak diunggah)</span>`;
+  $("fileLabel").innerHTML = `Photo locked ✓ <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB — never uploaded)</span>`;
   $("hashOut").textContent = imgHash;
   enableSubmit();
 }
@@ -682,25 +682,25 @@ $("submitBtn").addEventListener("click", async ()=>{
   const type=$("aType").value, desc=$("aDesc").value.trim();
   if(DEMO){
     D.mine.unshift({id:"0x"+Math.random().toString(16).slice(2,10),type,desc,status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)});
-    renderMine(D.mine); toast("Demo: aksi dikirim untuk diperiksa");
+    renderMine(D.mine); toast("Demo: action submitted for review");
     resetForm(); return;
   }
-  if(!signer||!registry){ toast("Hubungkan dompet digital dan muat sistem dulu",true); return; }
+  if(!signer||!registry){ toast("Connect a wallet and load the system first",true); return; }
   $("submitBtn").disabled=true; $("submitErr").innerHTML="";
   try{
     const tx = await registry.connect(signer).submitAction(type,desc,imgHash);
-    toast("Terkirim — menunggu konfirmasi…");
+    toast("Submitted — awaiting confirmation…");
     await tx.wait();
-    toast("Aksi tercatat di sistem ✓");
+    toast("Action recorded on-chain ✓");
     resetForm(); refresh();
   }catch(e){
-    $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"gagal"))}</div>`;
+    $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"failed"))}</div>`;
     enableSubmit();
   }
 });
 function resetForm(){
   imgHash=null; $("hashOut").textContent=""; $("aDesc").value=""; $("charCount").textContent="0";
-  $("fileLabel").innerHTML="Taruh foto di sini atau klik untuk memilih<br><span style='font-size:12px'>foto tetap di perangkatmu — hanya sidik-jari digitalnya yang dicatat</span>";
+  $("fileLabel").innerHTML="Drop a photo here or click to pick<br><span style='font-size:12px'>the file stays on your device — only its digital fingerprint is recorded</span>";
   enableSubmit();
 }
 
@@ -711,25 +711,25 @@ $("pendingTable").addEventListener("click", async e=>{
   if(DEMO){
     if(act==="verify"){
       D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending);
-      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(disahkan dari antrean)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
+      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(approved from queue)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
       D.balance+=50n*10n**18n; renderMine(D.mine); setBalances(D.balance);
-      toast("Demo: disahkan, +50 poin SYL");
+      toast("Demo: approved, +50 SYL points");
     }else{
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: ditolak");
+      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: rejected");
     }
     return;
   }
   try{
     if(act==="verify"){
-      const tx=await registry.connect(signer).verifyAction(id); toast("Transaksi dikirim…"); await tx.wait();
-      toast("Disahkan ✓ hadiah keluar dari celengan");
+      const tx=await registry.connect(signer).verifyAction(id); toast("Transaction sent…"); await tx.wait();
+      toast("Approved ✓ reward released from pool");
     }else{
-      const reason=prompt("Alasan penolakan (diperlihatkan ke pengirim):")||"Tidak bisa diverifikasi";
-      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Transaksi dikirim…"); await tx.wait();
-      toast("Aksi ditolak");
+      const reason=prompt("Rejection reason (visible to the submitter):")||"Could not be verified";
+      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Transaction sent…"); await tx.wait();
+      toast("Action rejected");
     }
     refresh();
-  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"gagal"),true); }
+  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"failed"),true); }
 });
 
 /* ---------- redeem ---------- */
@@ -741,18 +741,18 @@ async function updateRedeem(){
   setBalances(bal);
   const min = 50n*10n**18n;
   const ok = amt!==null && amt>=min && amt<=bal;
-  $("redeemErr").innerHTML = amt===null ? `<div class="err">Masukkan jumlah desimal yang valid.</div>`
-    : amt>bal && amt>0n ? `<div class="err">Jumlah melebihi poin SYL kamu.</div>`
-    : amt>0n&&amt<min ? `<div class="err">Minimal penukaran adalah 50 SYL.</div>` : "";
+  $("redeemErr").innerHTML = amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
+    : amt>bal && amt>0n ? `<div class="err">Amount exceeds your SYL balance.</div>`
+    : amt>0n&&amt<min ? `<div class="err">Minimum redemption is 50 SYL.</div>` : "";
   $("redeemBtn").disabled = !ok;
   $("approveBtn").disabled = !ok;
 }
 $("approveBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){ toast("Demo: izin disimulasikan — sekarang tukar"); $("redeemBtn").disabled=false; return; }
+  if(DEMO){ toast("Demo: allowance simulated — you can redeem now"); $("redeemBtn").disabled=false; return; }
   try{
     const tx=await token.connect(signer).approve(await registry.syl(),amt);
-    toast("Meminta izin…"); await tx.wait(); toast("Izin penukaran aktif ✓ sekarang tukar");
+    toast("Requesting allowance…"); await tx.wait(); toast("Allowance active ✓ you can redeem now");
     $("redeemBtn").disabled=false;
   }catch(e){ toast(cleanErr(e.shortMessage||e.message),true); }
 });
@@ -762,13 +762,13 @@ $("redeemBtn").addEventListener("click", async ()=>{
     D.balance-=amt; D.burned+=amt;
     renderStrip(D.pool, D.mine.filter(m=>m.status===1).length, D.streak, D.burned, 1000000n*10n**18n-D.burned, 1000000n*10n**18n-D.pool-D.burned);
     setBalances(D.balance);
-    toast("Demo: "+fmt(amt)+" poin SYL ditukar & hilang → voucher siap"); return;
+    toast("Demo: "+fmt(amt)+" SYL points burned → voucher ready"); return;
   }
   try{
     const tx=await registry.connect(signer).redeemVoucher(amt);
-    toast("Menukar…"); await tx.wait(); toast(fmt(amt)+" poin SYL ditukar — voucher siap ✓");
+    toast("Redeeming…"); await tx.wait(); toast(fmt(amt)+" SYL points redeemed — voucher ready ✓");
     refresh();
-  }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"gagal"),true); }
+  }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"failed"),true); }
 });
 
 /* ---------- demo mode ---------- */
@@ -776,7 +776,7 @@ $("demoBtn").addEventListener("click", ()=>toggleDemo(!DEMO));
 function toggleDemo(on){
   DEMO=on;
   $("demoTag").hidden=!on;
-  $("demoBtn").textContent=on?"Keluar dari mode demo":"Coba mode demo";
+  $("demoBtn").textContent=on?"Exit demo mode":"Try demo mode";
   if(on){
     $("netBadge").textContent="demo · chain 968";
     $("cMembers").textContent=D.members;
@@ -785,22 +785,22 @@ function toggleDemo(on){
     renderLeader(Number(fmt(D.balance)));
     setBalances(D.balance);
     $("verifyWrap").hidden=false;
-    $("meRole").textContent="ya ✓ (demo)";
-    $("meName").textContent="Sahabat Syl (demo)";
-    $("meStatus").textContent="mode demo aktif";
+    $("meRole").textContent="yes ✓ (demo)";
+    $("meName").textContent="Syl Friend (demo)";
+    $("meStatus").textContent="demo mode active";
     $("meVoucher").textContent="1 voucher";
     updateRedeem();
-    toast("Mode demo — datanya simulasi, tidak perlu dompet digital.");
+    toast("Demo mode — data is simulated, no wallet required.");
   }else{
-    $("netBadge").textContent = provider&&account ? "sudah terhubung" : "belum terhubung";
+    $("netBadge").textContent = provider&&account ? "connected" : "not connected";
     $("verifyWrap").hidden=true;
     ["cMembers","cDistributed","stVerified","stBurned"].forEach(i=>$(i).textContent="—");
-    $("streakChip").textContent="🔥 rentetan 0 hari";
+    $("streakChip").textContent="🔥 0-day streak";
     renderLeader(0);
     renderMine([]);
-    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--latte);font-weight:700">Hubungkan dompet digital untuk melihat aksimu.</td></tr>`;
+    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--latte);font-weight:700">Connect a wallet to see your actions.</td></tr>`;
     setBalances(0n);
-    $("meRole").textContent="tidak";
+    $("meRole").textContent="no";
     if(provider&&account&&registry) refresh();
   }
 }
@@ -808,7 +808,7 @@ function toggleDemo(on){
 /* initial paint */
 renderLeader(0);
 
-if(!window.ethereum) $("netBadge").textContent="dompet tidak ada · demo tersedia";
+if(!window.ethereum) $("netBadge").textContent="no wallet · demo available";
 </script>
 </body>
 </html>
