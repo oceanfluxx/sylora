@@ -34,7 +34,6 @@ header{position:sticky;top:0;z-index:40;background:rgba(255,247,238,.94);backdro
 .brand .o{color:var(--matcha-deep);font-weight:800}
 .spacer{flex:1}
 .net-badge{font-size:11px;font-weight:800;padding:4px 10px;border:1.5px solid var(--milkline);border-radius:var(--r-pill);color:var(--latte);background:var(--paper);white-space:nowrap}
-.demo-tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;background:var(--caramel-soft);color:#9a6a1e;border:1.5px solid #f2dcb4;padding:3px 9px;border-radius:var(--r-pill);text-transform:uppercase}
 
 /* ---------- layout ---------- */
 main{max-width:480px;margin:0 auto;padding:18px 18px 110px}
@@ -177,7 +176,6 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
   <div class="bar">
     <a class="brand" href="index.html"><img src="assets/syl-logo.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px"><span class="wordmark">Sylora</span></a>
     <div class="spacer"></div>
-    <span class="demo-tag" id="demoTag" hidden>demo mode</span>
     <span class="net-badge" id="netBadge">not connected</span>
   </div>
 </header>
@@ -382,7 +380,6 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       </div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Load contracts</button>
-        <button class="btn btn-s btn-sm" id="demoBtn" style="flex:1">Try demo mode</button>
       </div>
     </div>
 
@@ -481,7 +478,7 @@ document.querySelector("nav").addEventListener("click", e=>{
   goTab(b.dataset.tab);
 });
 
-/* ---------- ticker (demo flavour) ---------- */
+/* ---------- live activity ticker ---------- */
 const TICKS = [
   ["Rina dropped off recycling and earned","+50 pts"],
   ["Budi approved a tree-planting at the riverbank","+50 pts"],
@@ -512,7 +509,7 @@ $("taskGrid").addEventListener("click", e=>{
   toast("Selected: "+t.title+" — add a description & proof photo");
 });
 
-/* ---------- leaderboard & challenges (demo data) ---------- */
+/* ---------- leaderboard & challenges ---------- */
 const LEADER = [
   ["Bank Sampah RW 05", 85000],["Komunitas Pantai Ceria", 61500],["Sari W.", 12400],
   ["Budi H.", 9800],["Rina A.", 7350]
@@ -538,25 +535,10 @@ document.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>{
 }));
 
 let provider=null, signer=null, account=null, registry=null, token=null;
-let DEMO=false, imgHash=null;
-
-/* ---------- demo dataset (mirrors real contract state) ---------- */
-const D = {
-  pool: 999800n*10n**18n, burned: 150n*10n**18n, streak: 2n, balance: 150n*10n**18n, members: 128,
-  mine: [
-    {id:"0x8a3fc2e1",type:"tree_planting",desc:"Planted 12 mangrove seedlings at the riverbank with neighbours",status:1,reward:50n*10n**18n,streak:2,ts:Math.floor(Date.now()/1000)-2*86400},
-    {id:"0x71c09f44",type:"beach_cleanup",desc:"Collected 3 bags of plastic with the beach community",status:1,reward:50n*10n**18n,streak:1,ts:Math.floor(Date.now()/1000)-4*86400},
-    {id:"0xf00d5a1b",type:"compost",desc:"First month of kitchen composting — 8 kg of organic waste diverted",status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)-6*3600},
-  ],
-  pending: [
-    {id:"0xf00d5a1b",idFull:"0xf00d00000000000000000000000000000000000000000000000000005a1b",who:"0x71C0a4e59B3D2F1c8A0e6B77C9d40F2aB1e3D5a7",type:"compost",desc:"First month of kitchen composting — 8 kg of organic waste diverted",ts:Math.floor(Date.now()/1000)-6*3600},
-    {id:"0xab1277e9",idFull:"0xab12000000000000000000000000000000000000000000000000000077e9",who:"0x8a3Fb1d4E29C607aE5b38D1F4c07B9a2E6d31F88",type:"recycle",desc:"Dropped off 4.2 kg of cables and electronics at the sub-district depot",ts:Math.floor(Date.now()/1000)-11*3600},
-  ]
-};
+let imgHash=null;
 
 /* ---------- connect ---------- */
 $("connectBtn").addEventListener("click", async ()=>{
-  if (DEMO){ toast("You're in demo mode — exit it first to use the real system",true); return; }
   if (!window.ethereum){ toast("No digital wallet found — install MetaMask to connect",true); return; }
   try{
     provider = new ethers.BrowserProvider(window.ethereum);
@@ -629,7 +611,7 @@ function setBalances(bal){
 
 /* ---------- refresh (real chain) ---------- */
 async function refresh(){
-  if (DEMO || !registry || !account) return;
+  if (!registry || !account) return;
   try{
     const [pool, streak, maxSupply, burned, ids, totalActions] = await Promise.all([
       registry.poolBalance(), registry.userStreak(account),
@@ -684,11 +666,6 @@ $("aFile").addEventListener("change",e=>hashFile(e.target.files[0]));
 
 $("submitBtn").addEventListener("click", async ()=>{
   const type=$("aType").value, desc=$("aDesc").value.trim();
-  if(DEMO){
-    D.mine.unshift({id:"0x"+Math.random().toString(16).slice(2,10),type,desc,status:0,reward:0n,streak:0,ts:Math.floor(Date.now()/1000)});
-    renderMine(D.mine); toast("Demo: action submitted for review");
-    resetForm(); return;
-  }
   if(!signer||!registry){ toast("Connect a wallet and load the system first",true); return; }
   $("submitBtn").disabled=true; $("submitErr").innerHTML="";
   try{
@@ -712,17 +689,6 @@ function resetForm(){
 $("pendingTable").addEventListener("click", async e=>{
   const b=e.target.closest("button"); if(!b) return;
   const id=b.dataset.id, act=b.dataset.act;
-  if(DEMO){
-    if(act==="verify"){
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending);
-      D.mine.unshift({id:id.slice(0,10),type:"compost",desc:"(approved from queue)",status:1,reward:50n*10n**18n,streak:3,ts:Math.floor(Date.now()/1000)});
-      D.balance+=50n*10n**18n; renderMine(D.mine); setBalances(D.balance);
-      toast("Demo: approved, +50 SYL points");
-    }else{
-      D.pending=D.pending.filter(p=>p.idFull!==id); renderPending(D.pending); toast("Demo: rejected");
-    }
-    return;
-  }
   try{
     if(act==="verify"){
       const tx=await registry.connect(signer).verifyAction(id); toast("Transaction sent…"); await tx.wait();
@@ -740,8 +706,8 @@ $("pendingTable").addEventListener("click", async e=>{
 $("rAmt").addEventListener("input", updateRedeem);
 async function updateRedeem(){
   const amt = parseAmt();
-  let bal = DEMO ? D.balance : 0n;
-  if(!DEMO && token && account){ try{ bal = await token.balanceOf(account); }catch{} }
+  let bal = 0n;
+  if(token && account){ try{ bal = await token.balanceOf(account); }catch{} }
   setBalances(bal);
   const min = 50n*10n**18n;
   const ok = amt!==null && amt>=min && amt<=bal;
@@ -753,7 +719,6 @@ async function updateRedeem(){
 }
 $("approveBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){ toast("Demo: allowance simulated — you can redeem now"); $("redeemBtn").disabled=false; return; }
   try{
     const tx=await token.connect(signer).approve(await registry.syl(),amt);
     toast("Requesting allowance…"); await tx.wait(); toast("Allowance active — you can redeem now");
@@ -762,12 +727,6 @@ $("approveBtn").addEventListener("click", async ()=>{
 });
 $("redeemBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
-  if(DEMO){
-    D.balance-=amt; D.burned+=amt;
-    renderStrip(D.pool, D.mine.filter(m=>m.status===1).length, D.streak, D.burned, 1000000n*10n**18n-D.burned, 1000000n*10n**18n-D.pool-D.burned);
-    setBalances(D.balance);
-    toast("Demo: "+fmt(amt)+" SYL points burned → voucher ready"); return;
-  }
   try{
     const tx=await registry.connect(signer).redeemVoucher(amt);
     toast("Redeeming…"); await tx.wait(); toast(fmt(amt)+" SYL points redeemed — voucher ready");
@@ -775,44 +734,10 @@ $("redeemBtn").addEventListener("click", async ()=>{
   }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"failed"),true); }
 });
 
-/* ---------- demo mode ---------- */
-$("demoBtn").addEventListener("click", ()=>toggleDemo(!DEMO));
-function toggleDemo(on){
-  DEMO=on;
-  $("demoTag").hidden=!on;
-  $("demoBtn").textContent=on?"Exit demo mode":"Try demo mode";
-  if(on){
-    $("netBadge").textContent="demo · chain 968";
-    $("cMembers").textContent=D.members;
-    renderStrip(D.pool,D.mine.filter(m=>m.status===1).length,D.streak,D.burned,1000000n*10n**18n-D.burned,1000000n*10n**18n-D.pool-D.burned);
-    renderMine(D.mine); renderPending(D.pending);
-    renderLeader(Number(fmt(D.balance)));
-    setBalances(D.balance);
-    $("verifyWrap").hidden=false;
-    $("meRole").textContent="yes (demo)";
-    $("meName").textContent="Syl Friend (demo)";
-    $("meStatus").textContent="demo mode active";
-    $("meVoucher").textContent="1 voucher";
-    updateRedeem();
-    toast("Demo mode — data is simulated, no wallet required.");
-  }else{
-    $("netBadge").textContent = provider&&account ? "connected" : "not connected";
-    $("verifyWrap").hidden=true;
-    ["cMembers","cDistributed","stVerified","stBurned"].forEach(i=>$(i).textContent="—");
-    $("streakChip").textContent="0-day streak";
-    renderLeader(0);
-    renderMine([]);
-    $("myActions").innerHTML=`<tr><td colspan="3" style="color:var(--latte);font-weight:700">Connect a wallet to see your actions.</td></tr>`;
-    setBalances(0n);
-    $("meRole").textContent="no";
-    if(provider&&account&&registry) refresh();
-  }
-}
-
 /* initial paint */
 renderLeader(0);
 
-if(!window.ethereum) $("netBadge").textContent="no wallet · demo available";
+if(!window.ethereum) $("netBadge").textContent="wallet not detected";
 </script>
 </body>
 </html>
