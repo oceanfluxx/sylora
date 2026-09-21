@@ -70,16 +70,6 @@ main{max-width:480px;margin:0 auto;padding:18px 18px 110px}
 .ticker .msg{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ticker .pts{color:#3ddc74;flex-shrink:0}
 
-/* leaderboard */
-.lb-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1.5px dashed var(--milkline);font-size:13.5px}
-.lb-row:last-child{border-bottom:0}
-.lb-rank{width:26px;height:26px;border-radius:50%;background:var(--matcha-foam);color:var(--matcha-deep);font-family:'Baloo 2';font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.lb-rank.gold{background:#f7e6b8;color:#8a6414}
-.lb-name{flex:1;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-pts{font-weight:800;color:var(--matcha-deep);font-size:12.5px;white-space:nowrap}
-.lb-you{background:var(--matcha-foam);border-radius:12px}
-.rank-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;background:var(--sakura-soft);color:#a04d61;border:1.5px solid var(--sakura);padding:5px 12px;border-radius:var(--r-pill);margin-bottom:14px}
-
 /* ---------- task cards (Aksi) ---------- */
 .tasks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
 .task{background:var(--paper);border:1.5px solid var(--milkline);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 14px;cursor:pointer;transition:.15s;text-align:left;position:relative}
@@ -102,8 +92,8 @@ main{max-width:480px;margin:0 auto;padding:18px 18px 110px}
 /* ---------- forms ---------- */
 label{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--latte);margin:14px 0 6px}
 label:first-child{margin-top:0}
-select,input[type=text],textarea{width:100%;font-family:'Nunito';font-size:15px;color:var(--cocoa);background:#fdfaf5;border:1.5px solid var(--milkline);border-radius:12px;padding:11px 13px}
-select:focus-visible,input:focus-visible,textarea:focus-visible{outline:none;border-color:var(--matcha);box-shadow:0 0 0 3px rgba(124,191,142,.25)}
+select,input[type=text],input[type=url],textarea{width:100%;font-family:'Nunito';font-size:15px;color:var(--cocoa);background:#fdfaf5;border:1.5px solid var(--milkline);border-radius:12px;padding:11px 13px}
+select:focus-visible,input:focus-visible,input[type=url]:focus-visible,textarea:focus-visible{outline:none;border-color:var(--matcha);box-shadow:0 0 0 3px rgba(124,191,142,.25)}
 textarea{resize:vertical;min-height:76px}
 .file-zone{border:2px dashed var(--milkline);border-radius:var(--r);padding:22px 14px;text-align:center;color:var(--latte);cursor:pointer;transition:.15s;background:#fdfaf5}
 .file-zone:hover,.file-zone.drag{border-color:var(--matcha);background:var(--matcha-foam)}
@@ -171,9 +161,111 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 .navbar button.on .ic{filter:none;opacity:1;transform:translateY(-1px)}
 
 .ui-icon{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.16em;stroke:currentColor;fill:none;flex:none}.ui-icon.big{width:1.25em;height:1.25em}.spark .ui-icon{width:1em;height:1em}.task .ui-icon,.chal .ui-icon{width:2em;height:2em}.card h3 .ui-icon{width:1.15em;height:1.15em}.navbar .ui-icon{width:24px;height:24px;display:block;vertical-align:0}.tr .ui-icon{width:30px;height:30px}.mi .ui-icon{width:26px;height:26px}.rank-pill .ui-icon{width:1em;height:1em}.ticker .ui-icon{width:1em;height:1em}.brand .ui-icon{width:1em;height:1em}.end .ui-icon{width:78px;height:78px}.</style>
+<style>
+/* The icon sizes follow their containers, never the large emoji font size. */
+.ui-icon{width:1.15em;height:1.15em;vertical-align:-.18em}
+.task .em{width:44px;height:44px;margin-bottom:10px;border-radius:13px;background:var(--matcha-foam);color:var(--matcha-deep);display:grid;place-items:center;font-size:16px;line-height:1}
+.task .ui-icon{width:27px;height:27px}
+.chal .ui-icon{width:26px;height:26px}
+.card h3 .ui-icon{width:20px;height:20px}
+.navbar button .ic{filter:none;opacity:.78;line-height:0}
+.navbar .ui-icon{width:23px;height:23px}
+.navbar button .lb{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.15;overflow-wrap:anywhere}
+.list-item .ui-icon{width:22px;height:22px}
+.btn .ui-icon{width:18px;height:18px}
+.profile-return{display:flex;justify-content:center;padding:4px 0 8px}
+.profile-return a{display:inline-flex;align-items:center;gap:7px;padding:8px 2px;color:var(--matcha-deep);font:800 14px 'Nunito',sans-serif;text-decoration:none;border-bottom:1.5px solid transparent;transition:border-color .15s,color .15s}
+.profile-return a:hover{border-color:currentColor;color:#336844}
+.profile-return a:focus-visible{outline:3px solid var(--sakura);outline-offset:3px}
+.profile-return .ui-icon{width:17px;height:17px}
+/* Keep content inside cards as values and viewport widths change. */
+.bar,.card,.chal,.list-item,.profile,.point-card .row{min-width:0}
+.net-badge{min-width:0;max-width:50%;white-space:normal;text-align:center;line-height:1.25}
+.profile>div:last-child,.chal>div:nth-child(2),.list-item .grow{min-width:0;overflow-wrap:anywhere}
+.point-card .big{font-size:clamp(28px,9vw,40px);overflow-wrap:anywhere}
+.balance-line{display:flex;align-items:center;gap:10px;min-width:0;padding:12px 14px;border-radius:12px;background:var(--matcha-foam);color:var(--matcha-deep);font-size:13px;font-weight:800}
+.balance-line .ui-icon{width:18px;height:18px;flex:none}
+.balance-line .balance-label{min-width:0;flex:1}
+.balance-line .balance-value{font-family:'Baloo 2';font-size:18px;line-height:1.2;text-align:right;overflow-wrap:anywhere}
+.cstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.cstats>div{min-width:0}
+.cstats .v{font-size:clamp(13px,4vw,19px);line-height:1.25;overflow-wrap:anywhere}
+.cstats .k{line-height:1.3;overflow-wrap:anywhere}
+.ticker .msg{min-width:0}
+.tasks{grid-template-columns:repeat(2,minmax(0,1fr))}
+.task{min-width:0;overflow-wrap:anywhere}
+.task .tt{display:block;line-height:1.25}
+.chal .join{max-width:100%}
+.challenge-option{min-width:0;overflow-wrap:anywhere}
+.challenge-option .reward{flex:none}
+.challenge-option:disabled{opacity:.58;cursor:not-allowed}
+.challenge-option .status{line-height:1.3}
+.list-item .em{flex:none}
+.list-item .mini{max-width:42%;text-align:right;overflow-wrap:anywhere}
+.hint,.err,.proof-copy,.proof-status,td .desc,td .id{overflow-wrap:anywhere}
+.proof-head>div,.proof-reward>span{min-width:0;overflow-wrap:anywhere}
+.proof-close{flex:none}
+.proof-reward{gap:12px}
+.proof-reward strong{flex:none}
+table{table-layout:fixed}
+td{overflow-wrap:anywhere}
+.pending-table th:first-child{width:48%}
+.pending-actions{text-align:right}
+.pending-actions .btn{max-width:100%;white-space:normal;line-height:1.2}
+.redeem-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.redeem-actions .btn{flex:1 1 150px;min-width:0;max-width:100%;white-space:normal;line-height:1.2;text-align:center}
+@media(max-width:420px){
+  .cstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cstats>div:nth-child(2){border-right:0}
+  .cstats>div:nth-child(-n+2){border-bottom:1.5px dashed var(--milkline)}
+  .cstats .v{font-size:19px}
+  .chal{flex-wrap:wrap;gap:10px 12px}
+  .chal .em{width:44px;height:44px}
+  .chal>div:nth-child(2){flex:1 1 calc(100% - 56px)}
+  .chal .join{margin-left:56px}
+  .pending-table,.pending-table tbody,.pending-table tr,.pending-table td{display:block;width:100%}
+  .pending-table thead{display:none}
+  .pending-table tr{border-bottom:1.5px solid var(--milkline);padding:10px 0}
+  .pending-table tr:last-child{border-bottom:0}
+  .pending-table td{border:0;padding:4px 0}
+  .pending-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;text-align:left}
+  .pending-actions br{display:none}
+  .pending-actions .btn{width:100%;margin:0!important;padding:8px}
+  .pending-actions .btn:first-child{grid-column:1/-1}
+}
+@media(max-width:350px){.tasks{grid-template-columns:1fr}}
+</style>
 </head>
 <svg aria-hidden=true style="position:absolute;width:0;height:0;overflow:hidden"><defs><symbol id="icon-cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 10H6L5 8Z"/><path d="M8 8c0-4 2-5 4-5s4 1 4 5M9 13h.01M15 13h.01M10 16c1 .8 3 .8 4 0" fill="none"/></symbol><symbol id="icon-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 3 5h-3a7 7 0 0 0-6 3M5 11l-2 3 5 1M19 13l-3-5 3-1M16 8a7 7 0 0 1-1 9M15 17h-6l1 3M9 17a7 7 0 0 1-3-6" fill="none"/></symbol><symbol id="icon-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></symbol><symbol id="icon-spark2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/></symbol><symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none"/></symbol><symbol id="icon-sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M12 12C8 12 5 9 5 5c4 0 7 3 7 7ZM12 10c0-4 3-7 7-7 0 4-3 7-7 7Z" fill="none"/></symbol><symbol id="icon-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 8 4 15c0 2 1 4 3 4 7 0 11-6 13-15Z" fill="none"/><path d="M4 20 14 10" fill="none"/></symbol><symbol id="icon-beach" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19c3-2 5-2 8 0s5 2 8 0M4 15c3-2 5-2 8 0s5 2 8 0M12 4v9M8 7l4-3 4 3" fill="none"/></symbol><symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6Z" fill="none"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h4l1.5-2h5L16 8h4v10H4V8Z" fill="none"/><circle cx="12" cy="13" r="3" fill="none"/></symbol><symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2" fill="none"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none"/></symbol><symbol id="icon-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4 0 7-3 7-7 0-4-3-7-5-10-1 3-2 4-3 5-1-2-2-3-2-5-2 2-5 6-5 10 0 4 3 7 8 7Z" fill="none"/></symbol><symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2" fill="none"/><circle cx="9" cy="10" r="1"/><path d="m5 17 4-4 3 3 2-2 5 4" fill="none"/></symbol><symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 11 4-4 4 2 4-2 4 4-5 5-3-2-3 2-5-5Z" fill="none"/><path d="m9 13 3 2 3-3" fill="none"/></symbol><symbol id="icon-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" fill="none"/><path d="M9 8h6M9 12h6" fill="none"/></symbol><symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="none"/><path d="M19 12a7 7 0 0 0-.1-1l2-1-2-3-2 1a8 8 0 0 0-2-1l-.3-2h-3l-.3 2a8 8 0 0 0-2 1l-2-1-2 3 2 1a7 7 0 0 0 0 2l-2 1 2 3 2-1a8 8 0 0 0 2 1l.3 2h3l.3-2a8 8 0 0 0 2-1l2 1 2-3-2-1c.1-.3.1-.7.1-1Z" fill="none"/></symbol><symbol id="icon-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 11h6l-1 9 8-11h-6l1-9Z" fill="none"/></symbol><symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6" fill="none"/></symbol><symbol id="icon-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V6a1 1 0 0 1 2 0v4V5a1 1 0 0 1 2 0v5V4a1 1 0 0 1 2 0v6V6a1 1 0 0 1 2 0v8l2-2a1.5 1.5 0 0 1 2 2l-4 5H9c-2 0-3-2-3-4v-4a1 1 0 0 1 1-1Z" fill="none"/></symbol><symbol id="icon-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 20 4-1 10-10-3-3L5 16l-1 4Z" fill="none"/><path d="m13 7 3 3" fill="none"/></symbol><symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18" fill="none"/></symbol><symbol id="icon-tree" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V12M8 21h8M12 3 7 11h3l-3 4h10l-3-4h3l-5-8Z" fill="none"/></symbol><symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="1" fill="none"/><path d="M12 9v11M4 13h16M12 9H8a2 2 0 1 1 2-2c2 0 2 2 2 2Zm0 0h4a2 2 0 1 0-2-2c-2 0-2 2-2 2Z" fill="none"/></symbol><symbol id="icon-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4h16a2 2 0 0 0 0-4v-2a2 2 0 0 0 0-4H4Z" fill="none"/><path d="M12 7v10" fill="none"/></symbol><symbol id="icon-medal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6" fill="none"/><path d="m8 9-1-6 5 3 5-3-1 6" fill="none"/></symbol><symbol id="icon-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4ZM12 13v5M8 21h8M5 5H3v2a4 4 0 0 0 4 4M19 5h2v2a4 4 0 0 1-4 4" fill="none"/></symbol><symbol id="icon-community" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" fill="none"/><circle cx="17" cy="9" r="2" fill="none"/><path d="M3 19c0-3 2-5 6-5s6 2 6 5M15 14c3 0 5 2 5 5" fill="none"/></symbol><symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8v9H3v-9Z" fill="none"/><path d="M9 20v-6h6v6" fill="none"/></symbol><symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" fill="none"/><path d="M4 21c0-4 3-7 8-7s8 3 8 7" fill="none"/></symbol><symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2" fill="none"/><path d="M8 3v4M16 3v4M4 10h16" fill="none"/></symbol><symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 1V4Z" fill="none"/><path d="M8 20V7" fill="none"/></symbol><symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M5 13v6h14v-6" fill="none"/></symbol><symbol id="icon-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6M15 3v6M7 8h10v2a5 5 0 0 1-10 0V8ZM12 15v6" fill="none"/></symbol><symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6" fill="none"/><path d="m15 15 5 5" fill="none"/></symbol><symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M7 17H5a4 4 0 0 1 0-8h4M17 7h2a4 4 0 0 1 0 8h-4" fill="none"/></symbol><symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8ZM9 8a3 3 0 0 1 6 0" fill="none"/></symbol><symbol id="icon-worm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15c3 5 7 5 8 1s-3-7 1-9c4-2 6 1 7 4" fill="none"/></symbol></defs></svg><body>
 
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden">
+  <defs>
+    <symbol id="action-tree" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20v-9M4 20h16M12 13c-4 0-6-2.6-6-6 3.8 0 6 2 6 6ZM12 11c0-3.8 2.1-6 6-6 0 3.6-2 6-6 6Z"/>
+    </symbol>
+    <symbol id="action-shore" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="17.5" cy="6.5" r="2.5"/><path d="M3 14c2.2 0 2.2-2 4.5-2s2.3 2 4.5 2 2.3-2 4.5-2 2.3 2 4.5 2M3 19c2.2 0 2.2-2 4.5-2s2.3 2 4.5 2 2.3-2 4.5-2 2.3 2 4.5 2"/>
+    </symbol>
+    <symbol id="action-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m10 3 2-1 2 1 2.4 4M16.4 7H20l-1.8 3M21 13l1 2-1 2-2.4 4H14M14 21l-1.8-3 1.8-3M9 21H5l-2-3.5 2.3-4M5.3 13.5l3.5.1-1.8 3M7 7l2.4-4"/>
+    </symbol>
+    <symbol id="action-compost" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 8h14l-1 12H6L5 8ZM4 8h16M9 5h6M12 20v-5M12 16c-2.5 0-4-1.5-4-4 2.5 0 4 1.5 4 4ZM12 15c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4Z"/>
+    </symbol>
+    <symbol id="action-unplug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3v5M14 3v5M6 8h10v3a5 5 0 0 1-10 0V8ZM11 16v5M18 7l3-3M19 11h3"/>
+    </symbol>
+    <symbol id="action-tumbler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 7h12l-1 13H7L6 7ZM5 7h14M8 4h8M14 4l1-2M9 12h6"/>
+    </symbol>
+    <symbol id="action-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 6V4h13v3M4 7h15a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2ZM21 12h-7a2 2 0 0 0 0 4h7"/><circle cx="15" cy="14" r=".6" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="action-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5m7-7-7 7 7 7"/>
+    </symbol>
+  </defs>
+</svg>
 <header>
   <div class="bar">
     <a class="brand" href="index.html"><img src="assets/syl-logo.png" alt="Syl" width="28" height="28" loading="eager" decoding="async" style="border-radius:8px"><span class="wordmark">Sylora</span></a>
@@ -202,7 +294,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <span class="chip" id="streakChip">0-day streak</span>
       </div>
       <div style="margin-top:14px">
-        <button class="btn btn-s btn-w" id="connectBtn"><svg class=ui-icon aria-hidden=true><use href=#icon-link></use></svg> Connect digital wallet</button>
+        <button class="btn btn-s btn-w" id="connectBtn"><svg class=ui-icon aria-hidden=true><use href=#action-wallet></use></svg> Connect digital wallet</button>
       </div>
     </div>
 
@@ -215,15 +307,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
     <div class="card">
       <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-medal></use></svg></span> Your points</h3>
-      <div class="rank-pill" id="myRank"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg> Your balance: 0 pts</div>
-      <div id="leaderList"></div>
+      <div class="balance-line"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg><span class="balance-label">Your balance</span><strong class="balance-value" id="myRankValue">0 pts</strong></div>
       <div class="hint">Only your wallet points are shown here. Community rankings are not available yet.</div>
     </div>
 
     <div id="verifyWrap" hidden>
       <div class="card">
         <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-search></use></svg></span> Verifier desk</h3>
-        <table>
+        <table class="pending-table">
           <thead><tr><th>Proof awaiting review</th><th></th></tr></thead>
           <tbody id="pendingTable"></tbody>
         </table>
@@ -247,49 +338,39 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
   <!-- ============ TAB: CHALLENGES ============ -->
   <section class="tab" id="tab-tantangan">
     <h1 class="page-title">Challenges <svg class=ui-icon aria-hidden=true><use href=#icon-trophy></use></svg></h1>
-    <p class="page-sub">Ideas for your next action. Each approved submission earns 50 SYL.</p>
+    <p class="page-sub">Help more people discover Sylora. Submit a screenshot and public link for review; approved challenges earn 50 SYL.</p>
 
     <div class="chal-wrap" data-challenge="one">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-bolt></use></svg></div>
-        <div><div class="tt">First-time try</div><div class="ss">Log your first eco-action.</div><div class="meta" id="chOne"></div></div>
+        <div><div class="tt">One-time follow</div><div class="ss">Follow Sylora on X (Twitter) once.</div><div class="meta" id="chOne"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="one">Choose</button>
       </div>
       <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
-      <div class="challenge-options"><div class="option-title">Choose your first action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-options"><div class="option-title">One-time task</div><div class="option-grid"><button class="challenge-option" data-key="follow_x" data-option="Follow Sylora on X" data-type="other">Follow Sylora on X <span class="reward">+50 SYL</span></button></div></div>
     </div>
 
     <div class="chal-wrap" data-challenge="daily">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-calendar></use></svg></div>
-        <div><div class="tt">Daily action</div><div class="ss">Each action type has a 24-hour cooldown.</div><div class="meta" id="chDaily"></div></div>
+        <div><div class="tt">Daily engagement</div><div class="ss">Like, comment on, or repost Sylora content on X or Instagram.</div><div class="meta" id="chDaily"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="daily">Choose</button>
       </div>
-      <div class="challenge-options"><div class="option-title">Choose your daily action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Drop off recycling" data-type="recycle">Drop off recycling <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Make compost" data-type="compost">Make compost <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-options"><div class="option-title">Choose one engagement task</div><div class="option-grid"><button class="challenge-option" data-key="like_x" data-option="Like a Sylora post on X" data-type="other">Like on X <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="comment_x" data-option="Comment on a Sylora post on X" data-type="other">Comment on X <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="repost_x" data-option="Repost Sylora on X" data-type="other">Repost on X <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="like_ig" data-option="Like a Sylora post on Instagram" data-type="other">Like on Instagram <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="comment_ig" data-option="Comment on a Sylora post on Instagram" data-type="other">Comment on Instagram <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="share_ig" data-option="Share a Sylora post on Instagram" data-type="other">Share on Instagram <span class="reward">+50 SYL</span></button></div></div>
       <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
     <div class="chal-wrap" data-challenge="weekly">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-calendar></use></svg></div>
-        <div><div class="tt">Weekly ideas</div><div class="ss">Try a different kind of eco-action this week.</div><div class="meta" id="chWeekly"></div></div>
+        <div><div class="tt">Weekly eco post</div><div class="ss">Post your eco movement this week and tag Sylora's official account.</div><div class="meta" id="chWeekly"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="weekly">Choose</button>
       </div>
-      <div class="challenge-options"><div class="option-title">Choose an action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Clean a beach" data-type="beach_cleanup">Clean a beach <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Drop off recycling" data-type="recycle">Drop off recycling <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-options"><div class="option-title">Choose where to post</div><div class="option-grid"><button class="challenge-option" data-key="eco_post_x" data-option="Post an eco movement on X and tag Sylora" data-type="other">Post on X and tag Sylora <span class="reward">+50 SYL</span></button><button class="challenge-option" data-key="eco_post_ig" data-option="Post an eco movement on Instagram and tag Sylora" data-type="other">Post on Instagram and tag Sylora <span class="reward">+50 SYL</span></button></div></div>
       <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
-    <div class="chal-wrap" data-challenge="community">
-      <div class="chal">
-        <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-community></use></svg></div>
-        <div><div class="tt">Community action</div><div class="ss">Beach cleanup or tree planting with your local bank-sampah.</div><div class="meta" id="chCommunity"></div></div>
-        <button class="btn btn-s btn-sm join" data-ch="community">Choose</button>
-      </div>
-      <div class="challenge-options"><div class="option-title">Choose a community action</div><div class="option-grid"><button class="challenge-option" data-option="Join a beach cleanup" data-type="beach_cleanup">Join a beach cleanup <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Join a tree-planting day" data-type="tree_planting">Join a tree-planting day <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Join a recycling drive" data-type="recycle">Join a recycling drive <span class="reward">+50 SYL</span></button></div></div>
-      <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
-    </div>
-
-      <div class="hint" style="text-align:center">Streaks are counted from approvals within 72 hours.</div>
+    <div class="hint" style="text-align:center">This app checks one-time and weekly limits from your wallet history. The current contract enforces a shared 24-hour cooldown for all “Other” actions. A verifier checks the original screenshot and public link.</div>
   </section>
 
   <!-- ============ TAB: ACTION ============ -->
@@ -303,11 +384,11 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-pen></use></svg></span> Log an action</h3>
       <label for="aType">Action type</label>
       <select id="aType">
-        <option value="tree_planting"><svg class=ui-icon aria-hidden=true><use href=#icon-tree></use></svg> Plant a tree</option>
-        <option value="beach_cleanup"><svg class=ui-icon aria-hidden=true><use href=#icon-beach></use></svg> Clean a beach or river</option>
-        <option value="recycle"><svg class=ui-icon aria-hidden=true><use href=#icon-recycle></use></svg> Drop off recycling</option>
-        <option value="compost"><svg class=ui-icon aria-hidden=true><use href=#icon-worm></use></svg> Make compost</option>
-        <option value="other"><svg class=ui-icon aria-hidden=true><use href=#icon-plug></use></svg> Other green action</option>
+        <option value="tree_planting">Plant a tree</option>
+        <option value="beach_cleanup">Clean a beach or river</option>
+        <option value="recycle">Drop off recycling</option>
+        <option value="compost">Make compost</option>
+        <option value="other">Other green action</option>
       </select>
       <label for="aDesc">Describe your action</label>
       <textarea id="aDesc" maxlength="280" placeholder="e.g. dropped off 2 kg of plastic bottles at my local bank-sampah…"></textarea>
@@ -342,9 +423,9 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <input type="text" inputmode="decimal" id="rAmt" value="50" autocomplete="off">
       <div class="hint" id="rHint">minimum 50 SYL · points will be burned &amp; gone</div>
       <div id="redeemErr"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-o" id="approveBtn" disabled style="flex:1"><svg class=ui-icon aria-hidden=true><use href=#icon-hand></use></svg> Approve redemption</button>
-        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1"><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg> Burn &amp; record redemption</button>
+      <div class="redeem-actions">
+        <button class="btn btn-o" id="approveBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-hand></use></svg> Approve redemption</button>
+        <button class="btn btn-p" id="redeemBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg> Burn &amp; record redemption</button>
       </div>
       <div class="hint" style="margin-top:14px"><b>Demo redemption:</b> this permanently burns your SYL and records a redemption on-chain. It does not issue a usable voucher or arrange fulfillment.</div>
     </div>
@@ -383,18 +464,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
         <label for="cfgTok">SYL token address</label>
         <input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off">
       </div>
-      <div id="cfgStatus" class="hint" style="margin-top:10px">Contracts: not loaded</div>
+      <div id="cfgStatus" class="hint" style="margin-top:10px">Contracts: loading public data…</div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" id="ownerCfgActions" hidden>
         <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Save &amp; load</button>
       </div>
     </div>
 
-    <div class="card" style="text-align:center">
-      <div style="font-size:13px;color:var(--latte);font-weight:700">
-        SYLORA · GMT Build Week Vol.2 · BOT Chain<br>
-        <a href="index.html" style="color:var(--matcha-deep)">← back to site</a> ·
-        <a href="https://github.com/oceanfluxx/sylora" target="_blank" rel="noopener" style="color:var(--matcha-deep)">github</a>
-      </div>
+    <div class="profile-return">
+      <a href="index.html"><svg class="ui-icon" aria-hidden="true"><use href="#action-back"></use></svg> Back to site</a>
     </div>
   </section>
 
@@ -414,13 +491,16 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
   <div class="proof-dialog">
     <div class="proof-head"><div><h2 id="proofTitle">Submit challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
     <div class="proof-reward"><span>Reward if approved</span><strong>50 SYL</strong></div>
+    <label for="challengeLink">Public post or profile link</label>
+    <input type="url" id="challengeLink" inputmode="url" placeholder="https://…" autocomplete="url">
     <label for="challengeDesc">What did you do?</label>
-    <textarea id="challengeDesc" maxlength="280" placeholder="Describe what you completed and when."></textarea>
+    <textarea id="challengeDesc" maxlength="180" placeholder="Briefly describe what you did and when."></textarea>
+    <div class="hint" id="challengeLength">The link and description must fit within 280 bytes on-chain.</div>
     <label>Proof image</label>
     <div class="file-zone" id="challengeFileZone" tabindex="0"><div id="challengeFileLabel">Upload one JPG, JPEG, or PNG<br><span style="font-size:12px">Maximum size: 5 MB</span></div></div>
     <input type="file" id="challengeFile" accept="image/png,image/jpeg" hidden>
     <img id="challengePreview" class="proof-preview" alt="Selected proof preview">
-    <div class="proof-status">Only the photo hash is recorded. Keep the original photo to show a verifier.</div>
+    <div class="proof-status">The link and description are public on-chain. Only the screenshot hash is stored; keep the original image for a verifier.</div>
     <div id="challengeSubmitErr"></div>
     <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Submit for verification</button>
   </div>
@@ -466,6 +546,7 @@ const DEPLOYMENTS = {
     token: "0x9b289f77C099D7D7ed169fdd9c931266C9963dB3"
   }
 };
+const PUBLIC_RPC = "https://rpc.bohr.life";
 const TYPES = {tree_planting:" Plant a tree",beach_cleanup:" Clean beach/river",recycle:" Drop off recycling",compost:" Make compost",other:" Other green action"};
 const STATUS = ["pending","verified","rejected"];
 
@@ -517,15 +598,15 @@ setInterval(()=>{ tickI=(tickI+1)%TICKS.length; $("tickerMsg").textContent=TICKS
 
 /* ---------- task cards ---------- */
 const TASKS = [
-  {type:"tree_planting", emoji:"", title:"Plant a tree", sub:"in a yard or public space"},
-  {type:"beach_cleanup", emoji:"", title:"Beach or river cleanup", sub:"pick up plastic waste"},
-  {type:"recycle", emoji:"", title:"Drop off recycling", sub:"bottles, paper, to a bank-sampah"},
-  {type:"compost", emoji:"", title:"Make compost", sub:"turn kitchen scraps into fertiliser"},
-  {type:"other", emoji:"", title:"Unplug electronics", sub:"appliances on standby waste energy"},
-  {type:"other", emoji:"", title:"Bring a tumbler", sub:"skip disposable cups on purchases"}
+  {type:"tree_planting", icon:"action-tree", title:"Plant a tree", sub:"in a yard or public space"},
+  {type:"beach_cleanup", icon:"action-shore", title:"Beach or river cleanup", sub:"pick up plastic waste"},
+  {type:"recycle", icon:"action-recycle", title:"Drop off recycling", sub:"bottles, paper, to a bank-sampah"},
+  {type:"compost", icon:"action-compost", title:"Make compost", sub:"turn kitchen scraps into fertiliser"},
+  {type:"other", icon:"action-unplug", title:"Unplug electronics", sub:"appliances on standby waste energy"},
+  {type:"other", icon:"action-tumbler", title:"Bring a tumbler", sub:"skip disposable cups on purchases"}
 ];
 $("taskGrid").innerHTML = TASKS.map((t,i)=>`<button class="task" data-i="${i}">
-  <span class="pts">+50</span><span class="em">${t.emoji}</span>
+  <span class="pts">+50</span><span class="em"><svg class="ui-icon" aria-hidden="true"><use href="#${t.icon}"></use></svg></span>
   <div class="tt">${t.title}</div><div class="ss">${t.sub}</div></button>`).join("");
 $("taskGrid").addEventListener("click", e=>{
   const b=e.target.closest(".task"); if(!b) return;
@@ -536,28 +617,41 @@ $("taskGrid").addEventListener("click", e=>{
   toast("Selected: "+t.title+" — add a description & proof photo");
 });
 
-/* ---------- leaderboard & challenges ---------- */
-function renderLeader(myPts){
-  $("leaderList").innerHTML = `<div class="lb-row lb-you"><span class="lb-rank" id="lbYouRank">—</span>
-    <span class="lb-name">You</span><span class="lb-pts">${myPts.toLocaleString("en-US")} pts</span></div>`;
-}
+/* ---------- challenges ---------- */
 function renderRank(myPts){
-  $("myRank").textContent = " Your balance: "+myPts.toLocaleString("en-US")+" pts";
+  $("myRankValue").textContent = myPts.toLocaleString("en-US")+" pts";
 }
-const CHALS = {one:["chOne","Action idea"],daily:["chDaily","One action type per 24 hours"],weekly:["chWeekly","No extra bonus"],community:["chCommunity","Community verification required"]};
+const CHALS = {one:["chOne","Once per wallet"],daily:["chDaily","One per 24 hours"],weekly:["chWeekly","One per 7 days"]};
 Object.values(CHALS).forEach(([id,txt])=>$(id).textContent=txt);
 document.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>{
   const wrap=b.closest(".chal-wrap");
   const open=wrap.classList.toggle("open");
   b.textContent=open?"Hide choices":"Choose";
 }));
-let challengeChoice="", challengeType="other", challengeGroup="", challengeHash=null;
+let challengeType="other", challengeKey="", challengeHash=null;
 const proofModal=$("proofModal"), challengeFile=$("challengeFile"), challengePreview=$("challengePreview");
+const challengeNames=Object.fromEntries([...document.querySelectorAll(".challenge-option")].map(b=>[b.dataset.key,b.dataset.option]));
+function challengeInfo(desc){
+  const match=desc.match(/^\[Challenge:([a-z_]+)\]\s*/);
+  return match && challengeNames[match[1]] ? {key:match[1],name:challengeNames[match[1]],detail:desc.slice(match[0].length)} : null;
+}
+function renderChallengeAvailability(mine=[]){
+  const now=Date.now()/1000;
+  for(const wrap of document.querySelectorAll(".chal-wrap")){
+    const group=wrap.dataset.challenge;
+    const relevant=mine.filter(a=>a.status!==2n && a.type==="other" && challengeInfo(a.desc)?.key && wrap.querySelector(`.challenge-option[data-key="${challengeInfo(a.desc).key}"]`));
+    const active=relevant.find(a=>a.status===0n) || relevant.find(a=>group==="one" || now-a.ts<(group==="weekly"?7:1)*86400);
+    const locked=!!active;
+    wrap.classList.toggle("pending",locked);
+    wrap.querySelector(".challenge-pending").textContent=active ? active.status===0n ? "Submitted for review. Wait for verification before trying this challenge again." : group==="one" ? "Completed for this wallet." : group==="weekly" ? "Completed this week. Available again after 7 days." : "Completed today. Available again after 24 hours." : "";
+    for(const option of wrap.querySelectorAll(".challenge-option")) option.disabled=!account || locked;
+  }
+}
 function openProofModal(option, title){
-  challengeChoice=option; challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
+  challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
   $("proofTitle").textContent="Submit proof: "+option;
-  $("proofSubtitle").textContent=title+" requires community verification before the reward is released.";
-  $("challengeDesc").value=""; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
+  $("proofSubtitle").textContent=title+" requires a public link and screenshot for community verification.";
+  $("challengeLink").value=""; $("challengeDesc").value=""; $("challengeLength").textContent="The link and description must fit within 280 bytes on-chain."; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
   proofModal.classList.add("open"); $("challengeDesc").focus();
 }
 function closeProofModal(){proofModal.classList.remove("open");}
@@ -566,55 +660,62 @@ $("challengeFileZone").addEventListener("click",()=>challengeFile.click());
 $("challengeFileZone").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();challengeFile.click()}});
 challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; challengeHash=null; updateChallengeSubmit(); if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=await hashFileValue(f); challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
 $("challengeDesc").addEventListener("input",updateChallengeSubmit);
-function updateChallengeSubmit(){$("challengeSubmitBtn").disabled=!(challengeHash&&$("challengeDesc").value.trim())}
+$("challengeLink").addEventListener("input",updateChallengeSubmit);
+function challengeDescription(){return `[Challenge:${challengeKey}] ${$("challengeLink").value.trim()} ${$("challengeDesc").value.trim()}`.trim()}
+function validChallengeLink(){try{const u=new URL($("challengeLink").value.trim());return u.protocol==="https:" && !!u.hostname && !u.username && !u.password}catch{return false}}
+function updateChallengeSubmit(){
+  const bytes=new TextEncoder().encode(challengeDescription()).length;
+  $("challengeLength").textContent=bytes+" / 280 bytes on-chain"+(bytes>280?" · shorten your link or description":"");
+  $("challengeSubmitBtn").disabled=!(account&&signer&&challengeHash&&validChallengeLink()&&$("challengeDesc").value.trim()&&bytes<=280);
+}
 async function hashFileValue(file){return ethers.keccak256(new Uint8Array(await file.arrayBuffer()))}
 $("challengeSubmitBtn").addEventListener("click",async()=>{
-  const desc="[Action: "+challengeChoice+"] "+$("challengeDesc").value.trim();
-  if(!challengeHash||!$("challengeDesc").value.trim()||new TextEncoder().encode(desc).length>280){$("challengeSubmitErr").textContent="Add a description within 280 bytes.";return;}
+  const desc=challengeDescription();
+  if(!challengeHash||!validChallengeLink()||!$("challengeDesc").value.trim()||new TextEncoder().encode(desc).length>280){$("challengeSubmitErr").innerHTML='<div class="err">Add a valid HTTPS link and a shorter description (280 bytes total).</div>';return;}
   if(!signer||!registry){toast("Connect a wallet and load the system first",true);return}
   const btn=$("challengeSubmitBtn");btn.disabled=true;$("challengeSubmitErr").innerHTML="";
-  try{const tx=await registry.connect(signer).submitAction(challengeType,desc,challengeHash);toast("Action submitted — awaiting verifier approval");await tx.wait();document.querySelector(`.chal-wrap[data-challenge="${challengeGroup}"]`)?.classList.add("pending");closeProofModal();toast("Photo hash recorded. Approval earns 50 SYL");refresh();}
+  try{const tx=await registry.connect(signer).submitAction(challengeType,desc,challengeHash);toast("Challenge submitted — awaiting verifier approval");await tx.wait();closeProofModal();toast("Screenshot hash recorded. Approval earns 50 SYL");refresh();}
   catch(e){$("challengeSubmitErr").innerHTML='<div class="err">'+esc(cleanErr(e.shortMessage||e.info||e.message||"Submission failed"))+'</div>';btn.disabled=false}
 });
 document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("click",()=>{
   const wrap=b.closest(".chal-wrap"); wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected")); b.classList.add("selected");
-  challengeGroup=wrap.dataset.challenge;
   challengeType=b.dataset.type;
+  challengeKey=b.dataset.key;
   openProofModal(b.dataset.option,wrap.querySelector(".tt").textContent);
 }));
 
-let provider=null, signer=null, account=null, registry=null, token=null;
+const publicProvider=new ethers.JsonRpcProvider(PUBLIC_RPC);
+let provider=publicProvider, signer=null, account=null, registry=null, token=null;
 let imgHash=null;
 
 /* ---------- connect ---------- */
 $("connectBtn").addEventListener("click", async ()=>{
   if (!window.ethereum){ toast("No digital wallet found — install MetaMask to connect",true); return; }
   try{
-    provider = new ethers.BrowserProvider(window.ethereum);
-    const accts = await provider.send("eth_requestAccounts",[]);
-    account = accts[0];
-    const net = await provider.getNetwork();
+    const walletProvider = new ethers.BrowserProvider(window.ethereum);
+    const accts = await walletProvider.send("eth_requestAccounts",[]);
+    const net = await walletProvider.getNetwork();
     const cid = Number(net.chainId);
     $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
     if(cid!==968){ toast("Switch your wallet to BOT testnet (chain 968) to use this deployment",true); return; }
+    provider=walletProvider;
+    account=accts[0];
     $("connectBtn").textContent = " "+short(account);
     $("meName").textContent = short(account);
     $("meStatus").textContent = "wallet connected";
     signer = await provider.getSigner();
-    const deployed=DEPLOYMENTS[cid];
-    const cachedReg=localStorage.getItem("syl_reg_"+cid), cachedTok=localStorage.getItem("syl_tok_"+cid);
-    if (registry) refresh();
-    else if (deployed) autoLoad(deployed.registry,deployed.token);
-    else if (cachedReg && cachedTok) autoLoad(cachedReg,cachedTok);
-    else if ($("cfgReg").value && $("cfgTok").value) autoLoad($("cfgReg").value.trim(),$("cfgTok").value.trim());
+    await autoLoad(DEPLOYMENTS[cid].registry,DEPLOYMENTS[cid].token);
+    enableSubmit(); updateChallengeSubmit();
     window.ethereum.on?.("accountsChanged", async a=>{
       checkedPhotos.clear();
       account=a[0]||null;
-      signer=account ? await provider.getSigner(account) : null;
+      signer=account ? await walletProvider.getSigner(account) : null;
+      provider=account ? walletProvider : publicProvider;
       $("connectBtn").textContent=account ? " "+short(account) : " Connect digital wallet";
       $("meName").textContent=account ? short(account) : "Guest";
-      if(account && registry) autoLoad(await registry.getAddress(),await token.getAddress());
-      else { $("verifyWrap").hidden=true; $("ownerCfg").hidden=true; $("ownerCfgActions").hidden=true; setBalances(0n); }
+      $("meStatus").textContent=account ? "wallet connected" : "connect wallet to act";
+      await autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
+      enableSubmit(); updateChallengeSubmit();
     });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
   }catch(e){ toast("Wallet request rejected: "+(e.shortMessage||e.message),true); }
@@ -622,7 +723,6 @@ $("connectBtn").addEventListener("click", async ()=>{
 
 async function autoLoad(r,t){
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
-  if(!provider||!account){ $("cfgStatus").textContent="Contracts cached — connect wallet to load"; return; }
   try{
     const cid=Number((await provider.getNetwork()).chainId);
     const c=new ethers.Contract(r,["function owner() view returns (address)","function syl() view returns (address)"],provider);
@@ -632,12 +732,12 @@ async function autoLoad(r,t){
     if((await tokenCheck.registry()).toLowerCase()!==r.toLowerCase()) throw new Error("Token belongs to a different registry");
     registry = new ethers.Contract(r,REG_ABI,provider);
     token = new ethers.Contract(t,TOK_ABI,provider);
-    localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t);
+    if(account){ localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t); }
     const isOwner = ownerAddr && account && ownerAddr.toLowerCase()===account.toLowerCase();
     $("ownerCfg").hidden=!isOwner; $("ownerCfgActions").hidden=!isOwner;
     if(isOwner){ $("cfgReg").value=r; $("cfgTok").value=t; }
     $("cfgStatus").textContent="Contracts: chain "+cid+" · registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
-    refresh();
+    await refresh();
   }catch(e){ $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
 }
 $("loadBtn").addEventListener("click",()=>{
@@ -657,8 +757,9 @@ function renderStrip(pool,verified,streak,burned,supplyLeft,distributed){
 }
 function badge(s){ return `<span class="badge b-${["pending","verified","rejected"][s]}">${STATUS[s]}</span>`; }
 function row(a){
+  const challenge=challengeInfo(a.desc);
   return `<tr>
-    <td><div class="type">${TYPES[a.type]||esc(a.type)}</div><div class="desc">${esc(a.desc)}</div>
+    <td><div class="type">${challenge?"Challenge: "+esc(challenge.name):TYPES[a.type]||esc(a.type)}</div><div class="desc">${esc(challenge?challenge.detail:a.desc)}</div>
         <div class="id">${a.id} · ${timeAgo(a.ts)}</div></td>
     <td>${badge(a.status)}</td>
     <td style="text-align:right;font-weight:800;color:var(--matcha-deep)">${a.status===1n?fmt(a.reward):"—"}${a.status===1n&&a.streak>1n?`<div style="font-size:10.5px;color:var(--latte)"><svg class=ui-icon aria-hidden=true><use href=#icon-flame></use></svg> ×${a.streak}</div>`:""}</td></tr>`;
@@ -672,9 +773,9 @@ function renderPending(list){
   if(!list.length){ $("pendingTable").innerHTML=""; $("noPending").hidden=false; return; }
   $("noPending").hidden=true;
   $("pendingTable").innerHTML = list.map(p=>`<tr>
-    <td><div class="type">${TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(p.desc)}</div>
+    <td><div class="type">${challengeInfo(p.desc)?"Challenge: "+esc(challengeInfo(p.desc).name):TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(challengeInfo(p.desc)?.detail||p.desc)}</div>
         <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
-    <td style="text-align:right;white-space:nowrap">
+    <td class="pending-actions">
       <button class="btn btn-s btn-sm" data-act="check" data-id="${p.idFull}" style="margin-bottom:6px">Check original photo</button><br>
       <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px" ${checkedPhotos.has(p.idFull)?"":"disabled"}><svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg> Approve</button><br>
       <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}"><svg class=ui-icon aria-hidden=true><use href=#icon-x></use></svg> Reject</button></td></tr>`).join("");
@@ -683,28 +784,37 @@ function setBalances(bal){
   $("balHome").innerHTML = fmt(bal)+" <small>pts</small>";
   $("myBalance").innerHTML = fmt(bal,2)+" <small>pts</small>";
   const points=Number(ethers.formatUnits(bal,18));
-  renderLeader(points);
   renderRank(points);
 }
 
 /* ---------- refresh (real chain) ---------- */
 async function refresh(){
-  if (!registry || !account) return;
+  if (!registry || !token) return;
   try{
-    const [pool, streak, maxSupply, burned, ids, totalActions] = await Promise.all([
-      registry.poolBalance(), registry.userStreak(account),
-      token.MAX_SUPPLY(), token.totalBurned(), registry.getActionsByUser(account),
-      registry.actionCount()
+    const [pool, maxSupply, burned, totalActions] = await Promise.all([
+      registry.poolBalance(), token.MAX_SUPPLY(), token.totalBurned(), registry.actionCount()
     ]);
+    const distributed = maxSupply - pool;
+    if(!account){
+      renderStrip(pool,Number(totalActions),0n,burned,maxSupply-burned,distributed);
+      $("verifyWrap").hidden=true;
+      $("ownerCfg").hidden=true; $("ownerCfgActions").hidden=true;
+      $("myActions").innerHTML='<tr><td colspan="3">Connect your wallet to view your actions.</td></tr>';
+      $("meVoucher").textContent="—"; $("meRole").textContent="—";
+      renderChallengeAvailability();
+      await updateRedeem();
+      return;
+    }
+    const [streak,ids]=await Promise.all([registry.userStreak(account),registry.getActionsByUser(account)]);
     const mine=[];
     for(const id of ids){
       const a = await registry.actions(id);
       mine.push({id:id.slice(0,10)+"…",idFull:id,type:a[1],desc:a[2],status:a[5],reward:a[7],streak:a[8],ts:Number(a[4])});
     }
     mine.sort((x,y)=>y.ts-x.ts);
-    const distributed = maxSupply - pool; // all tokens that have left the reward pool
     renderStrip(pool,Number(totalActions),streak,burned,maxSupply-burned,distributed);
     renderMine(mine);
+    renderChallengeAvailability(mine);
     try{ const count=await registry.voucherCount(account); $("meVoucher").textContent=count+" recorded redemption"+(count===1n?"":"s"); }catch{}
     const isVerifier = await registry.verifiers(account);
     $("verifyWrap").hidden = !isVerifier;
@@ -724,7 +834,7 @@ async function refresh(){
 $("aDesc").addEventListener("input", e=>{ $("charCount").textContent=e.target.value.length; enableSubmit(); });
 function enableSubmit(){
   const desc=$("aDesc").value.trim();
-  $("submitBtn").disabled = !(imgHash && desc && new TextEncoder().encode(desc).length<=280);
+  $("submitBtn").disabled = !(account && signer && imgHash && desc && new TextEncoder().encode(desc).length<=280);
 }
 async function hashFile(file){
   if(!file) return;
@@ -818,7 +928,8 @@ async function updateRedeem(){
   setBalances(bal);
   const min = 50n*10n**18n;
   const ok = amt!==null && amt>=min && amt<=bal;
-  $("redeemErr").innerHTML = amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
+  $("redeemErr").innerHTML = !account ? `<div class="hint">Connect your wallet to redeem.</div>`
+    : amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
     : amt>bal && amt>0n ? `<div class="err">Amount exceeds your SYL balance.</div>`
     : amt>0n&&amt<min ? `<div class="err">Minimum redemption is 50 SYL.</div>` : "";
   $("redeemBtn").disabled = !ok || allowance<amt;
@@ -842,9 +953,10 @@ $("redeemBtn").addEventListener("click", async ()=>{
 });
 
 /* initial paint */
-renderLeader(0);
-
-if(!window.ethereum) $("netBadge").textContent="wallet not detected";
+renderChallengeAvailability();
+$("netBadge").textContent="BOT testnet · 968 · public";
+$("meStatus").textContent="connect wallet to act";
+autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
 </script>
 </body>
 </html>
