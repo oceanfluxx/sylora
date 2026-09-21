@@ -373,15 +373,16 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
     <div class="card">
       <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-settings></use></svg></span> System settings</h3>
-      <div class="hint" style="margin-top:0" id="netInfo">For organisers: enter the deployed contract addresses for the action registry and SYL token. Addresses are stored in this browser only.</div>
-      <div class="cfg-grid">
+      <div class="hint" style="margin-top:0" id="netInfo">Contracts are auto-loaded for this network. Only the organiser can change the address.</div>
+      <div class="cfg-grid" id="ownerCfg" hidden>
         <label for="cfgReg">Action registry address</label>
         <input type="text" id="cfgReg" spellcheck="false" placeholder="0x…" autocomplete="off">
         <label for="cfgTok">SYL token address</label>
         <input type="text" id="cfgTok" spellcheck="false" placeholder="0x…" autocomplete="off">
       </div>
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Load contracts</button>
+      <div id="cfgStatus" class="hint" style="margin-top:10px">Contracts: not loaded</div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" id="ownerCfgActions" hidden>
+        <button class="btn btn-p btn-sm" id="loadBtn" style="flex:1">Save &amp; load</button>
       </div>
     </div>
 
@@ -599,26 +600,37 @@ $("connectBtn").addEventListener("click", async ()=>{
     $("meName").textContent = short(account);
     $("meStatus").textContent = "wallet connected";
     signer = await provider.getSigner();
-    if (registry) refresh(); else if ($("cfgReg").value && $("cfgTok").value) loadContracts();
+    const cachedReg=localStorage.getItem("syl_reg_"+cid), cachedTok=localStorage.getItem("syl_tok_"+cid);
+    if (registry) refresh();
+    else if (cachedReg && cachedTok) autoLoad(cachedReg,cachedTok);
+    else if ($("cfgReg").value && $("cfgTok").value) autoLoad($("cfgReg").value.trim(),$("cfgTok").value.trim());
     window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)?(" "+short(account)):" Connect digital wallet"; if(registry) refresh(); });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
   }catch(e){ toast("Wallet request rejected: "+(e.shortMessage||e.message),true); }
 });
 
-function loadContracts(silent){
+async function autoLoad(r,t){
+  if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
+  if(!provider||!account){ $("cfgStatus").textContent="Contracts cached — connect wallet to load"; return; }
+  try{
+    const c=new ethers.Contract(r,["function owner() view returns (address)","function syl() view returns (address)"],provider);
+    const [ownerAddr,tokenAddr]=await Promise.all([c.owner().catch(()=>null),c.syl().catch(()=>null)]);
+    if(tokenAddr && ethers.isAddress(tokenAddr) && tokenAddr!==ethers.ZeroAddress){ t=tokenAddr; }
+    registry = new ethers.Contract(r,REG_ABI,provider);
+    token = new ethers.Contract(t,TOK_ABI,provider);
+    localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t);
+    const isOwner = ownerAddr && account && ownerAddr.toLowerCase()===account.toLowerCase();
+    $("ownerCfg").hidden=!isOwner; $("ownerCfgActions").hidden=!isOwner;
+    if(isOwner){ $("cfgReg").value=r; $("cfgTok").value=t; }
+    $("cfgStatus").textContent="Contracts: registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
+    refresh();
+  }catch(e){ $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
+}
+$("loadBtn").addEventListener("click",()=>{
   const r=$("cfgReg").value.trim(), t=$("cfgTok").value.trim();
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ toast("Both addresses must be valid 0x…",true); return; }
-  if(!provider||!account){ toast("Connect a wallet first",true); return; }
-  localStorage.setItem("syl_reg",r); localStorage.setItem("syl_tok",t);
-  registry = new ethers.Contract(r,REG_ABI,provider);
-  token = new ethers.Contract(t,TOK_ABI,provider);
-  $("netInfo").textContent = "Registry "+r.slice(0,10)+"… · SYL token "+t.slice(0,10)+"…";
-  if(!silent) toast("System loaded");
-  refresh();
-}
-$("loadBtn").addEventListener("click",()=>loadContracts());
-$("cfgReg").value = localStorage.getItem("syl_reg")||"";
-$("cfgTok").value = localStorage.getItem("syl_tok")||"";
+  autoLoad(r,t);
+});
 
 /* ---------- render helpers ---------- */
 function renderStrip(pool,verified,streak,burned,supplyLeft,distributed){
