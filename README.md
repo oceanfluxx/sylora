@@ -25,14 +25,24 @@ Platform seperti ESG-in, Sirkula, dan aplikasi bank sampah sudah membuktikan bah
 ```bash
 # 36/36 E2E tests, dijalankan di anvil (local EVM)
 cd build-week
-node compile.js                # solc 0.8.20
+npm ci --omit=optional
+npm run compile               # solc 0.8.20 dipatok
 anvil --chain-id 968 --port 8545
-node test-e2e.js               # → ALL GREEN ✅
+npm run test:e2e              # → ALL GREEN ✅
 ```
 
 Cakupan test: token invariants, no-mint enforcement, cooldown 24 jam per jenis aksi, max 3 pending, verify→reward→streak, reject flow, redeem burn sink, pool arithmetic, input guards, admin guards, anti-photo-swap.
 
 ## 🚀 Deploy
+
+Deploy BOT **testnet** (chain ID 968, RPC `https://rpc.bohr.life`):
+
+| Kontrak | Alamat |
+|---|---|
+| EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` |
+| SylToken | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
+
+Frontend memuat kedua alamat ini secara otomatis setelah dompet tersambung ke chain 968.
 
 Urutan deploy **WAJIB**:
 1. `EcoActionRegistry(true)` — seed 3 demo action untuk display
@@ -44,8 +54,10 @@ Detail lengkap: [`build-week/DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md)
 ## 📋 Status
 
 - [x] Smart contracts (Solidity ^0.8.20) — compile & 36/36 E2E green
-- [ ] Deploy ke BOT Chain testnet (butuh faucet)
+- [x] Deploy ke BOT Chain testnet
 - [x] Landing kawaii-coffee (DESIGN.md token system, ID copy) + DApp app.html (MetaMask, ethers v6, demo mode)
+- [ ] Layanan penyimpanan foto yang bisa diakses verifier; saat ini submitter harus membagikan foto asli di luar aplikasi agar hash-nya dapat dicocokkan
+- [ ] Penerbitan dan pemenuhan voucher nyata; `redeemVoucher` saat ini hanya membakar token dan mencatat event
 
 ## 📄 PRD
 

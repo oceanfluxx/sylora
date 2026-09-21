@@ -130,7 +130,7 @@ async function main() {
   // verify 2nd within streak window → streak 2
   const ids = await registry.getActionsByUser(alice.address);
   const id2 = ids[ids.length - 2]; // recycle action
-  await (await bobReg.verifyAction(id2)).wait();
+  await (await bobReg.verifyAction(id2, { gasLimit: 300_000 })).wait();
   check('streak grows within 72h window', (await registry.userStreak(alice.address)) === 2n);
 
   // --- Reject flow ---

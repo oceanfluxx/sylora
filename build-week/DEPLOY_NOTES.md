@@ -5,8 +5,11 @@
 - [x] Test E2E 36/36 lulus di anvil (lokal in-memory EVM, chain id 968)
 - [x] 1 bug serius udah di-fix: redeem voucher sekarang **pull-and-burn** (1 transaksi),
       pool balance nggak pernah kebolong
-- [ ] Deploy ke BOT testnet (chain id 968, RPC: https://rpc.botchain.ai) — BUTUH FAUCET
-- [ ] Frontend (belum dibuat — luar scope smart contract)
+- [x] Deploy ke BOT testnet (chain id 968, RPC: https://rpc.bohr.life)
+- [x] Frontend dibuat di `frontend/app.html`
+
+Deployed registry: `0xA26FE9756D942A491385B542f6E60e1163C7a6a3`
+Deployed token: `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3`
 
 ## Cara test lokal (reproduce 36/36)
 ```bash
@@ -26,7 +29,7 @@ Anvil jalan di port 8545 (instant-mine, deterministic). Test pake 3 wallet anvil
    b. `SylToken` dengan constructor arg = **address registry** dari langkah a
    c. From registry: `setToken(addressToken)`
 3. Wallet deployer = organiser/owner. Tambah verifier via `setVerifier(addr, true)`.
-4. Testnet: https://rpc.botchain.ai (chain id 968) · Mainnet Bohr: https://rpc.bohr.life (677)
+4. Testnet: https://rpc.bohr.life (chain id 968) · Mainnet: https://rpc.botchain.ai (677)
    Gas price testnet terakhir cek: ~20 gwei.
 
 ## Temuan penting dari self-audit

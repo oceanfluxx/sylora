@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SYLORA — Log climate actions, earn real-world value</title>
-<meta name="description" content="Log eco-actions, verified by your community, and earn limited, transparent SYL points redeemable for vouchers.">
+<title>SYLORA — Log climate actions on BOT testnet</title>
+<meta name="description" content="Log eco-actions, receive 50 SYL after approval, and track your rewards on BOT Chain testnet.">
 <link rel="icon" type="image/png" href="assets/syl-logo.png">
 <link rel="apple-touch-icon" href="assets/syl-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,8 +191,8 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 
     <div class="ticker" id="ticker">
       <span class="live">LIVE</span>
-      <span class="msg" id="tickerMsg">Rina dropped off recycling and earned</span>
-      <span class="pts" id="tickerPts">+50 pts</span>
+      <span class="msg" id="tickerMsg">Every approved action earns 50 SYL</span>
+      <span class="pts" id="tickerPts"></span>
     </div>
 
     <div class="card point-card">
@@ -207,17 +207,17 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
     </div>
 
     <div class="cstats">
-      <div><div class="v" id="cMembers">—</div><div class="k">Members</div></div>
+      <div><div class="v" id="cMembers">—</div><div class="k">Reward pool (SYL)</div></div>
       <div><div class="v" id="cDistributed">—</div><div class="k">Points distributed</div></div>
-      <div><div class="v" id="stVerified">—</div><div class="k">Actions done</div></div>
-      <div><div class="v" id="stBurned">—</div><div class="k">Points redeemed</div></div>
+      <div><div class="v" id="stVerified">—</div><div class="k">Actions submitted</div></div>
+      <div><div class="v" id="stBurned">—</div><div class="k">Points burned</div></div>
     </div>
 
     <div class="card">
-      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-medal></use></svg></span> Weekly leaderboard</h3>
-      <div class="rank-pill" id="myRank"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg> Your rank: — · 0 pts</div>
+      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-medal></use></svg></span> Your points</h3>
+      <div class="rank-pill" id="myRank"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg> Your balance: 0 pts</div>
       <div id="leaderList"></div>
-      <div class="hint">Rank based on actions approved this week. Points come from the reward pool — fixed supply, fully on-chain.</div>
+      <div class="hint">Only your wallet points are shown here. Community rankings are not available yet.</div>
     </div>
 
     <div id="verifyWrap" hidden>
@@ -227,6 +227,9 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
           <thead><tr><th>Proof awaiting review</th><th></th></tr></thead>
           <tbody id="pendingTable"></tbody>
         </table>
+        <input type="file" id="verifierPhoto" accept="image/*" hidden>
+        <img id="verifierPreview" class="proof-preview" alt="Original photo selected for verification">
+        <div class="hint">Ask the submitter for their original photo, then check it here before approval. Photos are shared outside this app.</div>
         <div id="noPending" hidden style="color:var(--latte);font-size:13.5px;font-weight:700;padding:10px 2px">No actions need your review right now.</div>
       </div>
     </div>
@@ -236,7 +239,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <div style="font-size:13.5px;color:var(--matcha-deep);font-weight:700">
         1. Pick an action in the <b>Action</b> tab and snap proof <svg class=ui-icon aria-hidden=true><use href=#icon-camera></use></svg><br>
         2. A community verifier approves it <svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg><br>
-        3. Receive 50 SYL points, redeem a voucher in the <b>Redeem</b> tab <svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg>
+        3. Receive 50 SYL points after approval. The <b>Redeem</b> tab records test redemptions; usable vouchers are not available yet.
       </div>
     </div>
   </section>
@@ -244,49 +247,49 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
   <!-- ============ TAB: CHALLENGES ============ -->
   <section class="tab" id="tab-tantangan">
     <h1 class="page-title">Challenges <svg class=ui-icon aria-hidden=true><use href=#icon-trophy></use></svg></h1>
-    <p class="page-sub">Join community challenges, keep your streak alive.</p>
+    <p class="page-sub">Ideas for your next action. Each approved submission earns 50 SYL.</p>
 
     <div class="chal-wrap" data-challenge="one">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-bolt></use></svg></div>
-        <div><div class="tt">First-time try</div><div class="ss">Log your very first action and grab your first points.</div><div class="meta" id="chOne">— participants</div></div>
+        <div><div class="tt">First-time try</div><div class="ss">Log your first eco-action.</div><div class="meta" id="chOne"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="one">Choose</button>
       </div>
-      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
-      <div class="challenge-options"><div class="option-title">Choose your first action</div><div class="option-grid"><button class="challenge-option" data-option="Follow X SYLORA">Follow X SYLORA <span class="reward">+500 pts</span></button></div></div>
+      <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
+      <div class="challenge-options"><div class="option-title">Choose your first action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button></div></div>
     </div>
 
     <div class="chal-wrap" data-challenge="daily">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-calendar></use></svg></div>
-        <div><div class="tt">Daily action</div><div class="ss">One green action per day — your streak is counted automatically.</div><div class="meta" id="chDaily">— participants</div></div>
+        <div><div class="tt">Daily action</div><div class="ss">Each action type has a 24-hour cooldown.</div><div class="meta" id="chDaily"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="daily">Choose</button>
       </div>
-      <div class="challenge-options"><div class="option-title">Choose your daily action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree">Plant a tree <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Drop off recycling">Drop off recycling <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Make compost">Make compost <span class="reward">+500 pts</span></button></div></div>
-      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
+      <div class="challenge-options"><div class="option-title">Choose your daily action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Drop off recycling" data-type="recycle">Drop off recycling <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Make compost" data-type="compost">Make compost <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
     <div class="chal-wrap" data-challenge="weekly">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-calendar></use></svg></div>
-        <div><div class="tt">Weekly challenge</div><div class="ss">Complete 3 different action types in a week.</div><div class="meta" id="chWeekly">— participants</div></div>
+        <div><div class="tt">Weekly ideas</div><div class="ss">Try a different kind of eco-action this week.</div><div class="meta" id="chWeekly"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="weekly">Choose</button>
       </div>
-      <div class="challenge-options"><div class="option-title">Choose your weekly goal</div><div class="option-grid"><button class="challenge-option" data-option="Plant 3 trees">Plant 3 trees <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Complete 3 action types">Complete 3 action types <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Collect 10 kg of recyclables">Collect 10 kg of recyclables <span class="reward">+500 pts</span></button></div></div>
-      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
+      <div class="challenge-options"><div class="option-title">Choose an action</div><div class="option-grid"><button class="challenge-option" data-option="Plant a tree" data-type="tree_planting">Plant a tree <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Clean a beach" data-type="beach_cleanup">Clean a beach <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Drop off recycling" data-type="recycle">Drop off recycling <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
     <div class="chal-wrap" data-challenge="community">
       <div class="chal">
         <div class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-community></use></svg></div>
-        <div><div class="tt">Community action</div><div class="ss">Beach cleanup or tree planting with your local bank-sampah.</div><div class="meta" id="chCommunity">— participants</div></div>
+        <div><div class="tt">Community action</div><div class="ss">Beach cleanup or tree planting with your local bank-sampah.</div><div class="meta" id="chCommunity"></div></div>
         <button class="btn btn-s btn-sm join" data-ch="community">Choose</button>
       </div>
-      <div class="challenge-options"><div class="option-title">Choose a community action</div><div class="option-grid"><button class="challenge-option" data-option="Join a beach cleanup">Join a beach cleanup <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Join a tree-planting day">Join a tree-planting day <span class="reward">+500 pts</span></button><button class="challenge-option" data-option="Join a recycling drive">Join a recycling drive <span class="reward">+500 pts</span></button></div></div>
-      <div class="challenge-pending">Pending verification — submit proof in the Action tab. The 500-point reward is released only after approval.</div>
+      <div class="challenge-options"><div class="option-title">Choose a community action</div><div class="option-grid"><button class="challenge-option" data-option="Join a beach cleanup" data-type="beach_cleanup">Join a beach cleanup <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Join a tree-planting day" data-type="tree_planting">Join a tree-planting day <span class="reward">+50 SYL</span></button><button class="challenge-option" data-option="Join a recycling drive" data-type="recycle">Join a recycling drive <span class="reward">+50 SYL</span></button></div></div>
+      <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
-    <div class="hint" style="text-align:center">Streaks are tallied automatically by the contract on each approval — they can't be gamed.</div>
+      <div class="hint" style="text-align:center">Streaks are counted from approvals within 72 hours.</div>
   </section>
 
   <!-- ============ TAB: ACTION ============ -->
@@ -311,12 +314,12 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <div class="hint"><span id="charCount">0</span>/280 · one action type per 24 h · up to 3 awaiting review</div>
       <label for="aFile">Proof photo</label>
       <div class="file-zone" id="fileZone" tabindex="0">
-        <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">the file stays on your device — only its digital fingerprint is recorded</span></div>
+        <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">Only its hash is recorded. Keep the original photo to show a verifier.</span></div>
         <div class="hash" id="hashOut"></div>
       </div>
       <input type="file" id="aFile" accept="image/*" hidden>
       <div id="submitErr"></div>
-      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-upload></use></svg> Submit proof photo</button></div>
+      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-upload></use></svg> Record photo hash</button></div>
     </div>
   </section>
 
@@ -329,7 +332,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <div class="big" id="myBalance">0.00 <small>pts</small></div>
     </div>
     <div class="card">
-      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-ticket></use></svg></span> Sample vouchers</h3>
+      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-ticket></use></svg></span> Voucher examples (not available yet)</h3>
       <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg></span><span class="grow">Plant seedlings</span><span class="mini">50 pts</span></div>
       <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-cup></use></svg></span><span class="grow">Drink at partner café</span><span class="mini">100 pts</span></div>
       <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-bag></use></svg></span><span class="grow">Reusable shopping bag</span><span class="mini">150 pts</span></div>
@@ -341,9 +344,9 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       <div id="redeemErr"></div>
       <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-o" id="approveBtn" disabled style="flex:1"><svg class=ui-icon aria-hidden=true><use href=#icon-hand></use></svg> Approve redemption</button>
-        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1"><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg> Burn &amp; get voucher</button>
+        <button class="btn btn-p" id="redeemBtn" disabled style="flex:1"><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg> Burn &amp; record redemption</button>
       </div>
-      <div class="hint" style="margin-top:14px"><b>Why burn?</b> your points are pulled from your wallet and destroyed after the voucher is claimed. The supply shrinks, so the value holds.</div>
+      <div class="hint" style="margin-top:14px"><b>Demo redemption:</b> this permanently burns your SYL and records a redemption on-chain. It does not issue a usable voucher or arrange fulfillment.</div>
     </div>
   </section>
 
@@ -360,7 +363,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
       </div>
       <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-search></use></svg></span><span class="grow">Verifier role</span><span class="mini" id="meRole">no</span></div>
       <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-flame></use></svg></span><span class="grow">Action streak</span><span class="mini" id="meStreak">—</span></div>
-      <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg></span><span class="grow">Vouchers redeemed</span><span class="mini" id="meVoucher">—</span></div>
+      <div class="list-item"><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-gift></use></svg></span><span class="grow">Redemptions recorded</span><span class="mini" id="meVoucher">—</span></div>
     </div>
 
     <div class="card">
@@ -410,14 +413,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 <div class="proof-modal" id="proofModal" role="dialog" aria-modal="true" aria-labelledby="proofTitle">
   <div class="proof-dialog">
     <div class="proof-head"><div><h2 id="proofTitle">Submit challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
-    <div class="proof-reward"><span>Potential reward after approval</span><strong>500 pts</strong></div>
+    <div class="proof-reward"><span>Reward if approved</span><strong>50 SYL</strong></div>
     <label for="challengeDesc">What did you do?</label>
     <textarea id="challengeDesc" maxlength="280" placeholder="Describe what you completed and when."></textarea>
     <label>Proof image</label>
     <div class="file-zone" id="challengeFileZone" tabindex="0"><div id="challengeFileLabel">Upload one JPG, JPEG, or PNG<br><span style="font-size:12px">Maximum size: 5 MB</span></div></div>
     <input type="file" id="challengeFile" accept="image/png,image/jpeg" hidden>
     <img id="challengePreview" class="proof-preview" alt="Selected proof preview">
-    <div class="proof-status">Your reward stays pending until a community verifier approves the proof.</div>
+    <div class="proof-status">Only the photo hash is recorded. Keep the original photo to show a verifier.</div>
     <div id="challengeSubmitErr"></div>
     <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Submit for verification</button>
   </div>
@@ -435,7 +438,7 @@ const REG_ABI = [
   "function REWARD() view returns (uint256)",
   "function MIN_REDEEM() view returns (uint256)",
   "function actionCount() view returns (uint256)",
-  "function getAction(bytes32) view returns (address,string,string,bytes32,uint64,uint8,address,uint256,uint16)",
+  "function actions(bytes32) view returns (address,string,string,bytes32,uint64,uint8,address,uint256,uint16)",
   "function getActionsByUser(address) view returns (bytes32[])",
   "function getPendingActions() view returns (bytes32[])",
   "function pendingCount(address) view returns (uint256)",
@@ -448,6 +451,7 @@ const REG_ABI = [
   "function redeemVoucher(uint256)"
 ];
 const TOK_ABI = [
+  "function registry() view returns (address)",
   "function symbol() view returns (string)",
   "function MAX_SUPPLY() view returns (uint256)",
   "function totalBurned() view returns (uint256)",
@@ -456,6 +460,12 @@ const TOK_ABI = [
   "function allowance(address,address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)"
 ];
+const DEPLOYMENTS = {
+  968: {
+    registry: "0xA26FE9756D942A491385B542f6E60e1163C7a6a3",
+    token: "0x9b289f77C099D7D7ed169fdd9c931266C9963dB3"
+  }
+};
 const TYPES = {tree_planting:" Plant a tree",beach_cleanup:" Clean beach/river",recycle:" Drop off recycling",compost:" Make compost",other:" Other green action"};
 const STATUS = ["pending","verified","rejected"];
 
@@ -498,10 +508,9 @@ document.querySelector("nav").addEventListener("click", e=>{
 
 /* ---------- live activity ticker ---------- */
 const TICKS = [
-  ["Rina dropped off recycling and earned","+50 pts"],
-  ["Budi approved a tree-planting at the riverbank","+50 pts"],
-  ["Sari redeemed 100 pts for a plant-seedling voucher",""],
-  ["A beach cleanup was verified by a community verifier",""]
+  ["Every approved action earns 50 SYL",""],
+  ["The reward pool is visible on-chain",""],
+  ["Keep your original photo for the verifier",""]
 ];
 let tickI=0;
 setInterval(()=>{ tickI=(tickI+1)%TICKS.length; $("tickerMsg").textContent=TICKS[tickI][0]; $("tickerPts").textContent=TICKS[tickI][1]; },4500);
@@ -528,31 +537,21 @@ $("taskGrid").addEventListener("click", e=>{
 });
 
 /* ---------- leaderboard & challenges ---------- */
-const LEADER = [
-  ["Bank Sampah RW 05", 85000],["Komunitas Pantai Ceria", 61500],["Sari W.", 12400],
-  ["Budi H.", 9800],["Rina A.", 7350]
-];
 function renderLeader(myPts){
-  $("leaderList").innerHTML = LEADER.map((r,i)=>`<div class="lb-row">
-    <span class="lb-rank${i===0?" gold":""}">${i+1}</span>
-    <span class="lb-name">${esc(r[0])}</span>
-    <span class="lb-pts">${r[1].toLocaleString("en-US")} pts</span></div>`).join("")
-    + `<div class="lb-row lb-you"><span class="lb-rank" id="lbYouRank">—</span>
+  $("leaderList").innerHTML = `<div class="lb-row lb-you"><span class="lb-rank" id="lbYouRank">—</span>
     <span class="lb-name">You</span><span class="lb-pts">${myPts.toLocaleString("en-US")} pts</span></div>`;
 }
 function renderRank(myPts){
-  let rank = LEADER.filter(r=>r[1]>myPts).length + 1;
-  $("myRank").textContent = " Your rank: #"+rank+" · "+myPts.toLocaleString("en-US")+" pts";
-  const el=$("lbYouRank"); if(el) el.textContent=rank;
+  $("myRank").textContent = " Your balance: "+myPts.toLocaleString("en-US")+" pts";
 }
-const CHALS = {one:["chOne","3,214 participants · until Dec 31"],daily:["chDaily","12,608 participants · ongoing"],weekly:["chWeekly","1,953 participants · every Monday"],community:["chCommunity","264 participants · community-led"]};
+const CHALS = {one:["chOne","Action idea"],daily:["chDaily","One action type per 24 hours"],weekly:["chWeekly","No extra bonus"],community:["chCommunity","Community verification required"]};
 Object.values(CHALS).forEach(([id,txt])=>$(id).textContent=txt);
 document.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>{
   const wrap=b.closest(".chal-wrap");
   const open=wrap.classList.toggle("open");
   b.textContent=open?"Hide choices":"Choose";
 }));
-let challengeChoice="", challengeType="other", challengeHash=null;
+let challengeChoice="", challengeType="other", challengeGroup="", challengeHash=null;
 const proofModal=$("proofModal"), challengeFile=$("challengeFile"), challengePreview=$("challengePreview");
 function openProofModal(option, title){
   challengeChoice=option; challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
@@ -565,21 +564,22 @@ function closeProofModal(){proofModal.classList.remove("open");}
 $("proofClose").addEventListener("click",closeProofModal); proofModal.addEventListener("click",e=>{if(e.target===proofModal)closeProofModal()});
 $("challengeFileZone").addEventListener("click",()=>challengeFile.click());
 $("challengeFileZone").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();challengeFile.click()}});
-challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=await hashFileValue(f); challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
+challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; challengeHash=null; updateChallengeSubmit(); if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=await hashFileValue(f); challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
 $("challengeDesc").addEventListener("input",updateChallengeSubmit);
 function updateChallengeSubmit(){$("challengeSubmitBtn").disabled=!(challengeHash&&$("challengeDesc").value.trim())}
-async function hashFileValue(file){return ethers.keccak256(await file.arrayBuffer())}
+async function hashFileValue(file){return ethers.keccak256(new Uint8Array(await file.arrayBuffer()))}
 $("challengeSubmitBtn").addEventListener("click",async()=>{
-  const desc="[Challenge: "+challengeChoice+"] "+$("challengeDesc").value.trim();
-  if(!challengeHash||!desc)return;
+  const desc="[Action: "+challengeChoice+"] "+$("challengeDesc").value.trim();
+  if(!challengeHash||!$("challengeDesc").value.trim()||new TextEncoder().encode(desc).length>280){$("challengeSubmitErr").textContent="Add a description within 280 bytes.";return;}
   if(!signer||!registry){toast("Connect a wallet and load the system first",true);return}
   const btn=$("challengeSubmitBtn");btn.disabled=true;$("challengeSubmitErr").innerHTML="";
-  try{const tx=await registry.connect(signer).submitAction("other",desc,challengeHash);toast("Challenge proof submitted — awaiting verifier approval");await tx.wait();closeProofModal();toast("Proof recorded. The 500-point reward remains pending until approval");refresh();}
+  try{const tx=await registry.connect(signer).submitAction(challengeType,desc,challengeHash);toast("Action submitted — awaiting verifier approval");await tx.wait();document.querySelector(`.chal-wrap[data-challenge="${challengeGroup}"]`)?.classList.add("pending");closeProofModal();toast("Photo hash recorded. Approval earns 50 SYL");refresh();}
   catch(e){$("challengeSubmitErr").innerHTML='<div class="err">'+esc(cleanErr(e.shortMessage||e.info||e.message||"Submission failed"))+'</div>';btn.disabled=false}
 });
 document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("click",()=>{
   const wrap=b.closest(".chal-wrap"); wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected")); b.classList.add("selected");
-  wrap.classList.add("pending"); wrap.querySelector(".join").textContent="Pending verification";
+  challengeGroup=wrap.dataset.challenge;
+  challengeType=b.dataset.type;
   openProofModal(b.dataset.option,wrap.querySelector(".tt").textContent);
 }));
 
@@ -596,15 +596,26 @@ $("connectBtn").addEventListener("click", async ()=>{
     const net = await provider.getNetwork();
     const cid = Number(net.chainId);
     $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
+    if(cid!==968){ toast("Switch your wallet to BOT testnet (chain 968) to use this deployment",true); return; }
     $("connectBtn").textContent = " "+short(account);
     $("meName").textContent = short(account);
     $("meStatus").textContent = "wallet connected";
     signer = await provider.getSigner();
+    const deployed=DEPLOYMENTS[cid];
     const cachedReg=localStorage.getItem("syl_reg_"+cid), cachedTok=localStorage.getItem("syl_tok_"+cid);
     if (registry) refresh();
+    else if (deployed) autoLoad(deployed.registry,deployed.token);
     else if (cachedReg && cachedTok) autoLoad(cachedReg,cachedTok);
     else if ($("cfgReg").value && $("cfgTok").value) autoLoad($("cfgReg").value.trim(),$("cfgTok").value.trim());
-    window.ethereum.on?.("accountsChanged", a=>{ account=a[0]; $("connectBtn").textContent=short(account)?(" "+short(account)):" Connect digital wallet"; if(registry) refresh(); });
+    window.ethereum.on?.("accountsChanged", async a=>{
+      checkedPhotos.clear();
+      account=a[0]||null;
+      signer=account ? await provider.getSigner(account) : null;
+      $("connectBtn").textContent=account ? " "+short(account) : " Connect digital wallet";
+      $("meName").textContent=account ? short(account) : "Guest";
+      if(account && registry) autoLoad(await registry.getAddress(),await token.getAddress());
+      else { $("verifyWrap").hidden=true; $("ownerCfg").hidden=true; $("ownerCfgActions").hidden=true; setBalances(0n); }
+    });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
   }catch(e){ toast("Wallet request rejected: "+(e.shortMessage||e.message),true); }
 });
@@ -613,16 +624,19 @@ async function autoLoad(r,t){
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
   if(!provider||!account){ $("cfgStatus").textContent="Contracts cached — connect wallet to load"; return; }
   try{
+    const cid=Number((await provider.getNetwork()).chainId);
     const c=new ethers.Contract(r,["function owner() view returns (address)","function syl() view returns (address)"],provider);
-    const [ownerAddr,tokenAddr]=await Promise.all([c.owner().catch(()=>null),c.syl().catch(()=>null)]);
-    if(tokenAddr && ethers.isAddress(tokenAddr) && tokenAddr!==ethers.ZeroAddress){ t=tokenAddr; }
+    const [ownerAddr,tokenAddr,regCode,tokCode]=await Promise.all([c.owner(),c.syl(),provider.getCode(r),provider.getCode(t)]);
+    if(regCode==="0x"||tokCode==="0x"||tokenAddr.toLowerCase()!==t.toLowerCase()) throw new Error("Addresses do not match deployed contracts on this network");
+    const tokenCheck=new ethers.Contract(t,["function registry() view returns (address)"],provider);
+    if((await tokenCheck.registry()).toLowerCase()!==r.toLowerCase()) throw new Error("Token belongs to a different registry");
     registry = new ethers.Contract(r,REG_ABI,provider);
     token = new ethers.Contract(t,TOK_ABI,provider);
     localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t);
     const isOwner = ownerAddr && account && ownerAddr.toLowerCase()===account.toLowerCase();
     $("ownerCfg").hidden=!isOwner; $("ownerCfgActions").hidden=!isOwner;
     if(isOwner){ $("cfgReg").value=r; $("cfgTok").value=t; }
-    $("cfgStatus").textContent="Contracts: registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
+    $("cfgStatus").textContent="Contracts: chain "+cid+" · registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
     refresh();
   }catch(e){ $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
 }
@@ -634,6 +648,7 @@ $("loadBtn").addEventListener("click",()=>{
 
 /* ---------- render helpers ---------- */
 function renderStrip(pool,verified,streak,burned,supplyLeft,distributed){
+  $("cMembers").textContent = fmt(pool);
   $("stVerified").textContent = verified.toLocaleString();
   $("stBurned").textContent = fmt(burned);
   $("cDistributed").innerHTML = fmt(distributed)+" <small>SYL</small>";
@@ -646,7 +661,7 @@ function row(a){
     <td><div class="type">${TYPES[a.type]||esc(a.type)}</div><div class="desc">${esc(a.desc)}</div>
         <div class="id">${a.id} · ${timeAgo(a.ts)}</div></td>
     <td>${badge(a.status)}</td>
-    <td style="text-align:right;font-weight:800;color:var(--matcha-deep)">${a.status===1?fmt(a.reward):"—"}${a.status===1&&a.streak>1?`<div style="font-size:10.5px;color:var(--latte)"><svg class=ui-icon aria-hidden=true><use href=#icon-flame></use></svg> ×${a.streak}</div>`:""}</td></tr>`;
+    <td style="text-align:right;font-weight:800;color:var(--matcha-deep)">${a.status===1n?fmt(a.reward):"—"}${a.status===1n&&a.streak>1n?`<div style="font-size:10.5px;color:var(--latte)"><svg class=ui-icon aria-hidden=true><use href=#icon-flame></use></svg> ×${a.streak}</div>`:""}</td></tr>`;
 }
 function renderMine(list){
   $("myActions").innerHTML = list.length
@@ -660,13 +675,16 @@ function renderPending(list){
     <td><div class="type">${TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(p.desc)}</div>
         <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
     <td style="text-align:right;white-space:nowrap">
-      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px"><svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg> Approve</button><br>
+      <button class="btn btn-s btn-sm" data-act="check" data-id="${p.idFull}" style="margin-bottom:6px">Check original photo</button><br>
+      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px" ${checkedPhotos.has(p.idFull)?"":"disabled"}><svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg> Approve</button><br>
       <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}"><svg class=ui-icon aria-hidden=true><use href=#icon-x></use></svg> Reject</button></td></tr>`).join("");
 }
 function setBalances(bal){
   $("balHome").innerHTML = fmt(bal)+" <small>pts</small>";
   $("myBalance").innerHTML = fmt(bal,2)+" <small>pts</small>";
-  renderRank(Number(fmt(bal)));
+  const points=Number(ethers.formatUnits(bal,18));
+  renderLeader(points);
+  renderRank(points);
 }
 
 /* ---------- refresh (real chain) ---------- */
@@ -678,24 +696,24 @@ async function refresh(){
       token.MAX_SUPPLY(), token.totalBurned(), registry.getActionsByUser(account),
       registry.actionCount()
     ]);
-    let verified=0; const mine=[];
+    const mine=[];
     for(const id of ids){
-      const a = await registry.getAction(id);
-      if(a[5]===1) verified++;
+      const a = await registry.actions(id);
       mine.push({id:id.slice(0,10)+"…",idFull:id,type:a[1],desc:a[2],status:a[5],reward:a[7],streak:a[8],ts:Number(a[4])});
     }
     mine.sort((x,y)=>y.ts-x.ts);
-    const distributed = maxSupply - pool - burned; // pool + distributed + burned = 1M
+    const distributed = maxSupply - pool; // all tokens that have left the reward pool
     renderStrip(pool,Number(totalActions),streak,burned,maxSupply-burned,distributed);
     renderMine(mine);
-    try{ $("meVoucher").textContent = (await registry.voucherCount(account))+" voucher"+(await registry.voucherCount(account)===1?"":"s"); }catch{}
+    try{ const count=await registry.voucherCount(account); $("meVoucher").textContent=count+" recorded redemption"+(count===1n?"":"s"); }catch{}
     const isVerifier = await registry.verifiers(account);
     $("verifyWrap").hidden = !isVerifier;
     $("meRole").textContent = isVerifier ? "yes" : "no";
     if(isVerifier){
       const pend=[]; const pids = await registry.getPendingActions();
-      for(const id of pids){ const a=await registry.getAction(id);
-        pend.push({id:id.slice(0,10)+"…",idFull:id,who:a[0],type:a[1],desc:a[2],ts:Number(a[4])}); }
+      for(const id of pids){ const a=await registry.actions(id);
+        pend.push({id:id.slice(0,10)+"…",idFull:id,who:a[0],type:a[1],desc:a[2],hash:a[3],ts:Number(a[4])}); }
+      pendingProofs=new Map(pend.map(p=>[p.idFull,p.hash]));
       renderPending(pend);
     }
     updateRedeem();
@@ -705,10 +723,16 @@ async function refresh(){
 /* ---------- submit ---------- */
 $("aDesc").addEventListener("input", e=>{ $("charCount").textContent=e.target.value.length; enableSubmit(); });
 function enableSubmit(){
-  $("submitBtn").disabled = !(imgHash && $("aDesc").value.trim().length>0);
+  const desc=$("aDesc").value.trim();
+  $("submitBtn").disabled = !(imgHash && desc && new TextEncoder().encode(desc).length<=280);
 }
 async function hashFile(file){
   if(!file) return;
+  if(file.size>5*1024*1024 || !/^image\/(jpeg|png)$/.test(file.type)){
+    imgHash=null; $("hashOut").textContent="";
+    $("fileLabel").textContent="Choose a JPG or PNG up to 5 MB";
+    enableSubmit(); return;
+  }
   const buf = new Uint8Array(await file.arrayBuffer());
   imgHash = ethers.keccak256(buf);
   $("fileLabel").innerHTML = `Photo locked <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB — never uploaded)</span>`;
@@ -741,14 +765,35 @@ $("submitBtn").addEventListener("click", async ()=>{
 });
 function resetForm(){
   imgHash=null; $("hashOut").textContent=""; $("aDesc").value=""; $("charCount").textContent="0";
-  $("fileLabel").innerHTML="Drop a photo here or click to pick<br><span style='font-size:12px'>the file stays on your device — only its digital fingerprint is recorded</span>";
+  $("fileLabel").innerHTML="Drop a photo here or click to pick<br><span style='font-size:12px'>Only its hash is recorded. Keep the original photo to show a verifier.</span>";
   enableSubmit();
 }
 
 /* ---------- verifier desk (event delegation) ---------- */
+const checkedPhotos=new Set();
+let pendingProofs=new Map(), checkingId=null;
+$("verifierPhoto").addEventListener("change",async e=>{
+  const file=e.target.files[0];
+  if(!file||!checkingId)return;
+  const actual=ethers.keccak256(new Uint8Array(await file.arrayBuffer()));
+  if(actual.toLowerCase()===pendingProofs.get(checkingId)?.toLowerCase()){
+    checkedPhotos.add(checkingId);
+    const preview=$("verifierPreview");
+    if(preview.dataset.url) URL.revokeObjectURL(preview.dataset.url);
+    preview.dataset.url=URL.createObjectURL(file);
+    preview.src=preview.dataset.url; preview.style.display="block";
+    toast("Original photo matches the on-chain hash");
+    $("pendingTable").querySelector(`button[data-act="verify"][data-id="${checkingId}"]`).disabled=false;
+  }else toast("Photo does not match this action's recorded hash",true);
+  checkingId=null; e.target.value="";
+});
 $("pendingTable").addEventListener("click", async e=>{
   const b=e.target.closest("button"); if(!b) return;
   const id=b.dataset.id, act=b.dataset.act;
+  if(act==="check"){
+    checkingId=id; $("verifierPreview").style.display="none";
+    $("verifierPhoto").click(); return;
+  }
   try{
     if(act==="verify"){
       const tx=await registry.connect(signer).verifyAction(id); toast("Transaction sent…"); await tx.wait();
@@ -766,30 +811,32 @@ $("pendingTable").addEventListener("click", async e=>{
 $("rAmt").addEventListener("input", updateRedeem);
 async function updateRedeem(){
   const amt = parseAmt();
-  let bal = 0n;
-  if(token && account){ try{ bal = await token.balanceOf(account); }catch{} }
+  let bal = 0n, allowance = 0n;
+  if(token && account){ try{
+    [bal,allowance] = await Promise.all([token.balanceOf(account),token.allowance(account,await registry.getAddress())]);
+  }catch{} }
   setBalances(bal);
   const min = 50n*10n**18n;
   const ok = amt!==null && amt>=min && amt<=bal;
   $("redeemErr").innerHTML = amt===null ? `<div class="err">Enter a valid decimal amount.</div>`
     : amt>bal && amt>0n ? `<div class="err">Amount exceeds your SYL balance.</div>`
     : amt>0n&&amt<min ? `<div class="err">Minimum redemption is 50 SYL.</div>` : "";
-  $("redeemBtn").disabled = !ok;
-  $("approveBtn").disabled = !ok;
+  $("redeemBtn").disabled = !ok || allowance<amt;
+  $("approveBtn").disabled = !ok || allowance>=amt;
 }
 $("approveBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
   try{
-    const tx=await token.connect(signer).approve(await registry.syl(),amt);
+    const tx=await token.connect(signer).approve(await registry.getAddress(),amt);
     toast("Requesting allowance…"); await tx.wait(); toast("Allowance active — you can redeem now");
-    $("redeemBtn").disabled=false;
+    await updateRedeem();
   }catch(e){ toast(cleanErr(e.shortMessage||e.message),true); }
 });
 $("redeemBtn").addEventListener("click", async ()=>{
   const amt=parseAmt(); if(amt===null) return;
   try{
     const tx=await registry.connect(signer).redeemVoucher(amt);
-    toast("Redeeming…"); await tx.wait(); toast(fmt(amt)+" SYL points redeemed — voucher ready");
+    toast("Recording redemption…"); await tx.wait(); toast(fmt(amt)+" SYL burned; redemption recorded on-chain");
     refresh();
   }catch(e){ toast(cleanErr(e.shortMessage||e.info||e.message||"failed"),true); }
 });
