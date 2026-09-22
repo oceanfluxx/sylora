@@ -131,10 +131,26 @@ footer a{color:var(--matcha-deep)}
 .mi .pr{flex:none}
 .btn{max-width:100%;text-align:center;white-space:normal;line-height:1.2}
 details p,.lead,.sub,.end p{overflow-wrap:anywhere}
-@media(max-width:600px){
-  .nbar{flex-wrap:wrap;justify-content:center;gap:6px 12px}
-  .nlinks{width:100%;margin-left:0;justify-content:center;gap:4px 14px;font-size:13px}
-  .nlinks a{padding:2px 0}
+.nav-toggle{display:none;margin-left:auto;width:44px;height:44px;border:1.5px solid var(--milkline);border-radius:14px;background:var(--paper);color:var(--cocoa);cursor:pointer;align-items:center;justify-content:center;padding:0;flex:none}
+.nav-toggle:focus-visible{outline:3px solid var(--sakura);outline-offset:2px}
+.nav-toggle-box{position:relative;display:block;width:18px;height:14px}
+.nav-toggle-box span{position:absolute;left:0;right:0;height:2px;border-radius:2px;background:currentColor;transition:transform .22s ease,opacity .18s ease,top .22s ease}
+.nav-toggle-box span:nth-child(1){top:0}
+.nav-toggle-box span:nth-child(2){top:6px}
+.nav-toggle-box span:nth-child(3){top:12px}
+nav.open .nav-toggle-box span:nth-child(1){top:6px;transform:rotate(45deg)}
+nav.open .nav-toggle-box span:nth-child(2){opacity:0}
+nav.open .nav-toggle-box span:nth-child(3){top:6px;transform:rotate(-45deg)}
+@media(max-width:767px){
+  .nav-toggle{display:inline-flex}
+  .nbar{flex-wrap:nowrap;justify-content:flex-start}
+  .nlinks{position:absolute;z-index:60;top:100%;left:16px;right:16px;width:auto;margin:0;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:2px;background:var(--paper);border:1.5px solid var(--milkline);border-width:0;border-radius:18px;box-shadow:none;padding:0 8px;overflow:hidden;max-height:0;opacity:0;pointer-events:none;transition:max-height .32s ease,opacity .22s ease,padding .32s ease,margin .32s ease,border-width .32s ease,box-shadow .32s ease}
+  .nlinks a{padding:12px 14px;border-radius:12px;font-size:15px}
+  .nlinks a:hover,.nlinks a:focus-visible{background:var(--matcha-foam);color:var(--matcha-deep)}
+  nav.open .nlinks{max-height:280px;opacity:1;margin-top:8px;padding:8px;border-width:1.5px;pointer-events:auto;box-shadow:0 12px 28px rgba(74,52,42,.1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .nlinks,.nav-toggle-box span{transition:none}
 }
 @media(max-width:520px){
   .wrap{padding-left:18px;padding-right:18px}
@@ -151,13 +167,39 @@ details p,.lead,.sub,.end p{overflow-wrap:anywhere}
   summary{padding:15px 16px}
   details p{padding:0 16px 16px 52px}
 }
+img{max-width:100%;height:auto}
+.hero-art{position:relative}
+@media(max-width:1000px){
+  .strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .strip div{min-width:0;padding:16px 12px}
+}
+@media(min-width:700px) and (max-width:980px){
+  .steps{grid-template-columns:1fr 1fr}
+}
+@media(min-width:1100px){
+  .wrap{max-width:1120px}
+}
+@media(min-width:980px){
+  .hero{padding:36px 0 8px}
+  .hero-layout{display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr);gap:8px 48px;align-items:center}
+  .hero-art{position:relative;min-height:260px;display:grid;place-items:center}
+  .hero .syl{width:min(260px,100%);margin:0}
+  .hero-copy{text-align:left}
+  .hero-copy h1{margin:0;text-align:left;max-width:18em}
+  .hero-copy .sub{margin:14px 0 0;text-align:left}
+  .hero-copy .cta{justify-content:flex-start}
+  .hero-copy .hi{margin-bottom:14px}
+}
 </style>
 </head>
 <svg aria-hidden=true style="position:absolute;width:0;height:0;overflow:hidden"><defs><symbol id="icon-cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 10H6L5 8Z"/><path d="M8 8c0-4 2-5 4-5s4 1 4 5M9 13h.01M15 13h.01M10 16c1 .8 3 .8 4 0" fill="none"/></symbol><symbol id="icon-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 3 5h-3a7 7 0 0 0-6 3M5 11l-2 3 5 1M19 13l-3-5 3-1M16 8a7 7 0 0 1-1 9M15 17h-6l1 3M9 17a7 7 0 0 1-3-6" fill="none"/></symbol><symbol id="icon-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></symbol><symbol id="icon-spark2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/></symbol><symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none"/></symbol><symbol id="icon-sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M12 12C8 12 5 9 5 5c4 0 7 3 7 7ZM12 10c0-4 3-7 7-7 0 4-3 7-7 7Z" fill="none"/></symbol><symbol id="icon-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 8 4 15c0 2 1 4 3 4 7 0 11-6 13-15Z" fill="none"/><path d="M4 20 14 10" fill="none"/></symbol><symbol id="icon-beach" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19c3-2 5-2 8 0s5 2 8 0M4 15c3-2 5-2 8 0s5 2 8 0M12 4v9M8 7l4-3 4 3" fill="none"/></symbol><symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6Z" fill="none"/><circle cx="12" cy="12" r="2"/></symbol><symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h4l1.5-2h5L16 8h4v10H4V8Z" fill="none"/><circle cx="12" cy="13" r="3" fill="none"/></symbol><symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2" fill="none"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none"/></symbol><symbol id="icon-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4 0 7-3 7-7 0-4-3-7-5-10-1 3-2 4-3 5-1-2-2-3-2-5-2 2-5 6-5 10 0 4 3 7 8 7Z" fill="none"/></symbol><symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2" fill="none"/><circle cx="9" cy="10" r="1"/><path d="m5 17 4-4 3 3 2-2 5 4" fill="none"/></symbol><symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 11 4-4 4 2 4-2 4 4-5 5-3-2-3 2-5-5Z" fill="none"/><path d="m9 13 3 2 3-3" fill="none"/></symbol><symbol id="icon-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" fill="none"/><path d="M9 8h6M9 12h6" fill="none"/></symbol><symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="none"/><path d="M19 12a7 7 0 0 0-.1-1l2-1-2-3-2 1a8 8 0 0 0-2-1l-.3-2h-3l-.3 2a8 8 0 0 0-2 1l-2-1-2 3 2 1a7 7 0 0 0 0 2l-2 1 2 3 2-1a8 8 0 0 0 2 1l.3 2h3l.3-2a8 8 0 0 0 2-1l2 1 2-3-2-1c.1-.3.1-.7.1-1Z" fill="none"/></symbol><symbol id="icon-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 11h6l-1 9 8-11h-6l1-9Z" fill="none"/></symbol><symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6" fill="none"/></symbol><symbol id="icon-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V6a1 1 0 0 1 2 0v4V5a1 1 0 0 1 2 0v5V4a1 1 0 0 1 2 0v6V6a1 1 0 0 1 2 0v8l2-2a1.5 1.5 0 0 1 2 2l-4 5H9c-2 0-3-2-3-4v-4a1 1 0 0 1 1-1Z" fill="none"/></symbol><symbol id="icon-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 20 4-1 10-10-3-3L5 16l-1 4Z" fill="none"/><path d="m13 7 3 3" fill="none"/></symbol><symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18" fill="none"/></symbol><symbol id="icon-tree" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V12M8 21h8M12 3 7 11h3l-3 4h10l-3-4h3l-5-8Z" fill="none"/></symbol><symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="1" fill="none"/><path d="M12 9v11M4 13h16M12 9H8a2 2 0 1 1 2-2c2 0 2 2 2 2Zm0 0h4a2 2 0 1 0-2-2c-2 0-2 2-2 2Z" fill="none"/></symbol><symbol id="icon-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4h16a2 2 0 0 0 0-4v-2a2 2 0 0 0 0-4H4Z" fill="none"/><path d="M12 7v10" fill="none"/></symbol><symbol id="icon-medal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6" fill="none"/><path d="m8 9-1-6 5 3 5-3-1 6" fill="none"/></symbol><symbol id="icon-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4ZM12 13v5M8 21h8M5 5H3v2a4 4 0 0 0 4 4M19 5h2v2a4 4 0 0 1-4 4" fill="none"/></symbol><symbol id="icon-community" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" fill="none"/><circle cx="17" cy="9" r="2" fill="none"/><path d="M3 19c0-3 2-5 6-5s6 2 6 5M15 14c3 0 5 2 5 5" fill="none"/></symbol><symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8v9H3v-9Z" fill="none"/><path d="M9 20v-6h6v6" fill="none"/></symbol><symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" fill="none"/><path d="M4 21c0-4 3-7 8-7s8 3 8 7" fill="none"/></symbol><symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2" fill="none"/><path d="M8 3v4M16 3v4M4 10h16" fill="none"/></symbol><symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 1V4Z" fill="none"/><path d="M8 20V7" fill="none"/></symbol><symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M5 13v6h14v-6" fill="none"/></symbol><symbol id="icon-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6M15 3v6M7 8h10v2a5 5 0 0 1-10 0V8ZM12 15v6" fill="none"/></symbol><symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6" fill="none"/><path d="m15 15 5 5" fill="none"/></symbol><symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M7 17H5a4 4 0 0 1 0-8h4M17 7h2a4 4 0 0 1 0 8h-4" fill="none"/></symbol><symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8ZM9 8a3 3 0 0 1 6 0" fill="none"/></symbol><symbol id="icon-worm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15c3 5 7 5 8 1s-3-7 1-9c4-2 6 1 7 4" fill="none"/></symbol></defs></svg><body>
 
-<nav><div class="wrap nbar">
+<nav id="siteNav"><div class="wrap nbar">
   <a class="brand" href="#">Syl<span class="o">o</span>ra</a>
-  <div class="nlinks">
+  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteLinks" aria-label="Open menu">
+    <span class="nav-toggle-box" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <div class="nlinks" id="siteLinks">
     <a href="#how">How it works</a>
     <a href="#menu">Action menu</a>
     <a href="#trust">Why honest</a>
@@ -167,19 +209,24 @@ details p,.lead,.sub,.end p{overflow-wrap:anywhere}
 
 <!-- ===== HERO ===== -->
 <header class="hero"><div class="wrap">
+  <div class="hero-layout">
+  <div class="hero-art">
   <span class="spark" style="top:18%;left:12%"><svg class=ui-icon aria-hidden=true><use href=#icon-spark></use></svg></span>
   <span class="spark" style="top:26%;right:14%;animation-delay:.7s"><svg class=ui-icon aria-hidden=true><use href=#icon-spark2></use></svg></span>
   <span class="spark" style="top:58%;left:20%;animation-delay:1.3s"><svg class=ui-icon aria-hidden=true><use href=#icon-spark></use></svg></span>
   <span class="spark" style="top:52%;right:10%;animation-delay:1.9s"><svg class=ui-icon aria-hidden=true><use href=#icon-spark2></use></svg></span>
 
   <img class="syl" src="assets/syl-mascot.png" alt="Syl, the SYLORA matcha-cup mascot with a green sprout and pink heart" width="220" height="220" loading="eager" decoding="async">
-
+  </div>
+  <div class="hero-copy">
   <div class="hi">hi, I'm Syl!</div>
   <h1>Your real actions for the planet, <em>recorded forever</em> — and impossible to cheat.</h1>
   <p class="sub">Record a tree-planting, beach-cleanup, or kitchen-compost action. A verifier checks your original photo. Each approved action receives 50 SYL from a fixed reward pool on BOT testnet.</p>
   <div class="cta">
     <a class="btn btn-p" href="app.html">Start logging actions</a>
     <a class="btn btn-s" href="#trust">Explore the ecosystem</a>
+  </div>
+  </div>
   </div>
 
   <div class="strip wrap" style="padding:0">
@@ -270,5 +317,23 @@ details p,.lead,.sub,.end p{overflow-wrap:anywhere}
   <div>Built for GMT Build Week Vol.2 · BOT Chain testnet</div>
 </div></footer>
 
+<script>
+(function(){
+  const nav=document.getElementById("siteNav");
+  const btn=document.getElementById("navToggle");
+  const links=document.getElementById("siteLinks");
+  if(!nav||!btn||!links) return;
+  function setOpen(open){
+    nav.classList.toggle("open",open);
+    btn.setAttribute("aria-expanded",open?"true":"false");
+    btn.setAttribute("aria-label",open?"Close menu":"Open menu");
+  }
+  btn.addEventListener("click",function(){ setOpen(!nav.classList.contains("open")); });
+  links.addEventListener("click",function(e){ if(e.target.closest("a")) setOpen(false); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") setOpen(false); });
+  document.addEventListener("click",function(e){ if(!nav.contains(e.target)) setOpen(false); });
+  window.addEventListener("resize",function(){ if(window.innerWidth>767) setOpen(false); });
+})();
+</script>
 </body>
 </html>
