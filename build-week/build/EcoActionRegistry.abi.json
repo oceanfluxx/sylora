@@ -37,6 +37,16 @@
   },
   {
     "inputs": [],
+    "name": "InvalidSignature",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidSubmitter",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "NotOurToken",
     "type": "error"
   },
@@ -58,6 +68,16 @@
   {
     "inputs": [],
     "name": "PoolEmpty",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SignatureAlreadyUsed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SignatureExpired",
     "type": "error"
   },
   {
@@ -690,6 +710,55 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "submitter",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "actionType",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "imageHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "submitActionFor",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "syl",
     "outputs": [
@@ -713,6 +782,30 @@
     "name": "topUpPool",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "usedNonces",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

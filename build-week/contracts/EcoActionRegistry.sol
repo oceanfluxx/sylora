@@ -55,6 +55,7 @@ contract EcoActionRegistry {
     mapping(address => uint256) public lastVerifiedAt;                  // streak window key
     mapping(address => uint256) public voucherCount;                   // vouchers redeemed
     mapping(address => bool) public verifiers;                          // organizer role
+    mapping(address => mapping(uint256 => bool)) public usedNonces;     // signed submissions
 
     event ActionSubmitted(bytes32 indexed id, address indexed submitter, string actionType, bytes32 imageHash, uint64 submittedAt);
     event ActionVerified(bytes32 indexed id, address indexed submitter, address indexed verifier, uint256 reward, uint16 streak);
@@ -76,6 +77,16 @@ contract EcoActionRegistry {
     error NotPending();
     error PoolEmpty();
     error BelowMinRedeem();
+    error InvalidSubmitter();
+    error InvalidSignature();
+    error SignatureExpired();
+    error SignatureAlreadyUsed();
+
+    bytes32 private constant DOMAIN_TYPEHASH = keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
+    bytes32 private constant SUBMIT_TYPEHASH = keccak256("SubmitAction(address submitter,string actionType,string description,bytes32 imageHash,uint256 nonce,uint256 deadline)");
+    bytes32 private constant NAME_HASH = keccak256("SYLORA");
+    bytes32 private constant VERSION_HASH = keccak256("1");
+    uint256 private constant MAX_VALID_S = 0x7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0;
 
     modifier onlyOwner() {
         if (msg.sender != owner) revert NotOwner();
@@ -134,18 +145,68 @@ contract EcoActionRegistry {
         string calldata description,
         bytes32 imageHash
     ) external returns (bytes32 id) {
+        return _submitAction(msg.sender, actionType, description, imageHash);
+    }
+
+    /// @notice A verifier pays gas for a wallet-signed action request.
+    function submitActionFor(
+        address submitter,
+        string calldata actionType,
+        string calldata description,
+        bytes32 imageHash,
+        uint256 nonce,
+        uint256 deadline,
+        bytes calldata signature
+    ) external onlyVerifier returns (bytes32 id) {
+        if (submitter == address(0)) revert InvalidSubmitter();
+        if (block.timestamp > deadline) revert SignatureExpired();
+        if (usedNonces[submitter][nonce]) revert SignatureAlreadyUsed();
+        _requireSignedAction(submitter, actionType, description, imageHash, nonce, deadline, signature);
+        usedNonces[submitter][nonce] = true;
+        return _submitAction(submitter, actionType, description, imageHash);
+    }
+
+    function _requireSignedAction(
+        address submitter,
+        string calldata actionType,
+        string calldata description,
+        bytes32 imageHash,
+        uint256 nonce,
+        uint256 deadline,
+        bytes calldata signature
+    ) private view {
+        bytes32 structHash = keccak256(abi.encode(
+            SUBMIT_TYPEHASH,
+            submitter,
+            keccak256(bytes(actionType)),
+            keccak256(bytes(description)),
+            imageHash,
+            nonce,
+            deadline
+        ));
+        bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, NAME_HASH, VERSION_HASH, block.chainid, address(this)));
+        bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
+        if (_recoverSigner(digest, signature) != submitter) revert InvalidSignature();
+    }
+
+    function _submitAction(
+        address submitter,
+        string calldata actionType,
+        string calldata description,
+        bytes32 imageHash
+    ) internal returns (bytes32 id) {
         _requireValidActionType(actionType);
         if (bytes(description).length == 0) revert EmptyDescription();
         if (bytes(description).length > MAX_DESCRIPTION) revert DescriptionTooLong();
-        if (pendingCount[msg.sender] >= MAX_PENDING) revert TooManyPending();
-        if (block.timestamp < lastSubmitAt[msg.sender][actionType] + COOLDOWN) revert CooldownActive();
+        if (pendingCount[submitter] >= MAX_PENDING) revert TooManyPending();
+        if (block.timestamp < lastSubmitAt[submitter][actionType] + COOLDOWN) revert CooldownActive();
 
-        lastSubmitAt[msg.sender][actionType] = block.timestamp;
-        pendingCount[msg.sender] += 1;
+        lastSubmitAt[submitter][actionType] = block.timestamp;
+        pendingCount[submitter] += 1;
 
-        id = keccak256(abi.encodePacked(msg.sender, imageHash, block.timestamp, userActions[msg.sender].length));
+        id = keccak256(abi.encodePacked(submitter, imageHash, block.timestamp, userActions[submitter].length));
         actions[id] = Action({
-            submitter: msg.sender,
+            submitter: submitter,
             actionType: actionType,
             description: description,
             imageHash: imageHash,
@@ -156,9 +217,25 @@ contract EcoActionRegistry {
             streak: 0
         });
         allActions.push(id);
-        userActions[msg.sender].push(id);
+        userActions[submitter].push(id);
 
-        emit ActionSubmitted(id, msg.sender, actionType, imageHash, uint64(block.timestamp));
+        emit ActionSubmitted(id, submitter, actionType, imageHash, uint64(block.timestamp));
+    }
+
+    function _recoverSigner(bytes32 digest, bytes calldata signature) private pure returns (address) {
+        if (signature.length != 65) revert InvalidSignature();
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
+        assembly {
+            r := calldataload(signature.offset)
+            s := calldataload(add(signature.offset, 32))
+            v := byte(0, calldataload(add(signature.offset, 64)))
+        }
+        if (uint256(s) > MAX_VALID_S || (v != 27 && v != 28)) revert InvalidSignature();
+        address recovered = ecrecover(digest, v, r, s);
+        if (recovered == address(0)) revert InvalidSignature();
+        return recovered;
     }
 
     // ------------------------------------------------------------------

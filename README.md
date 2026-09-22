@@ -58,41 +58,50 @@ Make community climate action visible, verifiable, and accountable from submissi
 <div align="center">
 
 ```
-Participant ──submit description + photo hash──► BOT Chain
-Verifier ──check original photo──► approve or reject
+Participant ──sign description + photo hash (no gas)──► verifier
+Verifier ──record signed request + check original photo──► BOT Chain
+Verifier ──approve or reject──► BOT Chain
 Approved action ──50 SYL from reward pool──► participant
 Demo redemption ──burn SYL──► on-chain redemption record
 ```
 
 </div>
 
-### Gas model (optimized contract)
+### Gas model for the new signed-request registry
 
 | Action | Who pays | Design |
 |--------|----------|--------|
-| Submit action | Participant | Stores a photo hash and short description, not the image itself |
-| Verify or reject | Verifier | Approval transfers 50 SYL from the existing pool; rejection pays no reward |
+| Sign action or challenge request | Participant | Wallet signature only; no transaction or gas fee |
+| Record signed request | Verifier | Checks the participant signature on-chain and stores the photo hash and description |
+| Verify or reject | Verifier | Separate transaction; approval transfers 50 SYL from the reward pool |
 | Read actions and balances | Free | View calls require no transaction |
 | Demo redemption | Participant | One registry call burns approved SYL after token allowance is granted |
 
 ### 1. Participant
 
 - Browse the landing page and action list without connecting a wallet.
-- Connect a wallet on BOT testnet (chain ID `968`) to submit an action.
+- Connect a wallet on BOT testnet (chain ID `968`) to sign an action request.
 - Describe the action and select a JPG or PNG proof photo. The app hashes the image locally; keep the original for verification.
-- Wait for a verifier's decision. An approved submission receives 50 SYL.
+- Copy or download the signed request and send it with the original photo to a verifier. The signature expires after seven days. Signing does not spend gas.
+- Wait for the verifier to record and review the request. An approved action receives 50 SYL.
 - Use the Challenges tab for Sylora promotion tasks. These use the deployed contract's `other` action type and share its 24-hour cooldown.
 
 ### 2. Verifier
 
 - Connect a wallet authorized as a verifier by the organiser.
+- Paste the participant's signed request into the verifier desk and record it on-chain. This transaction is paid by the verifier wallet.
 - Ask the submitter for the original photo outside the app and compare its hash with the recorded proof.
 - Review the description and, for a social challenge, its public post or profile link.
 - Approve a valid submission or reject it with a reason.
 
+The app has no shared request server. The participant must send the signed request to a verifier outside the app. A request is not on-chain until the verifier records it.
+
+Run `npm run compile` and `npm run test:gasless` from `build-week` to verify signed requests locally.
+
 ### 3. Organiser
 
 - Deploy and configure the registry and token, then appoint verifier wallets.
+- The deployed registry at `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` does not support signed requests. Deploy the updated registry and a new `SylToken` (the token is permanently tied to its registry), call `setToken`, appoint verifiers, and update `DEPLOYMENTS[968]` in `frontend/app.html` before enabling gasless submissions. Existing token balances do not migrate automatically.
 - Monitor the reward pool and verification process.
 - The current app checks one-time and weekly challenge limits from wallet history; the deployed contract itself only enforces a 24-hour cooldown per action type.
 
