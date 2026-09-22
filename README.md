@@ -97,7 +97,7 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 ### 3. Organiser
 
 - Deploy and configure the registry and token, then appoint verifier wallets.
-- The queue review contract change is compiled and tested locally but **has not been deployed to BOT testnet**. The previous registry `0x58486a357a3bf5bd77dea5f21981f3Be86e58E5B` and token `0xeCF75581e51AA07d40Ff13a689B6E2b0FB386fE6` cannot support this one-click review. Deploy a new registry and a new token tied to it, then configure the server with their addresses. Existing balances do not migrate automatically.
+- The queue review registry `0x9fF87496fd03B4178D7C0856712072b034248a10` and token `0x27779b068f280455E1AF6BfE666C6855803Fad06` are deployed and linked on BOT testnet. The owner is a verifier, and the reward pool contains 1,000,000 SYL. Existing balances from earlier tokens do not migrate automatically.
 - Monitor the reward pool and verification process.
 - The current app checks one-time and weekly challenge limits from wallet history; the deployed contract itself only enforces a 24-hour cooldown per action type.
 
@@ -123,15 +123,13 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 
 </div>
 
-After deploying the new registry and token, run from `build-week`:
+Run from `build-week`:
 
 ```powershell
-$env:REGISTRY_ADDRESS="0xNEW_REGISTRY"
-$env:TOKEN_ADDRESS="0xNEW_TOKEN"
 npm start
 ```
 
-Open [the app](http://localhost:8080/app.html). The server addresses are loaded automatically. A wallet is needed only for verifier review, balance display, token import, or redemption.
+Open [the app](http://localhost:8080/app.html). The verified BOT testnet addresses are the defaults; `REGISTRY_ADDRESS` and `TOKEN_ADDRESS` can override them. A wallet is needed only for verifier review, balance display, token import, or redemption.
 
 ---
 
@@ -139,8 +137,8 @@ Open [the app](http://localhost:8080/app.html). The server addresses are loaded 
 
 | Network | Contract | Address |
 |---------|----------|---------|
-| **BOT testnet · 968** | Queue-review EcoActionRegistry | Awaiting deployment |
-| **BOT testnet · 968** | SylToken tied to new registry | Awaiting deployment |
+| **BOT testnet · 968** | Queue-review EcoActionRegistry | `0x9fF87496fd03B4178D7C0856712072b034248a10` |
+| **BOT testnet · 968** | SylToken tied to new registry | `0x27779b068f280455E1AF6BfE666C6855803Fad06` |
 
 The app connects to `https://rpc.bohr.life` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
