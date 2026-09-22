@@ -567,8 +567,8 @@ const TOK_ABI = [
 ];
 const DEPLOYMENTS = {
   968: {
-    registry: "0xA26FE9756D942A491385B542f6E60e1163C7a6a3",
-    token: "0x9b289f77C099D7D7ed169fdd9c931266C9963dB3"
+    registry: "0x58486a357a3bf5bd77dea5f21981f3Be86e58E5B",
+    token: "0xeCF75581e51AA07d40Ff13a689B6E2b0FB386fE6"
   }
 };
 const PUBLIC_RPC = "https://rpc.bohr.life";
@@ -788,12 +788,16 @@ $("connectBtn").addEventListener("click", async ()=>{
 
 async function autoLoad(r,t){
   gaslessAvailable=false;
+  registry=null;token=null;
+  $("addTokenBtn").disabled=true;
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
   try{
     const cid=Number((await provider.getNetwork()).chainId);
     const c=new ethers.Contract(r,["function owner() view returns (address)","function syl() view returns (address)"],provider);
     const [ownerAddr,tokenAddr,regCode,tokCode]=await Promise.all([c.owner(),c.syl(),provider.getCode(r),provider.getCode(t)]);
-    if(regCode==="0x"||tokCode==="0x"||tokenAddr.toLowerCase()!==t.toLowerCase()) throw new Error("Addresses do not match deployed contracts on this network");
+    if(regCode==="0x"||tokCode==="0x") throw new Error("Registry or token is not deployed on this network");
+    if(tokenAddr===ethers.ZeroAddress) throw new Error("Registry token is not set. The organiser must call setToken with the new SYL token address");
+    if(tokenAddr.toLowerCase()!==t.toLowerCase()) throw new Error("Registry points to a different token on this network");
     const tokenCheck=new ethers.Contract(t,["function registry() view returns (address)"],provider);
     if((await tokenCheck.registry()).toLowerCase()!==r.toLowerCase()) throw new Error("Token belongs to a different registry");
     registry = new ethers.Contract(r,REG_ABI,provider);
@@ -812,7 +816,12 @@ async function autoLoad(r,t){
     if(isOwner){ $("cfgReg").value=r; $("cfgTok").value=t; }
     $("cfgStatus").textContent="Contracts: chain "+cid+" · registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
     enableSubmit();updateChallengeSubmit();await refresh();
-  }catch(e){ $("addTokenBtn").disabled=true;$("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
+  }catch(e){
+    $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,130));
+    $("tokenWalletHint").textContent="SYL token is not ready in this registry yet.";
+    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Action submissions are unavailable until the organiser connects the new token to the registry.");
+    enableSubmit();updateChallengeSubmit();renderChallengeAvailability();updateRedeem();
+  }
 }
 $("addTokenBtn").addEventListener("click",async()=>{
   if(!window.ethereum?.request||!token||!account) return;
