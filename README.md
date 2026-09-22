@@ -33,7 +33,7 @@ Environmental reward apps need a way to show that an action was reviewed and tha
 
 ## Solution
 
-**Sylora** records an action description and the hash of its proof photo on BOT Chain. A designated verifier checks the original photo before approving the action. Each approved submission receives **50 SYL** from a fixed reward pool. The token starts with a supply of **1,000,000 SYL** and has no mint function. Demo redemptions burn SYL and record the redemption on-chain.
+**Sylora** sends an action description and photo to a verifier queue. The verifier approves or rejects the submission; the decision and photo hash are recorded on BOT Chain. Each approved submission receives **50 SYL** from a fixed reward pool. The token starts with a supply of **1,000,000 SYL** and has no mint function. Demo redemptions burn SYL and record the redemption on-chain.
 
 ## Vision
 
@@ -45,8 +45,8 @@ Make community climate action visible, verifiable, and accountable from submissi
 
 | | Feature | Description |
 |:---:|---------|-------------|
-| 🌱 | **Log eco-actions** | Submit tree planting, cleanup, recycling, composting, or another green action with a description and photo hash. |
-| 🔍 | **Human verification** | A designated verifier compares the original photo with the committed hash before approving or rejecting. |
+| 🌱 | **Log eco-actions** | Submit tree planting, cleanup, recycling, composting, or another green action with a description and photo. |
+| 🔍 | **Human verification** | A designated verifier sees the submitted photo and approves or rejects it. |
 | 🪙 | **Fixed reward pool** | An approved action receives 50 SYL; all 1,000,000 SYL are allocated to the registry at deployment, with no mint function. |
 | 📣 | **Social challenges** | Follow Sylora on X, engage with posts, or share a weekly eco post with a public link and screenshot for review. |
 | 🔥 | **Burn on redemption** | Demo redemption burns SYL and records an on-chain event; usable vouchers are not available yet. |
@@ -58,50 +58,46 @@ Make community climate action visible, verifiable, and accountable from submissi
 <div align="center">
 
 ```
-Participant ──sign description + photo hash (no gas)──► verifier
-Verifier ──record signed request + check original photo──► BOT Chain
-Verifier ──approve or reject──► BOT Chain
+Participant ──submit address, action + photo──► shared queue
+Verifier ──approve or reject (one transaction)──► BOT Chain
 Approved action ──50 SYL from reward pool──► participant
 Demo redemption ──burn SYL──► on-chain redemption record
 ```
 
 </div>
 
-### Gas model for the new signed-request registry
+### Gas model for the shared queue
 
 | Action | Who pays | Design |
 |--------|----------|--------|
-| Sign action or challenge request | Participant | Wallet signature only; no transaction or gas fee |
-| Record signed request | Verifier | Checks the participant signature on-chain and stores the photo hash and description |
-| Verify or reject | Verifier | Separate transaction; approval transfers 50 SYL from the reward pool |
+| Submit action or challenge | Participant | No wallet connection, confirmation, signature, transaction, or gas fee |
+| Approve or reject | Verifier | One transaction; approval transfers 50 SYL from the reward pool |
 | Read actions and balances | Free | View calls require no transaction |
 | Demo redemption | Participant | One registry call burns approved SYL after token allowance is granted |
 
 ### 1. Participant
 
 - Browse the landing page and action list without connecting a wallet.
-- Connect a wallet on BOT testnet (chain ID `968`) to sign an action request.
-- Describe the action and select a JPG or PNG proof photo. The app hashes the image locally; keep the original for verification.
-- Copy or download the signed request and send it with the original photo to a verifier. The signature expires after seven days. Signing does not spend gas.
-- Wait for the verifier to record and review the request. An approved action receives 50 SYL.
+- Paste a BOT testnet wallet address to receive SYL. This does not connect or prompt the wallet.
+- Describe the action and select a JPG or PNG photo (maximum 5 MB). Submit it directly in the app.
+- Wait for the verifier to approve or reject the queued submission.
+- Approval transfers 50 SYL directly from the reward pool to the participant's wallet. There is no separate withdrawal transaction. Use **Show SYL in wallet** in the app, or import the token contract address manually in the wallet if needed.
 - Use the Challenges tab for Sylora promotion tasks. These use the deployed contract's `other` action type and share its 24-hour cooldown.
 
 ### 2. Verifier
 
 - Connect a wallet authorized as a verifier by the organiser.
-- Paste the participant's signed request into the verifier desk and record it on-chain. This transaction is paid by the verifier wallet.
-- Ask the submitter for the original photo outside the app and compare its hash with the recorded proof.
-- Review the description and, for a social challenge, its public post or profile link.
-- Approve a valid submission or reject it with a reason.
+- See queued submissions, including the photo and description, in the verifier desk.
+- Click **Approve** or **Reject**. This is one transaction paid by the verifier wallet.
 
-The app has no shared request server. The participant must send the signed request to a verifier outside the app. A request is not on-chain until the verifier records it.
+The shared queue requires a running Node server. Because the participant does not sign, the verifier is responsible for deciding whether the submitted wallet address and evidence are credible. The demo queue currently exposes uploaded photos to anyone who knows the photo URL; add authentication and private storage before using real personal photos in production.
 
-Run `npm run compile` and `npm run test:gasless` from `build-week` to verify signed requests locally.
+Run `npm run compile` and `npm run test:queue` from `build-week` to verify the queue and review flow locally.
 
 ### 3. Organiser
 
 - Deploy and configure the registry and token, then appoint verifier wallets.
-- The deployed registry at `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` does not support signed requests. Deploy the updated registry and a new `SylToken` (the token is permanently tied to its registry), call `setToken`, appoint verifiers, and update `DEPLOYMENTS[968]` in `frontend/app.html` before enabling gasless submissions. Existing token balances do not migrate automatically.
+- The queue review contract change is compiled and tested locally but **has not been deployed to BOT testnet**. The previous registry `0x58486a357a3bf5bd77dea5f21981f3Be86e58E5B` and token `0xeCF75581e51AA07d40Ff13a689B6E2b0FB386fE6` cannot support this one-click review. Deploy a new registry and a new token tied to it, then configure the server with their addresses. Existing balances do not migrate automatically.
 - Monitor the reward pool and verification process.
 - The current app checks one-time and weekly challenge limits from wallet history; the deployed contract itself only enforces a 24-hour cooldown per action type.
 
@@ -112,10 +108,10 @@ Run `npm run compile` and `npm run test:gasless` from `build-week` to verify sig
 | Layer | Stack |
 |-------|--------|
 | **Smart Contract** | Solidity `0.8.20` · `EcoActionRegistry.sol` · `SylToken.sol` |
-| **Frontend** | Static HTML, CSS, and JavaScript · `frontend/index.html` · `frontend/app.html` |
+| **Frontend and queue** | HTML, CSS, and JavaScript · Node.js HTTP server · file-backed queue |
 | **Wallet / Chain** | ethers.js v6 · MetaMask-compatible wallet · BOT Chain testnet `968` |
 | **Development** | Node.js · solc · Anvil-based end-to-end tests |
-| **Hosting** | Any static web server |
+| **Hosting** | Node.js server with persistent disk for queue and photos |
 
 ---
 
@@ -127,13 +123,15 @@ Run `npm run compile` and `npm run test:gasless` from `build-week` to verify sig
 
 </div>
 
-From the project root, serve the `frontend` directory:
+After deploying the new registry and token, run from `build-week`:
 
-```bash
-python -m http.server 8080 --directory frontend
+```powershell
+$env:REGISTRY_ADDRESS="0xNEW_REGISTRY"
+$env:TOKEN_ADDRESS="0xNEW_TOKEN"
+npm start
 ```
 
-Open [the landing page](http://localhost:8080/) or [the app](http://localhost:8080/app.html). The deployed contracts load in read-only mode before wallet connection; a wallet is required to submit or verify actions.
+Open [the app](http://localhost:8080/app.html). The server addresses are loaded automatically. A wallet is needed only for verifier review, balance display, token import, or redemption.
 
 ---
 
@@ -141,8 +139,8 @@ Open [the landing page](http://localhost:8080/) or [the app](http://localhost:80
 
 | Network | Contract | Address |
 |---------|----------|---------|
-| **BOT testnet · 968** | EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` |
-| **BOT testnet · 968** | SylToken | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
+| **BOT testnet · 968** | Queue-review EcoActionRegistry | Awaiting deployment |
+| **BOT testnet · 968** | SylToken tied to new registry | Awaiting deployment |
 
 The app connects to `https://rpc.bohr.life` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
@@ -156,6 +154,8 @@ sylora/
 │   ├── contracts/
 │   │   ├── EcoActionRegistry.sol   # Action registry and rewards
 │   │   └── SylToken.sol            # Fixed-supply SYL token
+│   ├── server.js                   # Shared queue and frontend server
+│   ├── test-queue.js               # Queue and contract integration test
 │   ├── test-e2e.js                 # Contract end-to-end tests
 │   └── DEPLOY_NOTES.md             # Deployment and test notes
 ├── frontend/

@@ -11,9 +11,10 @@ interface ISylToken {
 }
 
 /// @title EcoActionRegistry — SYLORA's on-chain logbook of eco-actions
-/// @notice Anti-fraud design (PRD §1a gap analysis):
-///         - imageHash = keccak256(image bytes), computed CLIENT-SIDE before submit
-///           → the proof photo cannot be swapped after submitting
+/// @notice Review design:
+///         - The queue server hashes uploaded image bytes; a verifier reviews
+///           the off-chain request and records a final decision on-chain.
+///         - Participant wallet ownership is not proven by a signature.
 ///         - Cooldown per action type + max pending → anti-spam / anti-sybil
 ///         - Rewards only leave the sponsor pool → solvent by design
 ///         - Burn-on-redeem → $SYL has real utility and deflationary sink
@@ -26,7 +27,7 @@ contract EcoActionRegistry {
     uint256 public constant MAX_PENDING    = 3;         // max concurrent pending per user
     uint256 public constant STREAK_WINDOW   = 72 hours;  // gap that keeps a streak alive
     uint256 public constant MIN_REDEEM     = 50 * 1e18; // min $SYL per voucher redeem
-    uint256 public constant MAX_DESCRIPTION = 280;      // chars
+    uint256 public constant MAX_DESCRIPTION = 280;      // UTF-8 bytes
 
     ISylToken public syl;
     address public owner;
@@ -56,6 +57,7 @@ contract EcoActionRegistry {
     mapping(address => uint256) public voucherCount;                   // vouchers redeemed
     mapping(address => bool) public verifiers;                          // organizer role
     mapping(address => mapping(uint256 => bool)) public usedNonces;     // signed submissions
+    mapping(bytes32 => bool) public reviewedRequests;                   // off-chain queue ids
 
     event ActionSubmitted(bytes32 indexed id, address indexed submitter, string actionType, bytes32 imageHash, uint64 submittedAt);
     event ActionVerified(bytes32 indexed id, address indexed submitter, address indexed verifier, uint256 reward, uint16 streak);
@@ -81,6 +83,8 @@ contract EcoActionRegistry {
     error InvalidSignature();
     error SignatureExpired();
     error SignatureAlreadyUsed();
+    error RequestAlreadyReviewed();
+    error InvalidRequestId();
 
     bytes32 private constant DOMAIN_TYPEHASH = keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
     bytes32 private constant SUBMIT_TYPEHASH = keccak256("SubmitAction(address submitter,string actionType,string description,bytes32 imageHash,uint256 nonce,uint256 deadline)");
@@ -236,6 +240,63 @@ contract EcoActionRegistry {
         address recovered = ecrecover(digest, v, r, s);
         if (recovered == address(0)) revert InvalidSignature();
         return recovered;
+    }
+
+    /// @notice A verifier records one queue decision and pays the transaction fee.
+    ///         The queue is off-chain; the verifier is trusted to select a recipient.
+    function reviewQueuedAction(
+        bytes32 requestId,
+        address submitter,
+        string calldata actionType,
+        string calldata description,
+        bytes32 imageHash,
+        bool approved
+    ) external onlyVerifier returns (bytes32 id) {
+        if (requestId == bytes32(0)) revert InvalidRequestId();
+        if (reviewedRequests[requestId]) revert RequestAlreadyReviewed();
+        if (submitter == address(0)) revert InvalidSubmitter();
+        _requireValidActionType(actionType);
+        if (bytes(description).length == 0) revert EmptyDescription();
+        if (bytes(description).length > MAX_DESCRIPTION) revert DescriptionTooLong();
+        if (approved) {
+            if (address(syl) == address(0)) revert TokenNotSet();
+            if (block.timestamp < lastSubmitAt[submitter][actionType] + COOLDOWN) revert CooldownActive();
+            if (syl.balanceOf(address(this)) < REWARD) revert PoolEmpty();
+        }
+
+        reviewedRequests[requestId] = true;
+        id = keccak256(abi.encodePacked(address(this), requestId));
+        uint16 streak = 0;
+        if (approved) {
+            lastSubmitAt[submitter][actionType] = block.timestamp;
+            if (lastVerifiedAt[submitter] != 0 && block.timestamp - lastVerifiedAt[submitter] <= STREAK_WINDOW) {
+                userStreak[submitter] += 1;
+            } else {
+                userStreak[submitter] = 1;
+            }
+            streak = uint16(userStreak[submitter]);
+            lastVerifiedAt[submitter] = block.timestamp;
+        }
+        actions[id] = Action({
+            submitter: submitter,
+            actionType: actionType,
+            description: description,
+            imageHash: imageHash,
+            submittedAt: uint64(block.timestamp),
+            status: approved ? Status.Verified : Status.Rejected,
+            verifier: msg.sender,
+            rewardAmount: approved ? REWARD : 0,
+            streak: streak
+        });
+        allActions.push(id);
+        userActions[submitter].push(id);
+        emit ActionSubmitted(id, submitter, actionType, imageHash, uint64(block.timestamp));
+        if (approved) {
+            syl.transfer(submitter, REWARD);
+            emit ActionVerified(id, submitter, msg.sender, REWARD, streak);
+        } else {
+            emit ActionRejected(id, msg.sender, "Rejected by verifier");
+        }
     }
 
     // ------------------------------------------------------------------

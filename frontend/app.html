@@ -210,8 +210,6 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--paper);bo
 .proof-close{flex:none}
 .proof-reward{gap:12px}
 .proof-reward strong{flex:none}
-#signedRequestOutput{min-height:150px}
-#signedRequestInput{min-height:110px}
 table{table-layout:fixed}
 td{overflow-wrap:anywhere}
 .pending-table th:first-child{width:48%}
@@ -325,23 +323,16 @@ td{overflow-wrap:anywhere}
           <thead><tr><th>Proof awaiting review</th><th></th></tr></thead>
           <tbody id="pendingTable"></tbody>
         </table>
-        <input type="file" id="verifierPhoto" accept="image/*" hidden>
-        <img id="verifierPreview" class="proof-preview" alt="Original photo selected for verification">
-        <div class="hint">Ask the submitter for their original photo, then check it here before approval. Photos are shared outside this app.</div>
         <div id="noPending" hidden style="color:var(--latte);font-size:13.5px;font-weight:700;padding:10px 2px">No actions need your review right now.</div>
-        <label for="signedRequestInput">Signed action request</label>
-        <textarea id="signedRequestInput" placeholder="Paste the request shared by the participant"></textarea>
-        <div class="hint">Check the action and original photo with the participant. Recording the signed request costs gas from your verifier wallet; approval or rejection is a separate transaction.</div>
-        <div id="signedRequestErr"></div>
-        <button class="btn btn-s btn-w" id="recordSignedBtn">Record signed action</button>
+        <div class="hint">Review each submission and choose Approve or Reject. Your verifier wallet pays the transaction fee.</div>
       </div>
     </div>
 
     <div class="card" style="background:var(--matcha-foam);border-color:#d5ead9">
       <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-cup></use></svg></span> How it works</h3>
       <div style="font-size:13.5px;color:var(--matcha-deep);font-weight:700">
-        1. Pick an action, photograph the proof, and sign a free request <svg class=ui-icon aria-hidden=true><use href=#icon-camera></use></svg><br>
-        2. Send the request and photo to a verifier, who records and reviews it <svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg><br>
+        1. Pick an action, add your wallet address and photo, then submit <svg class=ui-icon aria-hidden=true><use href=#icon-camera></use></svg><br>
+        2. A verifier sees your submission and approves or rejects it <svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg><br>
         3. Receive 50 SYL points after approval. The <b>Redeem</b> tab records test redemptions; usable vouchers are not available yet.
       </div>
     </div>
@@ -350,8 +341,8 @@ td{overflow-wrap:anywhere}
   <!-- ============ TAB: CHALLENGES ============ -->
   <section class="tab" id="tab-tantangan">
     <h1 class="page-title">Challenges <svg class=ui-icon aria-hidden=true><use href=#icon-trophy></use></svg></h1>
-    <p class="page-sub">Help more people discover Sylora. Sign a challenge request and share its screenshot and public link with a verifier; approved challenges earn 50 SYL.</p>
-    <div class="hint gasless-notice">Sign your request for free, then send it and the original screenshot to a verifier. The verifier pays to record it on-chain.</div>
+    <p class="page-sub">Help more people discover Sylora. Submit a public link and screenshot; approved challenges earn 50 SYL.</p>
+    <div class="hint gasless-notice">Submitting needs no wallet confirmation. A verifier reviews your request and pays the transaction fee.</div>
 
     <div class="chal-wrap" data-challenge="one">
       <div class="chal">
@@ -383,19 +374,22 @@ td{overflow-wrap:anywhere}
       <div class="challenge-pending">Submitted for review. An approved action earns 50 SYL.</div>
     </div>
 
-    <div class="hint" style="text-align:center">This app checks one-time and weekly limits from your wallet history. The current contract enforces a shared 24-hour cooldown for all “Other” actions. A verifier checks the original screenshot and public link.</div>
+    <div class="hint" style="text-align:center">Use the same recipient wallet address for each challenge. A verifier reviews the submitted screenshot and public link.</div>
   </section>
 
   <!-- ============ TAB: ACTION ============ -->
   <section class="tab" id="tab-aksi">
     <h1 class="page-title">Today's action <svg class=ui-icon aria-hidden=true><use href=#icon-camera></use></svg></h1>
-    <p class="page-sub">Pick an action, snap proof, and sign a request for a verifier.</p>
-    <div class="hint gasless-notice">Sign your request for free, then send it and the original photo to a verifier. The verifier pays to record it on-chain.</div>
+    <p class="page-sub">Pick an action, add proof, and submit it for review.</p>
+    <div class="hint gasless-notice">Submitting needs no wallet confirmation. A verifier reviews your request and pays the transaction fee.</div>
 
     <div class="tasks" id="taskGrid"></div>
 
     <div class="card" id="aksiForm">
       <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-pen></use></svg></span> Log an action</h3>
+      <label for="recipientAddress">Your wallet address (receives SYL)</label>
+      <input id="recipientAddress" type="text" inputmode="text" placeholder="0x…" spellcheck="false" autocomplete="off">
+      <div class="hint">An address is needed to receive SYL. You can paste it without connecting your wallet.</div>
       <label for="aType">Action type</label>
       <select id="aType">
         <option value="tree_planting">Plant a tree</option>
@@ -409,12 +403,11 @@ td{overflow-wrap:anywhere}
       <div class="hint"><span id="charCount">0</span>/280 · one action type per 24 h · up to 3 awaiting review</div>
       <label for="aFile">Proof photo</label>
       <div class="file-zone" id="fileZone" tabindex="0">
-        <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">Only its hash is recorded. Keep the original photo to show a verifier.</span></div>
-        <div class="hash" id="hashOut"></div>
+        <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">JPG or PNG, up to 5 MB. The verifier will see it in the app.</span></div>
       </div>
       <input type="file" id="aFile" accept="image/*" hidden>
       <div id="submitErr"></div>
-      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-pen></use></svg> Sign action request (no gas)</button></div>
+      <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-pen></use></svg> Submit for review</button></div>
     </div>
   </section>
 
@@ -503,8 +496,10 @@ td{overflow-wrap:anywhere}
 
 <div class="proof-modal" id="proofModal" role="dialog" aria-modal="true" aria-labelledby="proofTitle">
   <div class="proof-dialog">
-    <div class="proof-head"><div><h2 id="proofTitle">Sign challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
+    <div class="proof-head"><div><h2 id="proofTitle">Submit challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
     <div class="proof-reward"><span>Reward if approved</span><strong>50 SYL</strong></div>
+    <label for="challengeRecipient">Your wallet address (receives SYL)</label>
+    <input id="challengeRecipient" type="text" placeholder="0x…" spellcheck="false" autocomplete="off">
     <label for="challengeLink">Public post or profile link</label>
     <input type="url" id="challengeLink" inputmode="url" placeholder="https://…" autocomplete="url">
     <label for="challengeDesc">What did you do?</label>
@@ -514,19 +509,9 @@ td{overflow-wrap:anywhere}
     <div class="file-zone" id="challengeFileZone" tabindex="0"><div id="challengeFileLabel">Upload one JPG, JPEG, or PNG<br><span style="font-size:12px">Maximum size: 5 MB</span></div></div>
     <input type="file" id="challengeFile" accept="image/png,image/jpeg" hidden>
     <img id="challengePreview" class="proof-preview" alt="Selected proof preview">
-    <div class="proof-status">The link and description are public on-chain. Only the screenshot hash is stored; keep the original image for a verifier.</div>
+    <div class="proof-status">The verifier sees your screenshot in the app. The link and description become public on-chain after review.</div>
     <div id="challengeSubmitErr"></div>
-    <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Sign challenge request (no gas)</button>
-  </div>
-</div>
-<div class="proof-modal" id="signedRequestModal" role="dialog" aria-modal="true" aria-labelledby="signedRequestTitle">
-  <div class="proof-dialog">
-    <div class="proof-head"><div><h2 id="signedRequestTitle">Send this request to a verifier</h2><div class="proof-copy">Your signature costs no gas. The action appears in your log after a verifier records it on-chain.</div></div><button class="proof-close" id="signedRequestClose" aria-label="Close">×</button></div>
-    <label for="signedRequestOutput">Signed request</label>
-    <textarea id="signedRequestOutput" readonly></textarea>
-    <div class="hint">Send this request and your original photo or screenshot to a verifier. The request expires after 7 days.</div>
-    <button class="btn btn-p btn-w" id="copySignedRequest">Copy request</button>
-    <button class="btn btn-s btn-w" id="downloadSignedRequest" style="margin-top:8px">Download request</button>
+    <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Submit for review</button>
   </div>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -549,10 +534,8 @@ const REG_ABI = [
   "function userStreak(address) view returns (uint256)",
   "function voucherCount(address) view returns (uint256)",
   "function poolBalance() view returns (uint256)",
-  "function submitActionFor(address,string,string,bytes32,uint256,uint256,bytes) returns (bytes32)",
-  "function usedNonces(address,uint256) view returns (bool)",
-  "function verifyAction(bytes32)",
-  "function rejectAction(bytes32,string)",
+  "function reviewQueuedAction(bytes32,address,string,string,bytes32,bool) returns (bytes32)",
+  "function reviewedRequests(bytes32) view returns (bool)",
   "function redeemVoucher(uint256)"
 ];
 const TOK_ABI = [
@@ -593,7 +576,7 @@ function cleanErr(m){
   if(/InvalidActionType/.test(m)) return "That action type isn't supported yet.";
   if(/DescriptionTooLong/.test(m)) return "Your description is over 280 characters.";
   if(/PoolEmpty/.test(m)) return "Reward pool is empty — the operator needs to refill it.";
-  if(/NotPending/.test(m)) return "This action has already been reviewed.";
+  if(/RequestAlreadyReviewed/.test(m)) return "This request has already been reviewed.";
   if(/NotVerified/.test(m)||/NotVerifier/.test(m)) return "Only registered verifiers can do that.";
   if(/BelowMinRedeem/.test(m)) return "Minimum redemption is 50 SYL.";
   if(/InsufficientBalance|ERC20: transfer/.test(m)) return "Insufficient balance or allowance. Click 'Approve redemption' first.";
@@ -616,7 +599,7 @@ document.querySelector("nav").addEventListener("click", e=>{
 const TICKS = [
   ["Every approved action earns 50 SYL",""],
   ["The reward pool is visible on-chain",""],
-  ["Keep your original photo for the verifier",""]
+  ["Submit a photo directly to the verifier queue",""]
 ];
 let tickI=0;
 setInterval(()=>{ tickI=(tickI+1)%TICKS.length; $("tickerMsg").textContent=TICKS[tickI][0]; $("tickerPts").textContent=TICKS[tickI][1]; },4500);
@@ -674,42 +657,42 @@ function renderChallengeAvailability(mine=[]){
       const key=challengeInfo(a.desc)?.key;
       return a.status!==2n && a.type==="other" && key && (wrap.querySelector(`.challenge-option[data-key="${key}"]`) || group==="daily" && ["like_ig","comment_ig","share_ig"].includes(key) || group==="weekly" && key==="eco_post_ig");
     });
-    const active=relevant.find(a=>a.status===0n) || relevant.find(a=>group==="one" || now-a.ts<(group==="weekly"?7:1)*86400);
+  const active=relevant.find(a=>a.status===0n) || relevant.find(a=>group==="one" || now-a.ts<(group==="weekly"?7:1)*86400);
     const locked=!!active;
     wrap.classList.toggle("pending",locked);
     wrap.querySelector(".challenge-pending").textContent=active ? active.status===0n ? "Submitted for review. Wait for verification before trying this challenge again." : group==="one" ? "Completed for this wallet." : group==="weekly" ? "Completed this week. Available again after 7 days." : "Completed today. Available again after 24 hours." : "";
-    for(const option of wrap.querySelectorAll(".challenge-option")) option.disabled=!account || !gaslessAvailable || locked;
+    for(const option of wrap.querySelectorAll(".challenge-option")) option.disabled=!queueAvailable || locked;
   }
 }
 function openProofModal(option, title){
   challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
-  $("proofTitle").textContent="Sign proof: "+option;
+  $("proofTitle").textContent="Submit proof: "+option;
   $("proofSubtitle").textContent=title+" requires a public link and screenshot for community verification.";
-  $("challengeLink").value=""; $("challengeDesc").value=""; $("challengeLength").textContent="The link and description must fit within 280 bytes on-chain."; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
+  $("challengeRecipient").value=$("recipientAddress").value; $("challengeLink").value=""; $("challengeDesc").value=""; $("challengeLength").textContent="The link and description must fit within 280 bytes on-chain."; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
   proofModal.classList.add("open"); $("challengeDesc").focus();
 }
 function closeProofModal(){proofModal.classList.remove("open");}
 $("proofClose").addEventListener("click",closeProofModal); proofModal.addEventListener("click",e=>{if(e.target===proofModal)closeProofModal()});
 $("challengeFileZone").addEventListener("click",()=>challengeFile.click());
 $("challengeFileZone").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();challengeFile.click()}});
-challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; challengeHash=null; updateChallengeSubmit(); if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=await hashFileValue(f); challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
+challengeFile.addEventListener("change",async e=>{const f=e.target.files[0]; challengeHash=null; updateChallengeSubmit(); if(!f)return; if(f.size>5*1024*1024){$("challengeSubmitErr").innerHTML='<div class="err">File is larger than 5 MB.</div>';return} if(!/^image\/(jpeg|png)$/.test(f.type)){$("challengeSubmitErr").innerHTML='<div class="err">Please upload a JPG, JPEG, or PNG image.</div>';return} challengeHash=true; challengePreview.src=URL.createObjectURL(f); challengePreview.style.display="block"; $("challengeFileLabel").textContent=f.name+" · proof ready"; updateChallengeSubmit();});
 $("challengeDesc").addEventListener("input",updateChallengeSubmit);
 $("challengeLink").addEventListener("input",updateChallengeSubmit);
+$("challengeRecipient").addEventListener("input",updateChallengeSubmit);
 function challengeDescription(){return `[Challenge:${challengeKey}] ${$("challengeLink").value.trim()} ${$("challengeDesc").value.trim()}`.trim()}
 function validChallengeLink(){try{const u=new URL($("challengeLink").value.trim());return u.protocol==="https:" && !!u.hostname && !u.username && !u.password}catch{return false}}
 function updateChallengeSubmit(){
   const bytes=new TextEncoder().encode(challengeDescription()).length;
   $("challengeLength").textContent=bytes+" / 280 bytes on-chain"+(bytes>280?" · shorten your link or description":"");
-  $("challengeSubmitBtn").disabled=!(account&&signer&&gaslessAvailable&&challengeHash&&validChallengeLink()&&$("challengeDesc").value.trim()&&bytes<=280);
+  $("challengeSubmitBtn").disabled=!(queueAvailable&&ethers.isAddress($("challengeRecipient").value.trim())&&challengeHash&&validChallengeLink()&&$("challengeDesc").value.trim()&&bytes<=280);
 }
-async function hashFileValue(file){return ethers.keccak256(new Uint8Array(await file.arrayBuffer()))}
 $("challengeSubmitBtn").addEventListener("click",async()=>{
   const desc=challengeDescription();
   if(!challengeHash||!validChallengeLink()||!$("challengeDesc").value.trim()||new TextEncoder().encode(desc).length>280){$("challengeSubmitErr").innerHTML='<div class="err">Add a valid HTTPS link and a shorter description (280 bytes total).</div>';return;}
-  if(!signer||!registry||!gaslessAvailable){toast("Connect a wallet to a gasless-enabled registry first",true);return}
+  if(!queueAvailable){toast("Submission server or new registry is not ready",true);return}
   const btn=$("challengeSubmitBtn");btn.disabled=true;$("challengeSubmitErr").innerHTML="";
-  try{const request=await signActionRequest(challengeType,desc,challengeHash);closeProofModal();showSignedRequest(request);}
-  catch(e){$("challengeSubmitErr").innerHTML='<div class="err">'+esc(cleanErr(e.shortMessage||e.info||e.message||"Signing failed"))+'</div>';updateChallengeSubmit()}
+  try{await submitToQueue($("challengeRecipient").value.trim(),challengeType,desc,challengeFile.files[0]);$("recipientAddress").value=$("challengeRecipient").value.trim();closeProofModal();toast("Challenge submitted. Waiting for verifier review.");await refresh();}
+  catch(e){$("challengeSubmitErr").innerHTML='<div class="err">'+esc(cleanErr(e.message||"Submission failed"))+'</div>';updateChallengeSubmit()}
 });
 document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("click",()=>{
   const wrap=b.closest(".chal-wrap"); wrap.querySelectorAll(".challenge-option").forEach(x=>x.classList.remove("selected")); b.classList.add("selected");
@@ -719,39 +702,20 @@ document.querySelectorAll(".challenge-option").forEach(b=>b.addEventListener("cl
 }));
 
 const publicProvider=new ethers.JsonRpcProvider(PUBLIC_RPC);
-let provider=publicProvider, signer=null, account=null, registry=null, token=null, gaslessAvailable=false;
-let imgHash=null;
-
-const SIGN_TYPES={SubmitAction:[
-  {name:"submitter",type:"address"},{name:"actionType",type:"string"},
-  {name:"description",type:"string"},{name:"imageHash",type:"bytes32"},
-  {name:"nonce",type:"uint256"},{name:"deadline",type:"uint256"}
-]};
-function requestDomain(registryAddress){return {name:"SYLORA",version:"1",chainId:968,verifyingContract:registryAddress}}
-async function signActionRequest(actionType,description,imageHash){
-  if(!signer||!account||!registry||!gaslessAvailable) throw new Error("Gasless submission is unavailable on this registry");
-  const message={submitter:account,actionType,description,imageHash,
-    nonce:BigInt(ethers.hexlify(ethers.randomBytes(32))).toString(),
-    deadline:String(Math.floor(Date.now()/1000)+7*86400)};
-  const registryAddress=await registry.getAddress();
-  const signature=await signer.signTypedData(requestDomain(registryAddress),SIGN_TYPES,message);
-  return {version:1,chainId:968,registry:registryAddress,...message,signature};
+let provider=publicProvider, signer=null, account=null, registry=null, token=null, queueAvailable=false;
+let imgHash=null, actionFile=null;
+async function queueJson(url,options){
+  const response=await fetch(url,options);
+  const data=await response.json();
+  if(!response.ok) throw new Error(data.error||"Submission server error");
+  return data;
 }
-function showSignedRequest(request){
-  $("signedRequestOutput").value=JSON.stringify(request);
-  $("signedRequestModal").classList.add("open");
-  $("copySignedRequest").focus();
+async function photoData(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error("Could not read photo"));reader.readAsDataURL(file)})}
+async function submitToQueue(submitter,actionType,description,file){
+  if(!ethers.isAddress(submitter)||!file) throw new Error("Add a valid wallet address and JPG or PNG photo");
+  return queueJson('/api/submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({submitter,actionType,description,photo:await photoData(file)})});
 }
-$("signedRequestClose").addEventListener("click",()=>$("signedRequestModal").classList.remove("open"));
-$("signedRequestModal").addEventListener("click",e=>{if(e.target===$("signedRequestModal"))$("signedRequestModal").classList.remove("open")});
-$("copySignedRequest").addEventListener("click",async()=>{
-  try{await navigator.clipboard.writeText($("signedRequestOutput").value);toast("Request copied — send it with the original photo to a verifier")}
-  catch{ $("signedRequestOutput").select();toast("Select and copy the request manually",true) }
-});
-$("downloadSignedRequest").addEventListener("click",()=>{
-  const url=URL.createObjectURL(new Blob([$("signedRequestOutput").value],{type:"application/json"}));
-  const a=document.createElement("a");a.href=url;a.download="sylora-signed-action.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-});
+$("recipientAddress").addEventListener("input",enableSubmit);
 
 /* ---------- connect ---------- */
 $("connectBtn").addEventListener("click", async ()=>{
@@ -765,6 +729,7 @@ $("connectBtn").addEventListener("click", async ()=>{
     if(cid!==968){ toast("Switch your wallet to BOT testnet (chain 968) to use this deployment",true); return; }
     provider=walletProvider;
     account=accts[0];
+    if(!$("recipientAddress").value.trim()) $("recipientAddress").value=account;
     $("connectBtn").textContent = " "+short(account);
     $("meName").textContent = short(account);
     $("meStatus").textContent = "wallet connected";
@@ -772,13 +737,12 @@ $("connectBtn").addEventListener("click", async ()=>{
     await autoLoad(DEPLOYMENTS[cid].registry,DEPLOYMENTS[cid].token);
     enableSubmit(); updateChallengeSubmit();
     window.ethereum.on?.("accountsChanged", async a=>{
-      checkedPhotos.clear();
       account=a[0]||null;
       signer=account ? await walletProvider.getSigner(account) : null;
       provider=account ? walletProvider : publicProvider;
       $("connectBtn").textContent=account ? " "+short(account) : " Connect digital wallet";
       $("meName").textContent=account ? short(account) : "Guest";
-      $("meStatus").textContent=account ? "wallet connected" : "connect wallet to act";
+      $("meStatus").textContent=account ? "wallet connected" : "wallet not connected";
       await autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
       enableSubmit(); updateChallengeSubmit();
     });
@@ -787,7 +751,7 @@ $("connectBtn").addEventListener("click", async ()=>{
 });
 
 async function autoLoad(r,t){
-  gaslessAvailable=false;
+  queueAvailable=false;
   registry=null;token=null;
   $("addTokenBtn").disabled=true;
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
@@ -804,11 +768,11 @@ async function autoLoad(r,t){
     token = new ethers.Contract(t,TOK_ABI,provider);
     $("addTokenBtn").disabled=!account;
     $("tokenWalletHint").textContent="SYL token on BOT testnet: "+t;
-    try{ await registry.usedNonces(ethers.ZeroAddress,0); gaslessAvailable=true; }catch{}
+    try{const cfg=await queueJson('/api/config');queueAvailable=cfg.ready&&cfg.registry.toLowerCase()===r.toLowerCase()&&cfg.token.toLowerCase()===t.toLowerCase();if(queueAvailable)await registry.reviewedRequests(ethers.ZeroHash);else queueAvailable=false;}catch{queueAvailable=false}
     document.querySelectorAll(".gasless-notice").forEach(el=>{
-      el.textContent=gaslessAvailable
-        ? "Sign your request for free, then send it and the original photo or screenshot to a verifier. The verifier pays to record it on-chain."
-        : "Gasless submission is unavailable on this deployed registry. A new registry and token deployment is required before signing requests.";
+      el.textContent=queueAvailable
+        ? "Submit your action and photo here without wallet confirmation. A verifier reviews it and pays the transaction fee."
+        : "Submissions are waiting for the new registry, token, and shared server to be configured.";
     });
     if(account){ localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t); }
     const isOwner = ownerAddr && account && ownerAddr.toLowerCase()===account.toLowerCase();
@@ -819,7 +783,7 @@ async function autoLoad(r,t){
   }catch(e){
     $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,130));
     $("tokenWalletHint").textContent="SYL token is not ready in this registry yet.";
-    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Action submissions are unavailable until the organiser connects the new token to the registry.");
+    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Action submissions are unavailable until the organiser configures the new registry, token, and server.");
     enableSubmit();updateChallengeSubmit();renderChallengeAvailability();updateRedeem();
   }
 }
@@ -867,12 +831,19 @@ function renderPending(list){
   if(!list.length){ $("pendingTable").innerHTML=""; $("noPending").hidden=false; return; }
   $("noPending").hidden=true;
   $("pendingTable").innerHTML = list.map(p=>`<tr>
-    <td><div class="type">${challengeInfo(p.desc)?"Challenge: "+esc(challengeInfo(p.desc).name):TYPES[p.type]||esc(p.type)}</div><div class="desc">${esc(challengeInfo(p.desc)?.detail||p.desc)}</div>
-        <div class="id">${p.id} · by ${short(p.who)} · ${timeAgo(p.ts)}</div></td>
+    <td><div class="type">${challengeInfo(p.description)?"Challenge: "+esc(challengeInfo(p.description).name):TYPES[p.actionType]||esc(p.actionType)}</div><div class="desc">${esc(challengeInfo(p.description)?.detail||p.description)}</div>
+        <div class="id">${short(p.id)} · by ${short(p.submitter)} · ${timeAgo(Math.floor(p.submittedAt/1000))}</div>
+        <img class="proof-preview" style="display:block;max-width:180px;margin-top:8px" src="${p.photoUrl}" alt="Submitted proof"></td>
     <td class="pending-actions">
-      <button class="btn btn-s btn-sm" data-act="check" data-id="${p.idFull}" style="margin-bottom:6px">Check original photo</button><br>
-      <button class="btn btn-p btn-sm" data-act="verify" data-id="${p.idFull}" style="margin-bottom:6px" ${checkedPhotos.has(p.idFull)?"":"disabled"}><svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg> Approve</button><br>
-      <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.idFull}"><svg class=ui-icon aria-hidden=true><use href=#icon-x></use></svg> Reject</button></td></tr>`).join("");
+      <button class="btn btn-p btn-sm" data-act="approve" data-id="${p.id}" style="margin-bottom:6px"><svg class=ui-icon aria-hidden=true><use href=#icon-check></use></svg> Approve</button><br>
+      <button class="btn btn-d btn-sm" data-act="reject" data-id="${p.id}"><svg class=ui-icon aria-hidden=true><use href=#icon-x></use></svg> Reject</button></td></tr>`).join("");
+}
+async function queuedFor(wallet){
+  if(!ethers.isAddress(wallet))return [];
+  try{
+    const data=await queueJson('/api/submissions?wallet='+encodeURIComponent(wallet));
+    return data.items.filter(x=>x.status==='pending').map(x=>({id:short(x.id),idFull:x.id,type:x.actionType,desc:x.description,status:0n,reward:0n,streak:0n,ts:Math.floor(x.submittedAt/1000)}));
+  }catch{return []}
 }
 function setBalances(bal){
   $("balHome").innerHTML = fmt(bal)+" <small>pts</small>";
@@ -893,9 +864,10 @@ async function refresh(){
       renderStrip(pool,Number(totalActions),0n,burned,maxSupply-burned,distributed);
       $("verifyWrap").hidden=true;
       $("ownerCfg").hidden=true; $("ownerCfgActions").hidden=true;
-      $("myActions").innerHTML='<tr><td colspan="3">Connect your wallet to view your actions.</td></tr>';
+      const queued=await queuedFor($("recipientAddress").value.trim());
+      renderMine(queued);
       $("meVoucher").textContent="—"; $("meRole").textContent="—";
-      renderChallengeAvailability();
+      renderChallengeAvailability(queued);
       await updateRedeem();
       return;
     }
@@ -907,19 +879,14 @@ async function refresh(){
     }
     mine.sort((x,y)=>y.ts-x.ts);
     renderStrip(pool,Number(totalActions),streak,burned,maxSupply-burned,distributed);
-    renderMine(mine);
-    renderChallengeAvailability(mine);
+    const queued=await queuedFor(account);
+    renderMine([...queued,...mine]);
+    renderChallengeAvailability([...queued,...mine]);
     try{ const count=await registry.voucherCount(account); $("meVoucher").textContent=count+" recorded redemption"+(count===1n?"":"s"); }catch{}
     const isVerifier = await registry.verifiers(account);
     $("verifyWrap").hidden = !isVerifier;
     $("meRole").textContent = isVerifier ? "yes" : "no";
-    if(isVerifier){
-      const pend=[]; const pids = await registry.getPendingActions();
-      for(const id of pids){ const a=await registry.actions(id);
-        pend.push({id:id.slice(0,10)+"…",idFull:id,who:a[0],type:a[1],desc:a[2],hash:a[3],ts:Number(a[4])}); }
-      pendingProofs=new Map(pend.map(p=>[p.idFull,p.hash]));
-      renderPending(pend);
-    }
+    if(isVerifier){try{const data=await queueJson('/api/submissions');pendingQueue=new Map(data.items.filter(x=>x.status==='pending').map(x=>[x.id,x]));renderPending([...pendingQueue.values()]);}catch{renderPending([]);$("noPending").textContent="Submission server is unavailable."}}
     updateRedeem();
   }catch(e){ console.error(e); toast("Failed to read data — check address / network: "+(e.shortMessage||e.message),true); }
 }
@@ -928,19 +895,18 @@ async function refresh(){
 $("aDesc").addEventListener("input", e=>{ $("charCount").textContent=e.target.value.length; enableSubmit(); });
 function enableSubmit(){
   const desc=$("aDesc").value.trim();
-  $("submitBtn").disabled = !(account && signer && gaslessAvailable && imgHash && desc && new TextEncoder().encode(desc).length<=280);
+  $("submitBtn").disabled = !(queueAvailable && ethers.isAddress($("recipientAddress").value.trim()) && actionFile && imgHash && desc && new TextEncoder().encode(desc).length<=280);
 }
 async function hashFile(file){
   if(!file) return;
   if(file.size>5*1024*1024 || !/^image\/(jpeg|png)$/.test(file.type)){
-    imgHash=null; $("hashOut").textContent="";
+    imgHash=null; actionFile=null;
     $("fileLabel").textContent="Choose a JPG or PNG up to 5 MB";
     enableSubmit(); return;
   }
-  const buf = new Uint8Array(await file.arrayBuffer());
-  imgHash = ethers.keccak256(buf);
-  $("fileLabel").innerHTML = `Photo locked <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB — never uploaded)</span>`;
-  $("hashOut").textContent = imgHash;
+  actionFile=file;
+  imgHash=true;
+  $("fileLabel").innerHTML = `Photo ready <span style="font-size:12px">(${(file.size/1024).toFixed(0)} KB)</span>`;
   enableSubmit();
 }
 $("fileZone").addEventListener("click",()=>$("aFile").click());
@@ -954,82 +920,37 @@ $("aFile").addEventListener("change",e=>hashFile(e.target.files[0]));
 
 $("submitBtn").addEventListener("click", async ()=>{
   const type=$("aType").value, desc=$("aDesc").value.trim();
-  if(!signer||!registry||!gaslessAvailable){ toast("Connect a wallet to a gasless-enabled registry first",true); return; }
+  if(!queueAvailable){ toast("Submission server or new registry is not ready",true); return; }
   $("submitBtn").disabled=true; $("submitErr").innerHTML="";
   try{
-    const request=await signActionRequest(type,desc,imgHash);
-    showSignedRequest(request);
+    await submitToQueue($("recipientAddress").value.trim(),type,desc,actionFile);
     resetForm();
+    toast("Action submitted. Waiting for verifier review.");
+    await refresh();
   }catch(e){
     $("submitErr").innerHTML = `<div class="err">${esc(cleanErr(e.shortMessage||e.info||e.reason?.error?.message||e.message||"failed"))}</div>`;
     enableSubmit();
   }
 });
 function resetForm(){
-  imgHash=null; $("hashOut").textContent=""; $("aDesc").value=""; $("charCount").textContent="0";
-  $("fileLabel").innerHTML="Drop a photo here or click to pick<br><span style='font-size:12px'>Only its hash is recorded. Keep the original photo to show a verifier.</span>";
+  imgHash=null; actionFile=null; $("aFile").value=""; $("aDesc").value=""; $("charCount").textContent="0";
+  $("fileLabel").innerHTML="Drop a photo here or click to pick<br><span style='font-size:12px'>JPG or PNG, up to 5 MB. The verifier will see it in the app.</span>";
   enableSubmit();
 }
 
 /* ---------- verifier desk (event delegation) ---------- */
-const checkedPhotos=new Set();
-let pendingProofs=new Map(), checkingId=null;
-$("verifierPhoto").addEventListener("change",async e=>{
-  const file=e.target.files[0];
-  if(!file||!checkingId)return;
-  const actual=ethers.keccak256(new Uint8Array(await file.arrayBuffer()));
-  if(actual.toLowerCase()===pendingProofs.get(checkingId)?.toLowerCase()){
-    checkedPhotos.add(checkingId);
-    const preview=$("verifierPreview");
-    if(preview.dataset.url) URL.revokeObjectURL(preview.dataset.url);
-    preview.dataset.url=URL.createObjectURL(file);
-    preview.src=preview.dataset.url; preview.style.display="block";
-    toast("Original photo matches the on-chain hash");
-    $("pendingTable").querySelector(`button[data-act="verify"][data-id="${checkingId}"]`).disabled=false;
-  }else toast("Photo does not match this action's recorded hash",true);
-  checkingId=null; e.target.value="";
-});
+let pendingQueue=new Map();
 $("pendingTable").addEventListener("click", async e=>{
   const b=e.target.closest("button"); if(!b) return;
   const id=b.dataset.id, act=b.dataset.act;
-  if(act==="check"){
-    checkingId=id; $("verifierPreview").style.display="none";
-    $("verifierPhoto").click(); return;
-  }
+  const item=pendingQueue.get(id); if(!item||!signer||!registry)return;
+  b.disabled=true;
   try{
-    if(act==="verify"){
-      const tx=await registry.connect(signer).verifyAction(id); toast("Transaction sent…"); await tx.wait();
-      toast("Approved — reward released from pool");
-    }else{
-      const reason=prompt("Rejection reason (visible to the submitter):")||"Could not be verified";
-      const tx=await registry.connect(signer).rejectAction(id,reason); toast("Transaction sent…"); await tx.wait();
-      toast("Action rejected");
-    }
-    refresh();
-  }catch(err){ toast(cleanErr(err.shortMessage||err.info||err.message||"failed"),true); }
-});
-$("recordSignedBtn").addEventListener("click",async()=>{
-  const btn=$("recordSignedBtn"), error=$("signedRequestErr");error.innerHTML="";
-  try{
-    if(!registry||!signer||!account||!gaslessAvailable||!(await registry.verifiers(account))) throw new Error("Connect an authorized verifier wallet to a gasless-enabled registry");
-    const raw=$("signedRequestInput").value.trim();
-    if(raw.length>5000) throw new Error("The signed request is too large");
-    const request=JSON.parse(raw);
-    if(!request||typeof request!=="object") throw new Error("Paste a valid signed request");
-    if(request.version!==1||request.chainId!==968||!ethers.isAddress(request.registry)||request.registry.toLowerCase()!==(await registry.getAddress()).toLowerCase()) throw new Error("This request is for a different registry or network");
-    if(!ethers.isAddress(request.submitter)||!ethers.isHexString(request.imageHash,32)||!["tree_planting","beach_cleanup","recycle","compost","other"].includes(request.actionType)) throw new Error("Invalid action details");
-    if(typeof request.description!=="string"||new TextEncoder().encode(request.description).length===0||new TextEncoder().encode(request.description).length>280) throw new Error("Invalid action description");
-    const nonce=BigInt(request.nonce), deadline=BigInt(request.deadline);
-    if(nonce<0n||deadline<=BigInt(Math.floor(Date.now()/1000))) throw new Error("The signed request has expired");
-    const message={submitter:request.submitter,actionType:request.actionType,description:request.description,imageHash:request.imageHash,nonce,deadline};
-    if(ethers.verifyTypedData(requestDomain(request.registry),SIGN_TYPES,message,request.signature).toLowerCase()!==request.submitter.toLowerCase()) throw new Error("The wallet signature does not match the submitter");
-    if(await registry.usedNonces(request.submitter,nonce)) throw new Error("This request has already been recorded");
-    btn.disabled=true;
-    const tx=await registry.connect(signer).submitActionFor(request.submitter,request.actionType,request.description,request.imageHash,nonce,deadline,request.signature);
-    toast("Recording signed action — verifier pays gas");await tx.wait();
-    $("signedRequestInput").value="";toast("Action recorded. Review its original photo before approval");await refresh();
-  }catch(e){error.innerHTML='<div class="err">'+esc(cleanErr(e.shortMessage||e.message||"Could not record this request"))+'</div>'}
-  finally{btn.disabled=false}
+    const tx=await registry.connect(signer).reviewQueuedAction(item.id,item.submitter,item.actionType,item.description,item.imageHash,act==='approve');
+    toast("Review transaction sent…");await tx.wait();
+    await queueJson(`/api/submissions/${item.id}/review`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({txHash:tx.hash})});
+    toast(act==='approve'?"Approved — 50 SYL sent":"Submission rejected");await refresh();
+  }catch(err){toast(cleanErr(err.shortMessage||err.message||"Review failed"),true);b.disabled=false}
 });
 
 /* ---------- redeem ---------- */
@@ -1071,7 +992,10 @@ $("redeemBtn").addEventListener("click", async ()=>{
 renderChallengeAvailability();
 $("netBadge").textContent="BOT testnet · 968 · public";
 $("meStatus").textContent="connect wallet to act";
-autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
+(async()=>{
+  try{const cfg=await queueJson('/api/config');if(cfg.ready&&cfg.chainId===968&&ethers.isAddress(cfg.registry)&&ethers.isAddress(cfg.token))DEPLOYMENTS[968]={registry:cfg.registry,token:cfg.token}}catch{}
+  await autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
+})();
 </script>
 </body>
 </html>
