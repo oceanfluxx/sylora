@@ -311,9 +311,11 @@ td{overflow-wrap:anywhere}
     </div>
 
     <div class="card">
-      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-medal></use></svg></span> Your points</h3>
-      <div class="balance-line"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg><span class="balance-label">Your balance</span><strong class="balance-value" id="myRankValue">0 pts</strong></div>
-      <div class="hint">Only your wallet points are shown here. Community rankings are not available yet.</div>
+      <h3><span class="em"><svg class=ui-icon aria-hidden=true><use href=#icon-medal></use></svg></span> Your SYL</h3>
+      <div class="balance-line"><svg class=ui-icon aria-hidden=true><use href=#icon-sprout></use></svg><span class="balance-label">Wallet balance</span><strong class="balance-value" id="myRankValue">0 SYL</strong></div>
+      <div class="hint">Approved actions send 50 SYL directly to your wallet. No withdrawal is needed.</div>
+      <button class="btn btn-s btn-w" id="addTokenBtn" disabled style="margin-top:12px">Show SYL in wallet</button>
+      <div class="hint" id="tokenWalletHint">Connect your wallet to show the SYL token.</div>
     </div>
 
     <div id="verifyWrap" hidden>
@@ -642,7 +644,7 @@ $("taskGrid").addEventListener("click", e=>{
 
 /* ---------- challenges ---------- */
 function renderRank(myPts){
-  $("myRankValue").textContent = myPts.toLocaleString("en-US")+" pts";
+  $("myRankValue").textContent = myPts.toLocaleString("en-US")+" SYL";
 }
 const CHALS = {one:["chOne","Once per wallet"],daily:["chDaily","One per 24 hours"],weekly:["chWeekly","One per 7 days"]};
 Object.values(CHALS).forEach(([id,txt])=>$(id).textContent=txt);
@@ -796,6 +798,8 @@ async function autoLoad(r,t){
     if((await tokenCheck.registry()).toLowerCase()!==r.toLowerCase()) throw new Error("Token belongs to a different registry");
     registry = new ethers.Contract(r,REG_ABI,provider);
     token = new ethers.Contract(t,TOK_ABI,provider);
+    $("addTokenBtn").disabled=!account;
+    $("tokenWalletHint").textContent="SYL token on BOT testnet: "+t;
     try{ await registry.usedNonces(ethers.ZeroAddress,0); gaslessAvailable=true; }catch{}
     document.querySelectorAll(".gasless-notice").forEach(el=>{
       el.textContent=gaslessAvailable
@@ -808,8 +812,19 @@ async function autoLoad(r,t){
     if(isOwner){ $("cfgReg").value=r; $("cfgTok").value=t; }
     $("cfgStatus").textContent="Contracts: chain "+cid+" · registry "+r.slice(0,8)+"… · token "+t.slice(0,8)+"…"+(isOwner?" (you are organiser)":"");
     enableSubmit();updateChallengeSubmit();await refresh();
-  }catch(e){ $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
+  }catch(e){ $("addTokenBtn").disabled=true;$("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,80)); }
 }
+$("addTokenBtn").addEventListener("click",async()=>{
+  if(!window.ethereum?.request||!token||!account) return;
+  try{
+    const address=await token.getAddress();
+    const accepted=await window.ethereum.request({method:"wallet_watchAsset",params:{type:"ERC20",options:{address,symbol:"SYL",decimals:18}}});
+    toast(accepted?"SYL token request sent to your wallet":"SYL token was not added");
+  }catch(e){
+    $("tokenWalletHint").textContent="If your wallet cannot add it automatically, import SYL manually on BOT testnet using token address "+(await token.getAddress())+" (18 decimals).";
+    toast("Import the token manually using the address below",true);
+  }
+});
 $("loadBtn").addEventListener("click",()=>{
   const r=$("cfgReg").value.trim(), t=$("cfgTok").value.trim();
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ toast("Both addresses must be valid 0x…",true); return; }
