@@ -406,6 +406,7 @@ td{overflow-wrap:anywhere}
         <div id="fileLabel">Drop a photo here or click to pick<br><span style="font-size:12px">JPG or PNG, up to 5 MB. The verifier will see it in the app.</span></div>
       </div>
       <input type="file" id="aFile" accept="image/*" hidden>
+      <div class="hint" id="actionRequirements">Add your wallet address, description, and proof photo to submit.</div>
       <div id="submitErr"></div>
       <div style="margin-top:16px"><button class="btn btn-p btn-w" id="submitBtn" disabled><svg class=ui-icon aria-hidden=true><use href=#icon-pen></use></svg> Submit for review</button></div>
     </div>
@@ -661,14 +662,14 @@ function renderChallengeAvailability(mine=[]){
     const locked=!!active;
     wrap.classList.toggle("pending",locked);
     wrap.querySelector(".challenge-pending").textContent=active ? active.status===0n ? "Submitted for review. Wait for verification before trying this challenge again." : group==="one" ? "Completed for this wallet." : group==="weekly" ? "Completed this week. Available again after 7 days." : "Completed today. Available again after 24 hours." : "";
-    for(const option of wrap.querySelectorAll(".challenge-option")) option.disabled=!queueAvailable || locked;
+    for(const option of wrap.querySelectorAll(".challenge-option")) option.disabled=locked;
   }
 }
 function openProofModal(option, title){
   challengeHash=null; challengeFile.value=""; challengePreview.style.display="none";
   $("proofTitle").textContent="Submit proof: "+option;
   $("proofSubtitle").textContent=title+" requires a public link and screenshot for community verification.";
-  $("challengeRecipient").value=$("recipientAddress").value; $("challengeLink").value=""; $("challengeDesc").value=""; $("challengeLength").textContent="The link and description must fit within 280 bytes on-chain."; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=""; $("challengeSubmitBtn").disabled=true;
+  $("challengeRecipient").value=$("recipientAddress").value; $("challengeLink").value=""; $("challengeDesc").value=""; $("challengeLength").textContent="The link and description must fit within 280 bytes on-chain."; $("challengeFileLabel").innerHTML="Upload one JPG, JPEG, or PNG<br><span style=\"font-size:12px\">Maximum size: 5 MB</span>"; $("challengeSubmitErr").innerHTML=queueAvailable?"":'<div class="err">Submission server is offline. Open the app at http://localhost:8080/app.html after running npm start in build-week.</div>'; $("challengeSubmitBtn").disabled=true;
   proofModal.classList.add("open"); $("challengeDesc").focus();
 }
 function closeProofModal(){proofModal.classList.remove("open");}
@@ -772,7 +773,7 @@ async function autoLoad(r,t){
     document.querySelectorAll(".gasless-notice").forEach(el=>{
       el.textContent=queueAvailable
         ? "Submit your action and photo here without wallet confirmation. A verifier reviews it and pays the transaction fee."
-        : "Submissions are waiting for the new registry, token, and shared server to be configured.";
+        : "Submission server is offline. Run npm start in build-week, then open http://localhost:8080/app.html.";
     });
     if(account){ localStorage.setItem("syl_reg_"+cid,r); localStorage.setItem("syl_tok_"+cid,t); }
     const isOwner = ownerAddr && account && ownerAddr.toLowerCase()===account.toLowerCase();
@@ -783,7 +784,7 @@ async function autoLoad(r,t){
   }catch(e){
     $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,130));
     $("tokenWalletHint").textContent="SYL token is not ready in this registry yet.";
-    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Action submissions are unavailable until the organiser configures the new registry, token, and server.");
+    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Cannot load the contracts. Check BOT testnet (chain 968) and the app server at http://localhost:8080/app.html.");
     enableSubmit();updateChallengeSubmit();renderChallengeAvailability();updateRedeem();
   }
 }
@@ -895,7 +896,14 @@ async function refresh(){
 $("aDesc").addEventListener("input", e=>{ $("charCount").textContent=e.target.value.length; enableSubmit(); });
 function enableSubmit(){
   const desc=$("aDesc").value.trim();
-  $("submitBtn").disabled = !(queueAvailable && ethers.isAddress($("recipientAddress").value.trim()) && actionFile && imgHash && desc && new TextEncoder().encode(desc).length<=280);
+  const validAddress=ethers.isAddress($("recipientAddress").value.trim());
+  const validDescription=!!desc && new TextEncoder().encode(desc).length<=280;
+  $("submitBtn").disabled = !(queueAvailable && validAddress && actionFile && imgHash && validDescription);
+  $("actionRequirements").textContent=!queueAvailable ? "Submission server is unavailable. Open http://localhost:8080/app.html after running npm start in build-week."
+    : !validAddress ? "Enter the wallet address that should receive SYL."
+    : !validDescription ? "Describe your action in 280 bytes or fewer."
+    : !actionFile ? "Add a JPG or PNG proof photo (up to 5 MB)."
+    : "Ready to submit — no wallet confirmation is needed.";
 }
 async function hashFile(file){
   if(!file) return;

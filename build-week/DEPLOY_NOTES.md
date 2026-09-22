@@ -1,52 +1,39 @@
-# SYLORA — DEPLOY & TEST CHEAT SHEET (GMT Build Week, submit 23 Sept)
+# Sylora: deployment and local run
 
-## Status: SIAP DEPLOY ✅
-- [x] 2 smart contract (SylToken + EcoActionRegistry) — compile OK, bytecode di `build/`
-- [x] Test E2E 36/36 lulus di anvil (lokal in-memory EVM, chain id 968)
-- [x] 1 bug serius udah di-fix: redeem voucher sekarang **pull-and-burn** (1 transaksi),
-      pool balance nggak pernah kebolong
-- [x] Deploy ke BOT testnet (chain id 968, RPC: https://rpc.bohr.life)
-- [x] Frontend dibuat di `frontend/app.html`
+## Current status
 
-Deployed registry: `0xA26FE9756D942A491385B542f6E60e1163C7a6a3`
-Deployed token: `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3`
+The wallet-free participant flow and shared queue are implemented. The queue-review registry `0x9fF87496fd03B4178D7C0856712072b034248a10` and token `0x27779b068f280455E1AF6BfE666C6855803Fad06` are deployed on BOT testnet (chain 968). Read-only checks confirmed both contracts point to each other, the owner is a verifier, `reviewQueuedAction` exists, and the registry holds 1,000,000 SYL. The shared Node queue must still be running for participants and verifiers to exchange submissions.
 
-## Cara test lokal (reproduce 36/36)
-```bash
-cd ~/Documents/SYLORA/build-week
-node compile.js                      # refresh build/ ABI + bytecode
-# start anvil:
-~/.foundry/bin/anvil --chain-id 968 --gas-price 20000000000 --port 8545
-node test-e2e.js                     # harusnya ALL GREEN
+## Deploy on BOT testnet (chain ID 968)
+
+1. Run `npm run compile` in `build-week`, then compile `contracts/EcoActionRegistry.sol` and `contracts/SylToken.sol` in Remix with Solidity 0.8.20.
+2. Deploy `EcoActionRegistry` with constructor `seedDemo=false`.
+3. Deploy `SylToken` with constructor argument equal to the **new registry address** from step 2.
+4. On the new registry, call `setToken(newTokenAddress)`.
+5. The deployer is already a verifier. Add others with `setVerifier(address, true)`.
+6. Check `syl()` on the registry and `registry()` on the token. They must point to each other. Check `poolBalance()` for the 1,000,000 SYL reward pool.
+
+RPC: `https://rpc.bohr.life`.
+
+## Run the shared queue
+
+PowerShell, from `build-week`:
+
+```powershell
+npm start
 ```
-Anvil jalan di port 8545 (instant-mine, deterministic). Test pake 3 wallet anvil default
-(derive dari mnemonic `test test ... junk` — lihat test-e2e.js).
 
-## Cara deploy (kalau udah dapat faucet testnet)
-1. Buka Remix (remix.ethereum.org) → import file `contracts/*.sol` → compile 0.8.20
-2. Deploy order **WAJIB**:
-   a. `EcoActionRegistry` dengan constructor arg `true` (seed demo buat juri)
-   b. `SylToken` dengan constructor arg = **address registry** dari langkah a
-   c. From registry: `setToken(addressToken)`
-3. Wallet deployer = organiser/owner. Tambah verifier via `setVerifier(addr, true)`.
-4. Testnet: https://rpc.bohr.life (chain id 968) · Mainnet: https://rpc.botchain.ai (677)
-   Gas price testnet terakhir cek: ~20 gwei.
+Open `http://localhost:8080/app.html`. The verified addresses are built in; `REGISTRY_ADDRESS` and `TOKEN_ADDRESS` can override them. The server serves the frontend, accepts submissions, stores photos and queue metadata in `build-week/data/`, and provides the verifier queue. Keep the server and its data directory running on persistent storage for a public deployment; a static-only host cannot provide the shared queue. Set `PORT`, `RPC_URL`, and `SYLORA_DATA_DIR` when needed.
 
-## Temuan penting dari self-audit
-1. **Bug fix #1 (sudah beres):** redeem voucher dulu transfer token ke registry lalu
-   burn dari registry → registry jadi keeper tanpa izin (risk: token nyangkut /
-   pool balance ambiguous). Sekarang: `burnFrom` dari user, pool = balance registry
-   murni berisi reward.
-2. **No mint ever:** token supply hard-cap 1jt, SEMUA ke pool di deploy. Gak ada
-   `mint()` sama sekali di ABI — udah di-test. Ini diferensiator vs poin-poin
-   bank sampah yang bisa di-print diam-diam (pelajaran Toucan/KlimaDAO zombie credits).
-3. **Anti-photo-swap:** `imageHash = keccak256(bytes foto)` dihitung CLIENT sebelum
-   upload → bukti terkunci saat submit. Udah di-test on-chain.
-4. **Anti-spam:** cooldown 24 jam per (user, jenis aksi), max 3 pending per user.
-5. **Pool solvent by design:** reward cuma keluar dari pool, pool = 1jt hard-cap,
-   verify cek balance pool dulu (error `PoolEmpty`). Udah di-assert di test.
+Participants paste an address and submit without connecting, signing, or confirming anything in a wallet. Verifiers connect an authorized wallet and use Approve/Reject; each decision is one on-chain transaction paid by the verifier. Approval sends 50 SYL directly to the participant address.
 
-## Asumsi yang perlu diklarifikasi sama user nanti (low priority)
-- Streak sekarang reset otomatis > 72 jam; demo seed di constructor jalan tanpa token
-  (rewardAmount=0, display-only) — honest, bukan fake data.
-- `topUpPool` butuh approve dulu; plain transfer $SYL ke registry juga valid.
+The participant's address is not cryptographically proven because no participant signature is requested. The demo photo endpoint is publicly reachable. Add server authentication, private photo storage, and abuse protection before using this with sensitive photos or real rewards.
+
+## Verify locally
+
+```powershell
+npm run compile
+npm run test:queue
+```
+
+`test:queue` starts a local Ganache chain and the queue server, then checks submission, photo upload, approve/reject, reward transfer, replay protection, and zero participant gas. The previous `test:gasless` and `test:e2e` scripts remain for legacy contract paths.
