@@ -104,6 +104,9 @@ textarea{resize:vertical;min-height:76px}
 .file-zone .hash{font-size:11px;color:var(--matcha-deep);word-break:break-all;margin-top:8px;font-weight:700}
 .hint{font-size:12.5px;color:var(--latte);margin-top:8px}
 .err{font-size:13px;color:var(--azuki);background:var(--azuki-soft);border-radius:12px;padding:10px 13px;margin-top:12px;font-weight:700}
+#aksiForm{min-width:0;max-width:100%}
+#aksiForm>*,#aksiForm select,#aksiForm input,#aksiForm textarea,#aksiForm .file-zone{min-width:0;max-width:100%}
+#fileLabel{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:16px;border:0;border-radius:var(--r-pill);padding:13px 22px;cursor:pointer;transition:.15s;min-height:48px;text-decoration:none}
@@ -151,7 +154,7 @@ td .id{font-size:10.5px;color:#b3a496}
 #toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--cocoa);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:var(--r-pill);opacity:0;transition:.25s;z-index:99;max-width:88vw;text-align:center;box-shadow:0 10px 30px rgba(74,52,42,.3)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.bad{background:#7a2b2b}
-.proof-modal{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(74,52,42,.38);padding:18px}.proof-modal.open{display:flex}.proof-dialog{width:min(480px,100%);max-height:90vh;overflow:auto;background:var(--paper);border:1.5px solid var(--milkline);border-radius:22px 22px 16px 16px;box-shadow:0 20px 60px rgba(74,52,42,.28);padding:20px}.proof-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.proof-head h2{font-size:21px;margin:0 0 4px}.proof-close{width:36px;height:36px;border:1.5px solid var(--milkline);border-radius:50%;background:transparent;color:var(--cocoa);font-size:20px;cursor:pointer}.proof-copy{font-size:13px;color:var(--latte);font-weight:700;line-height:1.5}.proof-reward{display:flex;justify-content:space-between;align-items:center;background:var(--matcha-foam);border:1.5px solid var(--milkline);border-radius:12px;padding:10px 12px;margin:14px 0;color:var(--matcha-deep);font-weight:800;font-size:13px}.proof-reward strong{font-size:17px}.proof-preview{display:none;max-width:100%;max-height:180px;margin:10px auto 0;border-radius:12px;border:1.5px solid var(--milkline)}.proof-modal textarea{min-height:74px}.proof-modal .file-zone{padding:18px 12px}.proof-status{font-size:12px;color:#805e28;font-weight:800;margin-top:10px;line-height:1.45}.proof-modal .btn-w{margin-top:14px}.proof-modal .btn-w:disabled{opacity:.5;cursor:not-allowed}
+.proof-modal{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(74,52,42,.38);padding:18px}.proof-modal.open{display:flex}.proof-dialog{width:min(480px,100%);max-height:90vh;overflow:hidden;background:var(--paper);border:1.5px solid var(--milkline);border-radius:22px 22px 16px 16px;box-shadow:0 20px 60px rgba(74,52,42,.28)}.proof-scroll{width:calc(100% - 8px);max-height:90vh;margin:0 4px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:20px 16px;scrollbar-width:thin;scrollbar-color:var(--milkline) transparent}.proof-scroll::-webkit-scrollbar{width:6px}.proof-scroll::-webkit-scrollbar-track{background:transparent;margin:16px 0}.proof-scroll::-webkit-scrollbar-thumb{background:var(--milkline);border-radius:var(--r-pill)}.proof-scroll>*,.proof-scroll input,.proof-scroll textarea,.proof-scroll .file-zone{min-width:0;max-width:100%}#challengeFileLabel{overflow-wrap:anywhere;word-break:break-word}.proof-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.proof-head h2{font-size:21px;margin:0 0 4px}.proof-close{width:36px;height:36px;border:1.5px solid var(--milkline);border-radius:50%;background:transparent;color:var(--cocoa);font-size:20px;cursor:pointer}.proof-copy{font-size:13px;color:var(--latte);font-weight:700;line-height:1.5}.proof-reward{display:flex;justify-content:space-between;align-items:center;background:var(--matcha-foam);border:1.5px solid var(--milkline);border-radius:12px;padding:10px 12px;margin:14px 0;color:var(--matcha-deep);font-weight:800;font-size:13px}.proof-reward strong{font-size:17px}.proof-preview{display:none;max-width:100%;max-height:180px;margin:10px auto 0;border-radius:12px;border:1.5px solid var(--milkline)}.proof-modal textarea{min-height:74px}.proof-modal .file-zone{padding:18px 12px}.proof-status{font-size:12px;color:#805e28;font-weight:800;margin-top:10px;line-height:1.45}.proof-modal .btn-w{margin-top:14px}.proof-modal .btn-w:disabled{opacity:.5;cursor:not-allowed}
 
 /* ---------- bottom nav (mobile-first, large tap targets) ---------- */
 nav{position:fixed;bottom:0;left:0;right:0;width:100vw;max-width:none;margin:0;z-index:50;background:var(--paper);border-top:1.5px solid var(--milkline);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -4px 18px rgba(74,52,42,.06)}
@@ -516,6 +519,7 @@ img{max-width:100%;height:auto}
 
 <div class="proof-modal" id="proofModal" role="dialog" aria-modal="true" aria-labelledby="proofTitle">
   <div class="proof-dialog">
+    <div class="proof-scroll">
     <div class="proof-head"><div><h2 id="proofTitle">Submit challenge proof</h2><div class="proof-copy" id="proofSubtitle">Show the community that you completed this action.</div></div><button class="proof-close" id="proofClose" aria-label="Close">×</button></div>
     <div class="proof-reward"><span>Reward if approved</span><strong>50 SYL</strong></div>
     <label for="challengeRecipient">Your wallet address (receives SYL)</label>
@@ -532,6 +536,7 @@ img{max-width:100%;height:auto}
     <div class="proof-status">The verifier sees your screenshot in the app. The link and description become public on-chain after review.</div>
     <div id="challengeSubmitErr"></div>
     <button class="btn btn-p btn-w" id="challengeSubmitBtn" disabled>Submit for review</button>
+    </div>
   </div>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
