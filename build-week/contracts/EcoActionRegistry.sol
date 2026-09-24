@@ -36,7 +36,7 @@ contract EcoActionRegistry {
 
     struct Action {
         address submitter;
-        string  actionType;    // tree_planting | beach_cleanup | recycle | compost | other
+        string  actionType;    // eco-action or social-challenge identifier
         string  description;  // max 280 chars
         bytes32 imageHash;    // keccak256(image bytes) — proof locked at submit time
         uint64  submittedAt;
@@ -402,12 +402,21 @@ contract EcoActionRegistry {
     bytes32 private constant T_RECY  = keccak256("recycle");
     bytes32 private constant T_COMP  = keccak256("compost");
     bytes32 private constant T_OTHER = keccak256("other");
+    bytes32 private constant T_FOLLOW_X  = keccak256("follow_x");
+    bytes32 private constant T_LIKE_X    = keccak256("like_x");
+    bytes32 private constant T_COMMENT_X = keccak256("comment_x");
+    bytes32 private constant T_REPOST_X  = keccak256("repost_x");
+    bytes32 private constant T_ECO_POST_X = keccak256("eco_post_x");
+
+    function supportsActionType(string calldata actionType) public pure returns (bool) {
+        bytes32 t = keccak256(bytes(actionType));
+        return t == T_TREE || t == T_BEACH || t == T_RECY || t == T_COMP || t == T_OTHER ||
+            t == T_FOLLOW_X || t == T_LIKE_X || t == T_COMMENT_X || t == T_REPOST_X ||
+            t == T_ECO_POST_X;
+    }
 
     function _requireValidActionType(string calldata actionType) internal pure {
-        bytes32 t = keccak256(bytes(actionType));
-        if (t != T_TREE && t != T_BEACH && t != T_RECY && t != T_COMP && t != T_OTHER) {
-            revert InvalidActionType();
-        }
+        if (!supportsActionType(actionType)) revert InvalidActionType();
     }
 
     /// @dev 3 pre-populated VERIFIED display actions (PRD §5.4 mock data).

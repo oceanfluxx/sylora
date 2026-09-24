@@ -82,7 +82,8 @@ Demo redemption ──burn SYL──► on-chain redemption record
 - Describe the action and select a JPG or PNG photo (maximum 5 MB). Submit it directly in the app.
 - Wait for the verifier to approve or reject the queued submission.
 - Approval transfers 50 SYL directly from the reward pool to the participant's wallet. There is no separate withdrawal transaction. Use **Show SYL in wallet** in the app, or import the token contract address manually in the wallet if needed.
-- Use the Challenges tab for Sylora promotion tasks. These use the deployed contract's `other` action type and share its 24-hour cooldown.
+- Use the Challenges tab for Sylora promotion tasks. Like, comment, and repost are independent action types, so all three can be completed in one cycle and each receives its own 24-hour cooldown after approval.
+- The queue allows one pending submission per action type. Daily engagement tasks and the weekly eco post can therefore wait for review at the same time.
 
 ### 2. Verifier
 
@@ -97,9 +98,9 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 ### 3. Organiser
 
 - Deploy and configure the registry and token, then appoint verifier wallets.
-- The queue review registry `0x9fF87496fd03B4178D7C0856712072b034248a10` and token `0x27779b068f280455E1AF6BfE666C6855803Fad06` are deployed and linked on BOT testnet. The owner is a verifier, and the reward pool contains 1,000,000 SYL. Existing balances from earlier tokens do not migrate automatically.
+- The queue-review registry `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` and token `0x942C734dD3c6a23794e65e16bB78f5A713891537` are deployed and linked on BOT testnet. This registry supports separate challenge action types, and its reward pool contains 1,000,000 SYL. Existing balances from earlier tokens do not migrate automatically.
 - Monitor the reward pool and verification process.
-- The current app checks one-time and weekly challenge limits from wallet history; the deployed contract itself only enforces a 24-hour cooldown per action type.
+- The current app checks one-time and weekly challenge limits from wallet history; the contract enforces a 24-hour cooldown for each individual action type, including each daily engagement task.
 
 ---
 
@@ -137,8 +138,8 @@ Open [the app](http://localhost:8080/app.html). The verified BOT testnet address
 
 | Network | Contract | Address |
 |---------|----------|---------|
-| **BOT testnet · 968** | Queue-review EcoActionRegistry | `0x9fF87496fd03B4178D7C0856712072b034248a10` |
-| **BOT testnet · 968** | SylToken tied to new registry | `0x27779b068f280455E1AF6BfE666C6855803Fad06` |
+| **BOT testnet · 968** | Queue-review EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
+| **BOT testnet · 968** | SylToken tied to new registry | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
 
 The app connects to `https://rpc.bohr.life` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 

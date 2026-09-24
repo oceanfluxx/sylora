@@ -2,7 +2,7 @@
 
 ## Current status
 
-The wallet-free participant flow and shared queue are implemented. The queue-review registry `0x9fF87496fd03B4178D7C0856712072b034248a10` and token `0x27779b068f280455E1AF6BfE666C6855803Fad06` are deployed on BOT testnet (chain 968). Read-only checks confirmed both contracts point to each other, the owner is a verifier, `reviewQueuedAction` exists, and the registry holds 1,000,000 SYL. The shared Node queue must still be running for participants and verifiers to exchange submissions.
+The wallet-free participant flow and shared queue are implemented. The queue-review registry `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` and token `0x942C734dD3c6a23794e65e16bB78f5A713891537` are deployed and linked on BOT testnet (chain 968). Read-only checks confirmed both contracts point to each other, the registry supports independent daily challenge types, and the registry holds the 1,000,000 SYL reward pool. The shared Node queue must still be running for participants and verifiers to exchange submissions.
 
 ## Deploy on BOT testnet (chain ID 968)
 

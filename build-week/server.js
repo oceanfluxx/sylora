@@ -10,17 +10,22 @@ const dataDir = path.resolve(process.env.SYLORA_DATA_DIR || path.join(__dirname,
 const queueFile = path.join(dataDir, 'queue.json');
 const photoDir = path.join(dataDir, 'photos');
 const port = Number(process.env.PORT || 8080);
-const registryAddress = process.env.REGISTRY_ADDRESS || '0x9fF87496fd03B4178D7C0856712072b034248a10';
-const tokenAddress = process.env.TOKEN_ADDRESS || '0x27779b068f280455E1AF6BfE666C6855803Fad06';
+const registryAddress = process.env.REGISTRY_ADDRESS || '0x78771952847B4FF95b597f9639aeC8E0D3EF6F47';
+const tokenAddress = process.env.TOKEN_ADDRESS || '0x942C734dD3c6a23794e65e16bB78f5A713891537';
 const rpc = process.env.RPC_URL || 'https://rpc.bohr.life';
 const provider = new ethers.JsonRpcProvider(rpc);
 const iface = new ethers.Interface(['function reviewQueuedAction(bytes32,address,string,string,bytes32,bool) returns (bytes32)']);
 const registry = ethers.isAddress(registryAddress) ? new ethers.Contract(registryAddress, [
   'function reviewedRequests(bytes32) view returns (bool)',
   'function actions(bytes32) view returns (address,string,string,bytes32,uint64,uint8,address,uint256,uint16)',
+  'function supportsActionType(string) view returns (bool)',
   'function syl() view returns (address)'
 ], provider) : null;
-const types = new Set(['tree_planting','beach_cleanup','recycle','compost','other']);
+const types = new Set([
+  'tree_planting','beach_cleanup','recycle','compost','other',
+  'follow_x','like_x','comment_x','repost_x','eco_post_x'
+]);
+const submissionRateLimitMs = Number(process.env.SUBMISSION_RATE_LIMIT_MS ?? 5000);
 const rate = new Map();
 fs.mkdirSync(photoDir, {recursive:true});
 let queue = fs.existsSync(queueFile) ? JSON.parse(fs.readFileSync(queueFile, 'utf8')) : [];
@@ -48,6 +53,16 @@ function publicItem(item) {
   const {id,submitter,actionType,description,imageHash,submittedAt,status,txHash} = item;
   return {id,submitter,actionType,description,imageHash,submittedAt,status,txHash,photoUrl:`/api/photos/${id}`};
 }
+async function contractReady() {
+  if (!registry || !ethers.isAddress(tokenAddress)) return false;
+  try {
+    const challengeTypes=['follow_x','like_x','comment_x','repost_x','eco_post_x'];
+    const supported=await Promise.all(challengeTypes.map(type=>registry.supportsActionType(type)));
+    return supported.every(Boolean);
+  } catch {
+    return false;
+  }
+}
 async function reconcileQueue(){
   if(!registry)return;
   let changed=false;
@@ -69,7 +84,7 @@ function validPhoto(bytes, mime) {
 async function handle(req,res) {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/api/config' && req.method === 'GET') {
-    return send(res,200,{ready:!!registry && ethers.isAddress(tokenAddress),registry:registryAddress,token:tokenAddress,chainId:968});
+    return send(res,200,{ready:await contractReady(),registry:registryAddress,token:tokenAddress,chainId:968});
   }
   if (url.pathname === '/api/submissions' && req.method === 'GET') {
     await reconcileQueue();
@@ -78,16 +93,16 @@ async function handle(req,res) {
     return send(res,200,{items:queue.filter(x=>!wallet || x.submitter.toLowerCase()===wallet.toLowerCase()).map(publicItem)});
   }
   if (url.pathname === '/api/submissions' && req.method === 'POST') {
-    if (!registry || !ethers.isAddress(tokenAddress)) return fail(res,503,'New registry and token are not configured');
+    if (!await contractReady()) return fail(res,503,'A challenge-compatible registry and token are not configured');
     const ip = req.socket.remoteAddress || 'unknown';
-    if (Date.now() - (rate.get(ip)||0) < 5000) return fail(res,429,'Wait a few seconds before submitting again');
+    if (Date.now() - (rate.get(ip)||0) < submissionRateLimitMs) return fail(res,429,'Wait a few seconds before submitting again');
     const input = await body(req);
     const submitter = String(input.submitter||'');
     const actionType = String(input.actionType||'');
     const description = String(input.description||'').trim();
     if (!ethers.isAddress(submitter) || !types.has(actionType) || !description || Buffer.byteLength(description)>280) return fail(res,400,'Invalid wallet, action, or description');
     const pending = queue.filter(x=>x.status==='pending' && x.submitter.toLowerCase()===submitter.toLowerCase());
-    if (pending.length>=3 || pending.some(x=>x.actionType===actionType)) return fail(res,409,'This wallet already has a pending action of this type, or three pending actions');
+    if (pending.some(x=>x.actionType===actionType)) return fail(res,409,'This wallet already has a pending submission for this task. Wait for its review before submitting the same task again.');
     const match = /^data:(image\/(?:png|jpeg));base64,([A-Za-z0-9+/]+={0,2})$/.exec(String(input.photo||''));
     if (!match) return fail(res,400,'Upload a JPG or PNG photo');
     const bytes = Buffer.from(match[2], 'base64');
