@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 build-week/data/
+SYLORA_PRD.md
 
 # Local env / secrets
 .env
