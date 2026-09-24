@@ -6,13 +6,14 @@ const crypto = require('node:crypto');
 const { ethers } = require('ethers');
 
 const root = path.resolve(__dirname, '../frontend');
-const dataDir = path.resolve(process.env.SYLORA_DATA_DIR || path.join(__dirname, 'data'));
+const dataDir = path.resolve(process.env.SYLORA_DATA_DIR || path.join(__dirname, 'data-mainnet'));
 const queueFile = path.join(dataDir, 'queue.json');
 const photoDir = path.join(dataDir, 'photos');
 const port = Number(process.env.PORT || 8080);
-const registryAddress = process.env.REGISTRY_ADDRESS || '0x78771952847B4FF95b597f9639aeC8E0D3EF6F47';
-const tokenAddress = process.env.TOKEN_ADDRESS || '0x942C734dD3c6a23794e65e16bB78f5A713891537';
-const rpc = process.env.RPC_URL || 'https://rpc.bohr.life';
+const registryAddress = process.env.REGISTRY_ADDRESS || '0xA26FE9756D942A491385B542f6E60e1163C7a6a3';
+const tokenAddress = process.env.TOKEN_ADDRESS || '0x9b289f77C099D7D7ed169fdd9c931266C9963dB3';
+const rpc = process.env.RPC_URL || 'https://rpc.botchain.ai';
+const chainId = Number(process.env.CHAIN_ID ?? 677);
 const provider = new ethers.JsonRpcProvider(rpc);
 const iface = new ethers.Interface(['function reviewQueuedAction(bytes32,address,string,string,bytes32,bool) returns (bytes32)']);
 const registry = ethers.isAddress(registryAddress) ? new ethers.Contract(registryAddress, [
@@ -57,8 +58,10 @@ async function contractReady() {
   if (!registry || !ethers.isAddress(tokenAddress)) return false;
   try {
     const challengeTypes=['follow_x','like_x','comment_x','repost_x','eco_post_x'];
-    const supported=await Promise.all(challengeTypes.map(type=>registry.supportsActionType(type)));
-    return supported.every(Boolean);
+    const [network,linkedToken,...supported]=await Promise.all([
+      provider.getNetwork(),registry.syl(),...challengeTypes.map(type=>registry.supportsActionType(type))
+    ]);
+    return Number(network.chainId)===chainId&&linkedToken.toLowerCase()===tokenAddress.toLowerCase()&&supported.every(Boolean);
   } catch {
     return false;
   }
@@ -84,7 +87,7 @@ function validPhoto(bytes, mime) {
 async function handle(req,res) {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/api/config' && req.method === 'GET') {
-    return send(res,200,{ready:await contractReady(),registry:registryAddress,token:tokenAddress,chainId:968});
+    return send(res,200,{ready:await contractReady(),registry:registryAddress,token:tokenAddress,chainId});
   }
   if (url.pathname === '/api/submissions' && req.method === 'GET') {
     await reconcileQueue();

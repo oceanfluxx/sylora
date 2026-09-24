@@ -10,7 +10,7 @@ Record real environmental actions, verify their proof, and reward approved contr
 
 <br />
 
-[![BOT Chain Testnet](https://img.shields.io/badge/BOT%20Chain-Testnet%20968-3E7A52?style=for-the-badge)](https://scan.bohr.life/)
+[![BOT Chain Mainnet](https://img.shields.io/badge/BOT%20Chain-Mainnet%20677-3E7A52?style=for-the-badge)](https://scan.botchain.ai/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity)](https://soliditylang.org/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](frontend/app.html)
 [![ethers.js](https://img.shields.io/badge/ethers.js-v6-2535A0?style=for-the-badge)](frontend/vendor/ethers.umd.min.js)
@@ -78,7 +78,7 @@ Demo redemption ──burn SYL──► on-chain redemption record
 ### 1. Participant
 
 - Browse the landing page and action list without connecting a wallet.
-- Paste a BOT testnet wallet address to receive SYL. This does not connect or prompt the wallet.
+- Paste a BOT Mainnet wallet address to receive SYL. This does not connect or prompt the wallet.
 - Describe the action and select a JPG or PNG photo (maximum 5 MB). Submit it directly in the app.
 - Wait for the verifier to approve or reject the queued submission.
 - Approval transfers 50 SYL directly from the reward pool to the participant's wallet. There is no separate withdrawal transaction. Use **Show SYL in wallet** in the app, or import the token contract address manually in the wallet if needed.
@@ -98,7 +98,7 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 ### 3. Organiser
 
 - Deploy and configure the registry and token, then appoint verifier wallets.
-- The queue-review registry `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` and token `0x942C734dD3c6a23794e65e16bB78f5A713891537` are deployed and linked on BOT testnet. This registry supports separate challenge action types, and its reward pool contains 1,000,000 SYL. Existing balances from earlier tokens do not migrate automatically.
+- The production queue-review registry `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` and token `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` are deployed and linked on BOT Mainnet. The previous BOT Testnet deployment remains listed below for reference, but its balances and queue data do not migrate to Mainnet.
 - Monitor the reward pool and verification process.
 - The current app checks one-time and weekly challenge limits from wallet history; the contract enforces a 24-hour cooldown for each individual action type, including each daily engagement task.
 
@@ -110,7 +110,7 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 |-------|--------|
 | **Smart Contract** | Solidity `0.8.20` · `EcoActionRegistry.sol` · `SylToken.sol` |
 | **Frontend and queue** | HTML, CSS, and JavaScript · Node.js HTTP server · file-backed queue |
-| **Wallet / Chain** | ethers.js v6 · MetaMask-compatible wallet · BOT Chain testnet `968` |
+| **Wallet / Chain** | ethers.js v6 · MetaMask-compatible wallet · BOT Chain Mainnet `677` |
 | **Development** | Node.js · solc · Anvil-based end-to-end tests |
 | **Hosting** | Node.js server with persistent disk for queue and photos |
 
@@ -130,11 +130,24 @@ Run from `build-week`:
 npm start
 ```
 
-Open [the app](http://localhost:8080/app.html). The verified BOT testnet addresses are the defaults; `REGISTRY_ADDRESS` and `TOKEN_ADDRESS` can override them. A wallet is needed only for verifier review, balance display, token import, or redemption.
+Open [the app](http://localhost:8080/app.html). The verified BOT Mainnet addresses are the defaults; `REGISTRY_ADDRESS` and `TOKEN_ADDRESS` can override them. A wallet is needed only for verifier review, balance display, token import, or redemption.
 
 ---
 
-## BOT Testnet Contract Addresses
+## Contract Addresses
+
+### BOT Mainnet
+
+Current verified deployment on BOT Mainnet, chain ID `677`:
+
+| Network | Contract | Address |
+|---------|----------|---------|
+| **BOT Mainnet · 677** | EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` |
+| **BOT Mainnet · 677** | SylToken | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
+
+Explorer: [`scan.botchain.ai`](https://scan.botchain.ai)
+
+### BOT Testnet
 
 Current verified deployment on BOT Testnet, chain ID `968`:
 
@@ -143,7 +156,7 @@ Current verified deployment on BOT Testnet, chain ID `968`:
 | **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
 | **BOT Testnet · 968** | SylToken | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
 
-The app connects to `https://rpc.bohr.life` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
+The app connects to `https://rpc.botchain.ai` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
 ---
 

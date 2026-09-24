@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SYLORA — Log climate actions on BOT testnet</title>
-<meta name="description" content="Log eco-actions, receive 50 SYL after approval, and track your rewards on BOT Chain testnet.">
+<title>SYLORA | Log climate actions on BOT Mainnet</title>
+<meta name="description" content="Log eco-actions, receive 50 SYL after approval, and track your rewards on BOT Chain Mainnet.">
 <link rel="icon" type="image/png" href="assets/syl-logo.png">
 <link rel="apple-touch-icon" href="assets/syl-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -574,12 +574,13 @@ const TOK_ABI = [
   "function approve(address,uint256) returns (bool)"
 ];
 const DEPLOYMENTS = {
-  968: {
-    registry: "0x78771952847B4FF95b597f9639aeC8E0D3EF6F47",
-    token: "0x942C734dD3c6a23794e65e16bB78f5A713891537"
+  677: {
+    registry: "0xA26FE9756D942A491385B542f6E60e1163C7a6a3",
+    token: "0x9b289f77C099D7D7ed169fdd9c931266C9963dB3"
   }
 };
-const PUBLIC_RPC = "https://rpc.bohr.life";
+const ACTIVE_CHAIN_ID = 677;
+const PUBLIC_RPC = "https://rpc.botchain.ai";
 const TYPES = {tree_planting:" Plant a tree",beach_cleanup:" Clean beach/river",recycle:" Drop off recycling",compost:" Make compost",other:" Other green action"};
 const STATUS = ["pending","verified","rejected"];
 
@@ -764,7 +765,7 @@ $("connectBtn").addEventListener("click", async ()=>{
     const net = await walletProvider.getNetwork();
     const cid = Number(net.chainId);
     $("netBadge").textContent = cid===968 ? "BOT testnet · 968" : cid===677 ? "BOT mainnet · 677" : "chain "+cid+" — switch to BOT";
-    if(cid!==968){ toast("Switch your wallet to BOT testnet (chain 968) to use this deployment",true); return; }
+    if(cid!==ACTIVE_CHAIN_ID){ toast("Switch your wallet to BOT Mainnet (chain 677) to use this deployment",true); return; }
     provider=walletProvider;
     account=accts[0];
     if(!$("recipientAddress").value.trim()) $("recipientAddress").value=account;
@@ -781,7 +782,7 @@ $("connectBtn").addEventListener("click", async ()=>{
       $("connectBtn").textContent=account ? " "+short(account) : " Connect digital wallet";
       $("meName").textContent=account ? short(account) : "Guest";
       $("meStatus").textContent=account ? "wallet connected" : "wallet not connected";
-      await autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
+      await autoLoad(DEPLOYMENTS[ACTIVE_CHAIN_ID].registry,DEPLOYMENTS[ACTIVE_CHAIN_ID].token);
       enableSubmit(); updateChallengeSubmit();
     });
     window.ethereum.on?.("chainChanged", ()=>location.reload());
@@ -795,6 +796,7 @@ async function autoLoad(r,t){
   if(!ethers.isAddress(r)||!ethers.isAddress(t)){ $("cfgStatus").textContent="Contracts: cached address invalid — connect organiser wallet to fix"; return; }
   try{
     const cid=Number((await provider.getNetwork()).chainId);
+    if(cid!==ACTIVE_CHAIN_ID) throw new Error("Wrong network. Switch to BOT Mainnet (chain 677)");
     const c=new ethers.Contract(r,["function owner() view returns (address)","function syl() view returns (address)"],provider);
     const [ownerAddr,tokenAddr,regCode,tokCode]=await Promise.all([c.owner(),c.syl(),provider.getCode(r),provider.getCode(t)]);
     if(regCode==="0x"||tokCode==="0x") throw new Error("Registry or token is not deployed on this network");
@@ -805,7 +807,7 @@ async function autoLoad(r,t){
     registry = new ethers.Contract(r,REG_ABI,provider);
     token = new ethers.Contract(t,TOK_ABI,provider);
     $("addTokenBtn").disabled=!account;
-    $("tokenWalletHint").textContent="SYL token on BOT testnet: "+t;
+    $("tokenWalletHint").textContent="SYL token on BOT Mainnet: "+t;
     try{const cfg=await queueJson('/api/config');queueAvailable=cfg.ready&&cfg.registry.toLowerCase()===r.toLowerCase()&&cfg.token.toLowerCase()===t.toLowerCase();if(queueAvailable)await registry.reviewedRequests(ethers.ZeroHash);else queueAvailable=false;}catch{queueAvailable=false}
     document.querySelectorAll(".gasless-notice").forEach(el=>{
       el.textContent=queueAvailable
@@ -821,7 +823,7 @@ async function autoLoad(r,t){
   }catch(e){
     $("cfgStatus").textContent="Contracts: failed to load — "+((e.shortMessage||e.message||"").slice(0,130));
     $("tokenWalletHint").textContent="SYL token is not ready in this registry yet.";
-    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Cannot load the contracts. Check BOT testnet (chain 968) and the app server at http://localhost:8080/app.html.");
+    document.querySelectorAll(".gasless-notice").forEach(el=>el.textContent="Cannot load the contracts. Check BOT Mainnet (chain 677) and the app server at http://localhost:8080/app.html.");
     enableSubmit();updateChallengeSubmit();renderChallengeAvailability();updateRedeem();
   }
 }
@@ -832,7 +834,7 @@ $("addTokenBtn").addEventListener("click",async()=>{
     const accepted=await window.ethereum.request({method:"wallet_watchAsset",params:{type:"ERC20",options:{address,symbol:"SYL",decimals:18}}});
     toast(accepted?"SYL token request sent to your wallet":"SYL token was not added");
   }catch(e){
-    $("tokenWalletHint").textContent="If your wallet cannot add it automatically, import SYL manually on BOT testnet using token address "+(await token.getAddress())+" (18 decimals).";
+    $("tokenWalletHint").textContent="If your wallet cannot add it automatically, import SYL manually on BOT Mainnet using token address "+(await token.getAddress())+" (18 decimals).";
     toast("Import the token manually using the address below",true);
   }
 });
@@ -1035,11 +1037,11 @@ $("redeemBtn").addEventListener("click", async ()=>{
 
 /* initial paint */
 renderChallengeAvailability();
-$("netBadge").textContent="BOT testnet · 968 · public";
+$("netBadge").textContent="BOT Mainnet · 677 · public";
 $("meStatus").textContent="connect wallet to act";
 (async()=>{
-  try{const cfg=await queueJson('/api/config');if(cfg.ready&&cfg.chainId===968&&ethers.isAddress(cfg.registry)&&ethers.isAddress(cfg.token))DEPLOYMENTS[968]={registry:cfg.registry,token:cfg.token}}catch{}
-  await autoLoad(DEPLOYMENTS[968].registry,DEPLOYMENTS[968].token);
+  try{const cfg=await queueJson('/api/config');if(cfg.ready&&cfg.chainId===ACTIVE_CHAIN_ID&&ethers.isAddress(cfg.registry)&&ethers.isAddress(cfg.token))DEPLOYMENTS[ACTIVE_CHAIN_ID]={registry:cfg.registry,token:cfg.token}}catch{}
+  await autoLoad(DEPLOYMENTS[ACTIVE_CHAIN_ID].registry,DEPLOYMENTS[ACTIVE_CHAIN_ID].token);
 })();
 </script>
 </body>

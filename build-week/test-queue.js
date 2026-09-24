@@ -28,7 +28,7 @@ async function main(){
     console.log('Contracts deployed');
     const port=18080+Math.floor(Math.random()*20000);
     tmp=fs.mkdtempSync(path.join(os.tmpdir(),'sylora-queue-'));
-    child=spawn(process.execPath,[path.join(__dirname,'server.js')],{env:{...process.env,PORT:String(port),RPC_URL:rpc,REGISTRY_ADDRESS:await reg.getAddress(),TOKEN_ADDRESS:await token.getAddress(),SYLORA_DATA_DIR:tmp,SUBMISSION_RATE_LIMIT_MS:'0'},stdio:'ignore',windowsHide:true});
+    child=spawn(process.execPath,[path.join(__dirname,'server.js')],{env:{...process.env,PORT:String(port),RPC_URL:rpc,CHAIN_ID:'968',REGISTRY_ADDRESS:await reg.getAddress(),TOKEN_ADDRESS:await token.getAddress(),SYLORA_DATA_DIR:tmp,SUBMISSION_RATE_LIMIT_MS:'0'},stdio:'ignore',windowsHide:true});
     const base=`http://127.0.0.1:${port}`;
     let ready=false;
     for(let i=0;i<40;i++){try{const r=await fetch(base+'/api/config');ready=(await r.json()).ready;if(ready)break}catch{}await wait(100)}
