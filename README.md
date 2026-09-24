@@ -134,12 +134,14 @@ Open [the app](http://localhost:8080/app.html). The verified BOT testnet address
 
 ---
 
-## Smart Contract
+## BOT Testnet Contract Addresses
+
+Current verified deployment on BOT Testnet, chain ID `968`:
 
 | Network | Contract | Address |
 |---------|----------|---------|
-| **BOT testnet · 968** | Queue-review EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
-| **BOT testnet · 968** | SylToken tied to new registry | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
+| **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
+| **BOT Testnet · 968** | SylToken | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
 
 The app connects to `https://rpc.bohr.life` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
