@@ -148,8 +148,6 @@ Current verified deployment on BOT Testnet, chain ID `968`:
 | **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` | [View contract](https://scan.bohr.life/address/0x78771952847B4FF95b597f9639aeC8E0D3EF6F47) |
 | **BOT Testnet · 968** | SylToken          | `0x942C734dD3c6a23794e65e16bB78f5A713891537` | [View contract](https://scan.bohr.life/address/0x942C734dD3c6a23794e65e16bB78f5A713891537) |
 
-The app connects to `https://rpc.botchain.ai` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
-
 ---
 
 ## Project Structure
@@ -162,8 +160,7 @@ sylora/
 │   │   └── SylToken.sol            # Fixed-supply SYL token
 │   ├── server.js                   # Shared queue and frontend server
 │   ├── test-queue.js               # Queue and contract integration test
-│   ├── test-e2e.js                 # Contract end-to-end tests
-│   └── DEPLOY_NOTES.md             # Deployment and test notes
+│   └── test-e2e.js                 # Contract end-to-end tests
 ├── frontend/
 │   ├── assets/                     # Logo and mascot images
 │   ├── vendor/                     # Bundled ethers.js
