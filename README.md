@@ -21,7 +21,7 @@ Record real environmental actions, verify their proof, and reward approved contr
 
 <br />
 
-[Live Demo](#live-demo) · [Features](#features) · [How It Works](#how-it-works) · [Smart Contract](#smart-contract)
+[Product Video](#product-video) · [Features](#features) · [How It Works](#how-it-works) · [Smart Contract](#smart-contract)
 
 </div>
 
@@ -33,7 +33,7 @@ Environmental reward apps need a way to show that an action was reviewed and tha
 
 ## Solution
 
-**Sylora** sends an action description and photo to a verifier queue. The verifier approves or rejects the submission; the decision and photo hash are recorded on BOT Chain. Each approved submission receives **50 SYL** from a fixed reward pool. The token starts with a supply of **1,000,000 SYL** and has no mint function. Demo redemptions burn SYL and record the redemption on-chain.
+**Sylora** sends an action description and photo to a verifier queue. The verifier approves or rejects the submission; the decision and photo hash are recorded on BOT Chain. Each approved submission receives **50 SYL** from a fixed reward pool. The token starts with a supply of **1,000,000 SYL** and has no mint function. Redemptions burn SYL and record the redemption on-chain.
 
 ## Vision
 
@@ -49,7 +49,7 @@ Make community climate action visible, verifiable, and accountable from submissi
 | 🔍  | **Human verification** | A designated verifier sees the submitted photo and approves or rejects it.                                                |
 | 🪙  | **Fixed reward pool**  | An approved action receives 50 SYL; all 1,000,000 SYL are allocated to the registry at deployment, with no mint function. |
 | 📣  | **Social challenges**  | Follow Sylora on X, engage with posts, or share a weekly eco post with a public link and screenshot for review.           |
-| 🔥  | **Burn on redemption** | Demo redemption burns SYL and records an on-chain event; usable vouchers are not available yet.                           |
+| 🔥  | **Burn on redemption** | Redemption burns SYL and records an on-chain event; usable vouchers are not available yet.                                |
 
 ---
 
@@ -61,7 +61,7 @@ Make community climate action visible, verifiable, and accountable from submissi
 Participant ──submit address, action + photo──► shared queue
 Verifier ──approve or reject (one transaction)──► BOT Chain
 Approved action ──50 SYL from reward pool──► participant
-Demo redemption ──burn SYL──► on-chain redemption record
+Redemption ──burn SYL──► on-chain redemption record
 ```
 
 </div>
@@ -73,7 +73,7 @@ Demo redemption ──burn SYL──► on-chain redemption record
 | Submit action or challenge | Participant | No wallet connection, confirmation, signature, transaction, or gas fee |
 | Approve or reject          | Verifier    | One transaction; approval transfers 50 SYL from the reward pool        |
 | Read actions and balances  | Free        | View calls require no transaction                                      |
-| Demo redemption            | Participant | One registry call burns approved SYL after token allowance is granted  |
+| Redemption                 | Participant | One registry call burns approved SYL after token allowance is granted  |
 
 ### 1. Participant
 
@@ -91,7 +91,7 @@ Demo redemption ──burn SYL──► on-chain redemption record
 - See queued submissions, including the photo and description, in the verifier desk.
 - Click **Approve** or **Reject**. This is one transaction paid by the verifier wallet.
 
-The shared queue requires a running Node server. Because the participant does not sign, the verifier is responsible for deciding whether the submitted wallet address and evidence are credible. The demo queue currently exposes uploaded photos to anyone who knows the photo URL; add authentication and private storage before using real personal photos in production.
+The shared queue requires a running Node server. Because the participant does not sign, the verifier is responsible for deciding whether the submitted wallet address and evidence are credible. The current queue exposes uploaded photos to anyone who knows the photo URL; add authentication and private storage before using real personal photos in production.
 
 Run `npm run compile` and `npm run test:queue` from `build-week` to verify the queue and review flow locally.
 
@@ -116,21 +116,15 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 
 ---
 
-## Live Demo
+## Product Video
 
 <div align="center">
 
-**Run Sylora locally**
+[![Watch the Sylora product video](https://img.youtube.com/vi/kpic5DJTBVI/maxresdefault.jpg)](https://www.youtube.com/watch?v=kpic5DJTBVI)
+
+**[Watch Sylora on YouTube](https://www.youtube.com/watch?v=kpic5DJTBVI)**
 
 </div>
-
-Run from `build-week`:
-
-```powershell
-npm start
-```
-
-Open [the app](http://localhost:8080/app.html). The verified BOT Mainnet addresses are the defaults; `REGISTRY_ADDRESS` and `TOKEN_ADDRESS` can override them. A wallet is needed only for verifier review, balance display, token import, or redemption.
 
 ---
 
