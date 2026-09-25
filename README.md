@@ -134,21 +134,19 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 
 Current verified deployment on BOT Mainnet, chain ID `677`:
 
-| Network               | Contract          | Address                                      |
-| --------------------- | ----------------- | -------------------------------------------- |
-| **BOT Mainnet · 677** | EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` |
-| **BOT Mainnet · 677** | SylToken          | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
-
-Explorer: [`scan.botchain.ai`](https://scan.botchain.ai)
+| Network               | Contract          | Address                                      | Explorer                                                                                                  |
+| --------------------- | ----------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **BOT Mainnet · 677** | EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` | [View contract](https://scan.botchain.ai/address/0xA26FE9756D942A491385B542f6E60e1163C7a6a3) |
+| **BOT Mainnet · 677** | SylToken          | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` | [View contract](https://scan.botchain.ai/address/0x9b289f77C099D7D7ed169fdd9c931266C9963dB3) |
 
 ### BOT Testnet
 
 Current verified deployment on BOT Testnet, chain ID `968`:
 
-| Network               | Contract          | Address                                      |
-| --------------------- | ----------------- | -------------------------------------------- |
-| **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
-| **BOT Testnet · 968** | SylToken          | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
+| Network               | Contract          | Address                                      | Explorer                                                                                              |
+| --------------------- | ----------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` | [View contract](https://scan.bohr.life/address/0x78771952847B4FF95b597f9639aeC8E0D3EF6F47) |
+| **BOT Testnet · 968** | SylToken          | `0x942C734dD3c6a23794e65e16bB78f5A713891537` | [View contract](https://scan.bohr.life/address/0x942C734dD3c6a23794e65e16bB78f5A713891537) |
 
 The app connects to `https://rpc.botchain.ai` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
