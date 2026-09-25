@@ -17,7 +17,7 @@ Record real environmental actions, verify their proof, and reward approved contr
 
 <br />
 
-![Sylora landing and app preview](frontend/preview.png)
+![Sylora landing and app preview](frontend/assets/mockup.png)
 
 <br />
 
@@ -43,13 +43,13 @@ Make community climate action visible, verifiable, and accountable from submissi
 
 ## Features
 
-| | Feature | Description |
-|:---:|---------|-------------|
-| 🌱 | **Log eco-actions** | Submit tree planting, cleanup, recycling, composting, or another green action with a description and photo. |
-| 🔍 | **Human verification** | A designated verifier sees the submitted photo and approves or rejects it. |
-| 🪙 | **Fixed reward pool** | An approved action receives 50 SYL; all 1,000,000 SYL are allocated to the registry at deployment, with no mint function. |
-| 📣 | **Social challenges** | Follow Sylora on X, engage with posts, or share a weekly eco post with a public link and screenshot for review. |
-| 🔥 | **Burn on redemption** | Demo redemption burns SYL and records an on-chain event; usable vouchers are not available yet. |
+|     | Feature                | Description                                                                                                               |
+| :-: | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 🌱  | **Log eco-actions**    | Submit tree planting, cleanup, recycling, composting, or another green action with a description and photo.               |
+| 🔍  | **Human verification** | A designated verifier sees the submitted photo and approves or rejects it.                                                |
+| 🪙  | **Fixed reward pool**  | An approved action receives 50 SYL; all 1,000,000 SYL are allocated to the registry at deployment, with no mint function. |
+| 📣  | **Social challenges**  | Follow Sylora on X, engage with posts, or share a weekly eco post with a public link and screenshot for review.           |
+| 🔥  | **Burn on redemption** | Demo redemption burns SYL and records an on-chain event; usable vouchers are not available yet.                           |
 
 ---
 
@@ -68,12 +68,12 @@ Demo redemption ──burn SYL──► on-chain redemption record
 
 ### Gas model for the shared queue
 
-| Action | Who pays | Design |
-|--------|----------|--------|
+| Action                     | Who pays    | Design                                                                 |
+| -------------------------- | ----------- | ---------------------------------------------------------------------- |
 | Submit action or challenge | Participant | No wallet connection, confirmation, signature, transaction, or gas fee |
-| Approve or reject | Verifier | One transaction; approval transfers 50 SYL from the reward pool |
-| Read actions and balances | Free | View calls require no transaction |
-| Demo redemption | Participant | One registry call burns approved SYL after token allowance is granted |
+| Approve or reject          | Verifier    | One transaction; approval transfers 50 SYL from the reward pool        |
+| Read actions and balances  | Free        | View calls require no transaction                                      |
+| Demo redemption            | Participant | One registry call burns approved SYL after token allowance is granted  |
 
 ### 1. Participant
 
@@ -106,13 +106,13 @@ Run `npm run compile` and `npm run test:queue` from `build-week` to verify the q
 
 ## Tech Stack
 
-| Layer | Stack |
-|-------|--------|
-| **Smart Contract** | Solidity `0.8.20` · `EcoActionRegistry.sol` · `SylToken.sol` |
+| Layer                  | Stack                                                               |
+| ---------------------- | ------------------------------------------------------------------- |
+| **Smart Contract**     | Solidity `0.8.20` · `EcoActionRegistry.sol` · `SylToken.sol`        |
 | **Frontend and queue** | HTML, CSS, and JavaScript · Node.js HTTP server · file-backed queue |
-| **Wallet / Chain** | ethers.js v6 · MetaMask-compatible wallet · BOT Chain Mainnet `677` |
-| **Development** | Node.js · solc · Anvil-based end-to-end tests |
-| **Hosting** | Node.js server with persistent disk for queue and photos |
+| **Wallet / Chain**     | ethers.js v6 · MetaMask-compatible wallet · BOT Chain Mainnet `677` |
+| **Development**        | Node.js · solc · Anvil-based end-to-end tests                       |
+| **Hosting**            | Node.js server with persistent disk for queue and photos            |
 
 ---
 
@@ -140,10 +140,10 @@ Open [the app](http://localhost:8080/app.html). The verified BOT Mainnet address
 
 Current verified deployment on BOT Mainnet, chain ID `677`:
 
-| Network | Contract | Address |
-|---------|----------|---------|
+| Network               | Contract          | Address                                      |
+| --------------------- | ----------------- | -------------------------------------------- |
 | **BOT Mainnet · 677** | EcoActionRegistry | `0xA26FE9756D942A491385B542f6E60e1163C7a6a3` |
-| **BOT Mainnet · 677** | SylToken | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
+| **BOT Mainnet · 677** | SylToken          | `0x9b289f77C099D7D7ed169fdd9c931266C9963dB3` |
 
 Explorer: [`scan.botchain.ai`](https://scan.botchain.ai)
 
@@ -151,10 +151,10 @@ Explorer: [`scan.botchain.ai`](https://scan.botchain.ai)
 
 Current verified deployment on BOT Testnet, chain ID `968`:
 
-| Network | Contract | Address |
-|---------|----------|---------|
+| Network               | Contract          | Address                                      |
+| --------------------- | ----------------- | -------------------------------------------- |
 | **BOT Testnet · 968** | EcoActionRegistry | `0x78771952847B4FF95b597f9639aeC8E0D3EF6F47` |
-| **BOT Testnet · 968** | SylToken | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
+| **BOT Testnet · 968** | SylToken          | `0x942C734dD3c6a23794e65e16bB78f5A713891537` |
 
 The app connects to `https://rpc.botchain.ai` for public reads. Contract source and deployment notes are in [`build-week/`](build-week/) and [`DEPLOY_NOTES.md`](build-week/DEPLOY_NOTES.md).
 
